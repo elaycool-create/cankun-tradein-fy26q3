@@ -119,12 +119,27 @@ footer{text-align:center;color:var(--sub);font-size:12px;padding:28px}
     </div>
   </div>
   <div class="section-title">💰 個人舊換新獎金計算機</div>
-  <div class="card">
-    <div style="display:flex;gap:18px;flex-wrap:wrap;font-size:12px;margin-bottom:14px;padding:10px 14px;background:#fff8e6;border-radius:10px;border-left:3px solid var(--orange)">
-      <div><strong>🟢 基本獎勵</strong>（月總回收 &lt; 20 萬）<br>
-        高回收(≥$10,001) → 總額 × <strong>1%</strong> ・ 低回收(≤$10,000) → 每件 <strong>$100</strong></div>
-      <div><strong>🟡 進階獎勵</strong>（月總回收 ≥ 20 萬）<br>
-        高回收(≥$10,001) → 總額 × <strong>2%</strong> ・ 低回收(≤$10,000) → 每件 <strong>$200</strong></div>
+  <div class="card" id="bonus-locked-card">
+    <div style="text-align:center;padding:24px 20px">
+      <div style="font-size:48px;margin-bottom:10px">🔒</div>
+      <div style="font-size:16px;font-weight:700;margin-bottom:6px">此區僅限授權人員查看</div>
+      <div style="font-size:13px;color:var(--sub);margin-bottom:18px">請輸入密碼以解鎖個人獎金資料</div>
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+        <input type="password" id="bonusPwd" placeholder="密碼" onkeydown="if(event.key==='Enter')tryUnlock()" style="width:200px;padding:9px 16px;border:1.5px solid var(--border);border-radius:24px;font-size:14px;outline:none;font-family:inherit;text-align:center">
+        <button onclick="tryUnlock()" style="padding:9px 22px;border:none;border-radius:24px;background:var(--accent);color:#fff;font-size:14px;font-weight:600;cursor:pointer">🔓 解鎖</button>
+      </div>
+      <div id="pwd-error" style="color:#d63030;font-size:12px;margin-top:10px;display:none">❌ 密碼錯誤，請重試</div>
+    </div>
+  </div>
+  <div class="card" id="bonus-unlocked-card" style="display:none">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <div style="display:flex;gap:18px;flex-wrap:wrap;font-size:12px;padding:10px 14px;background:#fff8e6;border-radius:10px;border-left:3px solid var(--orange);flex:1;margin-right:10px">
+        <div><strong>🟢 基本獎勵</strong>（月總回收 &lt; 20 萬）<br>
+          高回收(≥$10,001) → 總額 × <strong>1%</strong> ・ 低回收(≤$10,000) → 每件 <strong>$100</strong></div>
+        <div><strong>🟡 進階獎勵</strong>（月總回收 ≥ 20 萬）<br>
+          高回收(≥$10,001) → 總額 × <strong>2%</strong> ・ 低回收(≤$10,000) → 每件 <strong>$200</strong></div>
+      </div>
+      <button onclick="lockBonus()" style="padding:6px 14px;border:1px solid var(--border);border-radius:20px;background:#fff;font-size:12px;cursor:pointer;color:var(--sub);white-space:nowrap">🔒 鎖定</button>
     </div>
     <div class="filter-bar" style="margin-bottom:18px">
       <select id="bonusOpSelect" onchange="renderBonus(this.value)" style="flex:1;min-width:240px;padding:9px 16px;border:1px solid var(--border);border-radius:24px;font-size:14px;font-family:inherit;background:#fff">
@@ -818,6 +833,7 @@ function renderBonus(op){
 function initBonusSelect(){
   const sel=document.getElementById('bonusOpSelect');
   if(!sel) return;
+  if(sel.options.length>1) return; // 已初始化
   // 排序：依總成交件數降冪
   const ops=Object.keys(BONUS_RECORDS).map(op=>{
     const recs=BONUS_RECORDS[op];
@@ -829,7 +845,50 @@ function initBonusSelect(){
     sel.appendChild(opt);
   });
 }
-window.addEventListener('load',()=>{const all=loadSales();Object.entries(all).forEach(([idx,sales])=>{const input=document.getElementById('sales-'+idx);if(input){input.value=sales;calcRate(input);}});updateLeaderboard();initBonusSelect();});
+
+// ── 密碼鎖（個人獎金區） ──────────────────────────────
+const BONUS_PWD_HASH='46a3bc0b6fdbcda91cb959d786e25cd2db5c38a95aaeac5fb4caad4ba4dab92d';  // SHA-256
+const UNLOCK_KEY='ck_bonus_unlocked_v1';
+async function sha256(text){
+  const buf=new TextEncoder().encode(text);
+  const hash=await crypto.subtle.digest('SHA-256',buf);
+  return Array.from(new Uint8Array(hash)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+async function tryUnlock(){
+  const input=document.getElementById('bonusPwd');
+  const err=document.getElementById('pwd-error');
+  const h=await sha256(input.value);
+  if(h===BONUS_PWD_HASH){
+    err.style.display='none';
+    sessionStorage.setItem(UNLOCK_KEY,'1');
+    showUnlocked();
+  }else{
+    err.style.display='block';
+    input.value='';
+    input.focus();
+  }
+}
+function showUnlocked(){
+  document.getElementById('bonus-locked-card').style.display='none';
+  document.getElementById('bonus-unlocked-card').style.display='';
+  initBonusSelect();
+}
+function lockBonus(){
+  sessionStorage.removeItem(UNLOCK_KEY);
+  document.getElementById('bonus-locked-card').style.display='';
+  document.getElementById('bonus-unlocked-card').style.display='none';
+  const pwd=document.getElementById('bonusPwd');
+  if(pwd) pwd.value='';
+  // 清空已查詢結果，避免被截圖殘留
+  const sel=document.getElementById('bonusOpSelect');
+  if(sel) sel.value='';
+  const res=document.getElementById('bonus-result');
+  if(res) res.innerHTML='<div class="empty-hint">👈 從上方選一位操作人來查詢個人獎金</div>';
+}
+function checkUnlockOnLoad(){
+  if(sessionStorage.getItem(UNLOCK_KEY)==='1') showUnlocked();
+}
+window.addEventListener('load',()=>{const all=loadSales();Object.entries(all).forEach(([idx,sales])=>{const input=document.getElementById('sales-'+idx);if(input){input.value=sales;calcRate(input);}});updateLeaderboard();checkUnlockOnLoad();});
 </script>
 </body>
 </html>
