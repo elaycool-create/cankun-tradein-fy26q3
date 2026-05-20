@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>燦坤 Trade-in 週報 FY26Q3</title>
+<title>燦坤 Trade-in 週報 FY26Q3 W01-W07</title>
 <style>
-:root{--bg:#f5f5f7;--card:#fff;--text:#1d1d1f;--sub:#6e6e73;--accent:#0071e3;--green:#34c759;--orange:#ff9500;--purple:#af52de;--border:#e5e5ea;--teal:#32ade6}
+:root{--bg:#f5f5f7;--card:#fff;--text:#1d1d1f;--sub:#6e6e73;--accent:#0071e3;--green:#34c759;--orange:#ff9500;--purple:#af52de;--border:#e5e5ea;--teal:#32ade6;--new:#ff9f0a}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','PingFang TC',sans-serif;background:var(--bg);color:var(--text);font-size:14px}
 .header{background:linear-gradient(135deg,#1d1d1f 0%,#0071e3 100%);color:#fff;padding:32px 40px 28px}
@@ -13,11 +13,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','PingFang TC'
 .header p{color:rgba(255,255,255,.7);margin-top:6px;font-size:14px}
 .header-meta{display:flex;gap:14px;margin-top:16px;flex-wrap:wrap}
 .meta-badge{background:rgba(255,255,255,.15);border-radius:20px;padding:5px 14px;font-size:13px;font-weight:500}
+.meta-badge.new{background:rgba(255,159,10,.8);color:#fff;font-weight:700}
 .container{max-width:1500px;margin:0 auto;padding:32px 24px}
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px}
 @media(max-width:900px){.two-col{grid-template-columns:1fr}}
 .section-title{font-size:20px;font-weight:700;margin:32px 0 14px;display:flex;align-items:center;gap:8px}
-.summary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:26px}
+.summary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:26px}
 .summary-card{background:var(--card);border-radius:16px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.06);text-align:center}
 .summary-card .label{color:var(--sub);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
 .summary-card .value{font-size:32px;font-weight:700;margin:6px 0}
@@ -33,6 +34,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','PingFang TC'
 .num{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
 .plugin-cell{color:var(--purple)}.deal-yes{color:var(--green);font-weight:700}
 .small-text{font-size:12px;color:var(--sub);max-width:190px}.zero-row td{color:#d1d1d6}
+/* NEW week highlight */
+.new-week td{background:rgba(255,159,10,.06)!important;border-left:3px solid var(--new)}
+.new-week-row{background:rgba(255,159,10,.05)}
+.new-week-row td{border-left:2px solid var(--new)}
+.new-badge{display:inline-block;background:var(--new);color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:8px;margin-left:5px;vertical-align:middle}
 .op-pill{display:inline-flex;align-items:center;gap:5px;background:rgba(50,173,230,.1);color:var(--teal);border-radius:20px;padding:3px 10px;margin:2px 3px 2px 0;font-size:12px;font-weight:500;white-space:nowrap}
 .op-pill .op-cnt{background:var(--teal);color:#fff;border-radius:10px;padding:1px 6px;font-size:11px;font-weight:700}
 .op-cell{max-width:300px;line-height:1.9}
@@ -74,130 +80,55 @@ footer{text-align:center;color:var(--sub);font-size:12px;padding:28px}
 </style>
 </head>
 <body>
-
 <div class="header">
   <h1>📱 燦坤 Trade-in 舊換新分析報告</h1>
   <p>Apple FY26Q3 週次追蹤 · 燦坤實業股份有限公司</p>
   <div class="header-meta">
-    <span class="meta-badge">📅 FY26Q3 W01–W06</span>
-    <span class="meta-badge">🗓 2026/3/29 – 5/9</span>
+    <span class="meta-badge">📅 FY26Q3 W01–W07</span>
+    <span class="meta-badge">🗓 2026/3/29 – 5/16</span>
     <span class="meta-badge">🏪 20 門市</span>
-    <span class="meta-badge">📊 1616 筆執行</span>
-    <span class="meta-badge">👤 31 位操作人</span>
+    <span class="meta-badge">📊 1925 筆執行</span>
+    <span class="meta-badge new">✨ W07 已更新</span>
   </div>
 </div>
-
 <div class="container">
-
-  <!-- ① KPI：拿掉 Kiosk、拿掉 Plugin 轉換率，保留純筆數 -->
   <div class="summary-grid">
-    <div class="summary-card">
-      <div class="label">總執行數</div>
-      <div class="value blue">1616</div>
-      <div class="sub">全 6 週合計</div>
-    </div>
-    <div class="summary-card">
-      <div class="label">Plugin 接機🔌</div>
-      <div class="value purple">309</div>
-      <div class="sub">有 IMEI 接線記錄</div>
-    </div>
-    <div class="summary-card">
-      <div class="label">成交數</div>
-      <div class="value green">131</div>
-      <div class="sub">完成以舊換新</div>
-    </div>
-    <div class="summary-card">
-      <div class="label">操作人數</div>
-      <div class="value teal">31</div>
-      <div class="sub">有成交記錄的人員</div>
-    </div>
+    <div class="summary-card"><div class="label">總執行數</div><div class="value blue">1925</div><div class="sub">全 7 週合計</div></div>
+    <div class="summary-card"><div class="label">Plugin 接機🔌</div><div class="value purple">381</div><div class="sub">有 IMEI 接線記錄</div></div>
+    <div class="summary-card"><div class="label">成交數</div><div class="value green">155</div><div class="sub">完成以舊換新</div></div>
+    <div class="summary-card"><div class="label">操作人數</div><div class="value teal">31</div><div class="sub">有成交記錄的人員</div></div>
+    <div class="summary-card" style="border-top:3px solid var(--new)"><div class="label">W07 執行</div><div class="value" style="color:var(--new)">309</div><div class="sub">5/10–5/16 新增</div></div>
+    <div class="summary-card" style="border-top:3px solid var(--new)"><div class="label">W07 成交</div><div class="value" style="color:var(--new)">24</div><div class="sub">5/10–5/16 新增</div></div>
   </div>
-
-  <!-- 圖例：拿掉 Kiosk -->
   <div class="legend">
     <span><span class="legend-dot" style="background:var(--purple)"></span>Plugin🔌：實際接線，有 IMEI 碼</span>
     <span><span class="legend-dot" style="background:var(--green)"></span>成交：完成以舊換新交易</span>
     <span><span class="legend-dot" style="background:var(--teal)"></span>操作人：XPOS 操作人員（成交筆數）</span>
+    <span><span class="legend-dot" style="background:var(--new)"></span>W07 新增週次</span>
   </div>
-
-  <!-- ② 週次總覽：拿掉 Kiosk 欄、轉換率欄 -->
   <div class="section-title">📊 全燦坤週次總覽</div>
   <div class="card">
     <table class="data-table">
-      <thead>
-        <tr><th>週次</th><th>執行數</th><th>Plugin🔌</th><th>成交數</th></tr>
-      </thead>
-      <tbody>
-        <tr>
-  <td><strong>FY26Q3W01</strong><br><small>3/29–4/4</small></td>
-  <td class="num">266</td>
-  <td class="num plugin-cell">🔌 64</td>
-  <td class="num deal-yes">23</td>
-</tr><tr>
-  <td><strong>FY26Q3W02</strong><br><small>4/5–4/11</small></td>
-  <td class="num">311</td>
-  <td class="num plugin-cell">🔌 63</td>
-  <td class="num deal-yes">28</td>
-</tr><tr>
-  <td><strong>FY26Q3W03</strong><br><small>4/12–4/18</small></td>
-  <td class="num">335</td>
-  <td class="num plugin-cell">🔌 50</td>
-  <td class="num deal-yes">26</td>
-</tr><tr>
-  <td><strong>FY26Q3W04</strong><br><small>4/19–4/25</small></td>
-  <td class="num">208</td>
-  <td class="num plugin-cell">🔌 45</td>
-  <td class="num deal-yes">18</td>
-</tr><tr>
-  <td><strong>FY26Q3W05</strong><br><small>4/26–5/2</small></td>
-  <td class="num">268</td>
-  <td class="num plugin-cell">🔌 50</td>
-  <td class="num deal-yes">24</td>
-</tr><tr>
-  <td><strong>FY26Q3W06</strong><br><small>5/3–5/9</small></td>
-  <td class="num">228</td>
-  <td class="num plugin-cell">🔌 37</td>
-  <td class="num deal-yes">12</td>
-</tr>
-        <tr style="background:#f5f5f7;font-weight:700">
-          <td>合計</td>
-          <td class="num blue">1616</td>
-          <td class="num purple">309</td>
-          <td class="num green">131</td>
-        </tr>
+      <thead><tr><th>週次</th><th>執行數</th><th>Plugin🔌</th><th>成交數</th></tr></thead>
+      <tbody><tr><td><strong>FY26Q3W01</strong><br><small>3/29–4/4</small></td><td class='num'>266</td><td class='num plugin-cell'>🔌 64</td><td class='num deal-yes'>23</td></tr><tr><td><strong>FY26Q3W02</strong><br><small>4/5–4/11</small></td><td class='num'>311</td><td class='num plugin-cell'>🔌 63</td><td class='num deal-yes'>28</td></tr><tr><td><strong>FY26Q3W03</strong><br><small>4/12–4/18</small></td><td class='num'>335</td><td class='num plugin-cell'>🔌 50</td><td class='num deal-yes'>26</td></tr><tr><td><strong>FY26Q3W04</strong><br><small>4/19–4/25</small></td><td class='num'>208</td><td class='num plugin-cell'>🔌 45</td><td class='num deal-yes'>18</td></tr><tr><td><strong>FY26Q3W05</strong><br><small>4/26–5/2</small></td><td class='num'>268</td><td class='num plugin-cell'>🔌 50</td><td class='num deal-yes'>24</td></tr><tr><td><strong>FY26Q3W06</strong><br><small>5/3–5/9</small></td><td class='num'>228</td><td class='num plugin-cell'>🔌 37</td><td class='num deal-yes'>12</td></tr><tr class='new-week'><td><strong>FY26Q3W07</strong><span class="new-badge">NEW</span><br><small>5/10–5/16</small></td><td class='num'>309</td><td class='num plugin-cell'>🔌 72</td><td class='num deal-yes'>24</td></tr>
+      <tr style="background:#f5f5f7;font-weight:700"><td>合計</td><td class="num blue">1925</td><td class="num purple">381</td><td class="num green">155</td></tr>
       </tbody>
     </table>
   </div>
-
-  <!-- 操作人 + 熱門機型 -->
   <div class="section-title">👤 全燦坤操作人成交排行</div>
   <div class="two-col">
     <div class="card">
       <div class="card-title">🏆 操作人成交總排行</div>
-      <table class="data-table">
-        <thead><tr><th>#</th><th>操作人</th><th>主要門市</th><th>成交筆數</th></tr></thead>
-        <tbody><tr><td>🥇</td><td><strong>傅淑怡</strong></td><td>基隆旗艦店</td><td class='num deal-yes'>11</td></tr><tr><td>🥈</td><td><strong>楊爵福</strong></td><td>光復店</td><td class='num deal-yes'>9</td></tr><tr><td>🥉</td><td><strong>李璟和</strong></td><td>中華店</td><td class='num deal-yes'>8</td></tr><tr><td>4.</td><td><strong>張云瑞</strong></td><td>岡山家電館</td><td class='num deal-yes'>7</td></tr><tr><td>5.</td><td><strong>張易生</strong></td><td>斗六店</td><td class='num deal-yes'>7</td></tr><tr><td>6.</td><td><strong>呂丞凱</strong></td><td>新文心店</td><td class='num deal-yes'>6</td></tr><tr><td>7.</td><td><strong>陳帛汶</strong></td><td>內湖店</td><td class='num deal-yes'>6</td></tr><tr><td>8.</td><td><strong>陶俊宏</strong></td><td>新光華店</td><td class='num deal-yes'>6</td></tr><tr><td>9.</td><td><strong>史昀靈</strong></td><td>右昌店</td><td class='num deal-yes'>6</td></tr><tr><td>10.</td><td><strong>吳啟禎</strong></td><td>右昌店</td><td class='num deal-yes'>5</td></tr><tr><td>11.</td><td><strong>孫靜雅</strong></td><td>岡山家電館</td><td class='num deal-yes'>5</td></tr><tr><td>12.</td><td><strong>徐誌良</strong></td><td>新莊店</td><td class='num deal-yes'>5</td></tr><tr><td>13.</td><td><strong>朱俐穎</strong></td><td>斗六店</td><td class='num deal-yes'>5</td></tr><tr><td>14.</td><td><strong>謝昀燁</strong></td><td>桃園旗艦店</td><td class='num deal-yes'>4</td></tr><tr><td>15.</td><td><strong>曾婷儀</strong></td><td>大甲店</td><td class='num deal-yes'>4</td></tr><tr><td>16.</td><td><strong>黃子豪</strong></td><td>公益店</td><td class='num deal-yes'>3</td></tr><tr><td>17.</td><td><strong>鄭宇廷</strong></td><td>華榮</td><td class='num deal-yes'>3</td></tr><tr><td>18.</td><td><strong>黃孟娟</strong></td><td>永華二店</td><td class='num deal-yes'>3</td></tr><tr><td>19.</td><td><strong>王建仁</strong></td><td>新豐原旗艦店</td><td class='num deal-yes'>3</td></tr><tr><td>20.</td><td><strong>羅文伶</strong></td><td>華榮</td><td class='num deal-yes'>3</td></tr><tr><td>21.</td><td><strong>張蕙雯</strong></td><td>新豐原旗艦店</td><td class='num deal-yes'>3</td></tr><tr><td>22.</td><td><strong>張育誌</strong></td><td>五甲店</td><td class='num deal-yes'>3</td></tr><tr><td>23.</td><td><strong>陳威志</strong></td><td>新文心店</td><td class='num deal-yes'>2</td></tr><tr><td>24.</td><td><strong>林達妮</strong></td><td>新光華店</td><td class='num deal-yes'>2</td></tr><tr><td>25.</td><td><strong>梁祐維</strong></td><td>公益店</td><td class='num deal-yes'>2</td></tr><tr><td>26.</td><td><strong>徐裴溫</strong></td><td>林口文化店</td><td class='num deal-yes'>2</td></tr><tr><td>27.</td><td><strong>黃至偉</strong></td><td>五甲店</td><td class='num deal-yes'>2</td></tr><tr><td>28.</td><td><strong>鄭伊婷</strong></td><td>永華二店</td><td class='num deal-yes'>1</td></tr><tr><td>29.</td><td><strong>謝函君</strong></td><td>基隆旗艦店</td><td class='num deal-yes'>1</td></tr><tr><td>30.</td><td><strong>陳泓錦</strong></td><td>信義店</td><td class='num deal-yes'>1</td></tr><tr><td>31.</td><td><strong>曾常明</strong></td><td>北投新旗艦店</td><td class='num deal-yes'>1</td></tr></tbody>
-      </table>
+      <table class="data-table"><thead><tr><th>#</th><th>操作人</th><th>主要門市</th><th>成交筆數</th></tr></thead><tbody><tr><td>🥇</td><td><strong>傅淑怡</strong></td><td>基隆旗艦店</td><td class='num deal-yes'>11</td></tr><tr><td>🥈</td><td><strong>楊爵福</strong></td><td>光復店</td><td class='num deal-yes'>11</td></tr><tr><td>🥉</td><td><strong>張云瑞</strong></td><td>岡山家電館</td><td class='num deal-yes'>11</td></tr><tr><td>4.</td><td><strong>李璟和</strong></td><td>中華店</td><td class='num deal-yes'>8</td></tr><tr><td>5.</td><td><strong>張易生</strong></td><td>斗六店</td><td class='num deal-yes'>8</td></tr><tr><td>6.</td><td><strong>呂丞凱</strong></td><td>新文心店</td><td class='num deal-yes'>7</td></tr><tr><td>7.</td><td><strong>孫靜雅</strong></td><td>岡山家電館</td><td class='num deal-yes'>7</td></tr><tr><td>8.</td><td><strong>朱俐穎</strong></td><td>斗六店</td><td class='num deal-yes'>7</td></tr><tr><td>9.</td><td><strong>陳帛汶</strong></td><td>內湖店</td><td class='num deal-yes'>6</td></tr><tr><td>10.</td><td><strong>陶俊宏</strong></td><td>新光華店</td><td class='num deal-yes'>6</td></tr><tr><td>11.</td><td><strong>史昀靈</strong></td><td>右昌店</td><td class='num deal-yes'>6</td></tr><tr><td>12.</td><td><strong>吳啟禎</strong></td><td>右昌店</td><td class='num deal-yes'>5</td></tr><tr><td>13.</td><td><strong>徐誌良</strong></td><td>新莊店</td><td class='num deal-yes'>5</td></tr><tr><td>14.</td><td><strong>黃子豪</strong></td><td>公益店</td><td class='num deal-yes'>5</td></tr><tr><td>15.</td><td><strong>鄭宇廷</strong></td><td>華榮</td><td class='num deal-yes'>5</td></tr><tr><td>16.</td><td><strong>謝昀燁</strong></td><td>桃園旗艦店</td><td class='num deal-yes'>4</td></tr><tr><td>17.</td><td><strong>曾婷儀</strong></td><td>大甲店</td><td class='num deal-yes'>4</td></tr><tr><td>18.</td><td><strong>王建仁</strong></td><td>新豐原旗艦店</td><td class='num deal-yes'>4</td></tr><tr><td>19.</td><td><strong>陳威志</strong></td><td>新文心店</td><td class='num deal-yes'>4</td></tr><tr><td>20.</td><td><strong>徐裴溫</strong></td><td>林口文化店</td><td class='num deal-yes'>4</td></tr><tr><td>21.</td><td><strong>黃孟娟</strong></td><td>永華二店</td><td class='num deal-yes'>3</td></tr><tr><td>22.</td><td><strong>羅文伶</strong></td><td>華榮</td><td class='num deal-yes'>3</td></tr><tr><td>23.</td><td><strong>張蕙雯</strong></td><td>新豐原旗艦店</td><td class='num deal-yes'>3</td></tr><tr><td>24.</td><td><strong>張育誌</strong></td><td>五甲店</td><td class='num deal-yes'>3</td></tr><tr><td>25.</td><td><strong>林達妮</strong></td><td>新光華店</td><td class='num deal-yes'>3</td></tr><tr><td>26.</td><td><strong>梁祐維</strong></td><td>公益店</td><td class='num deal-yes'>3</td></tr><tr><td>27.</td><td><strong>黃至偉</strong></td><td>五甲店</td><td class='num deal-yes'>3</td></tr><tr><td>28.</td><td><strong>鄭伊婷</strong></td><td>永華二店</td><td class='num deal-yes'>1</td></tr><tr><td>29.</td><td><strong>謝函君</strong></td><td>基隆旗艦店</td><td class='num deal-yes'>1</td></tr><tr><td>30.</td><td><strong>陳泓錦</strong></td><td>信義店</td><td class='num deal-yes'>1</td></tr><tr><td>31.</td><td><strong>曾常明</strong></td><td>北投新旗艦店</td><td class='num deal-yes'>1</td></tr></tbody></table>
     </div>
     <div style="display:flex;flex-direction:column;gap:20px">
-      <div class="card" style="margin:0">
-        <div class="card-title">📤 最常被換出舊機 Top 10</div>
-        <table class="data-table"><thead><tr><th>舊機型號</th><th>次數</th></tr></thead><tbody><tr><td>iPhone 13</td><td class='num'>193</td></tr><tr><td>iPhone 15 Pro</td><td class='num'>121</td></tr><tr><td>iPhone 14 Pro</td><td class='num'>107</td></tr><tr><td>iPhone 11</td><td class='num'>106</td></tr><tr><td>iPhone 16 Pro</td><td class='num'>89</td></tr><tr><td>iPhone 13 Pro</td><td class='num'>88</td></tr><tr><td>iPhone 13 Pro Max</td><td class='num'>86</td></tr><tr><td>iPhone 14</td><td class='num'>74</td></tr><tr><td>iPhone 14 Pro Max</td><td class='num'>73</td></tr><tr><td>iPhone 16 Pro Max</td><td class='num'>73</td></tr></tbody></table>
-      </div>
-      <div class="card" style="margin:0">
-        <div class="card-title">📥 最常換購新品 Top 10</div>
-        <table class="data-table"><thead><tr><th>類別</th><th>新品型號</th><th>次數</th></tr></thead><tbody><tr><td>iPhone</td><td>iPhone 17 Pro</td><td class='num'>46</td></tr><tr><td>iPhone</td><td>iPhone 17 Pro Max</td><td class='num'>33</td></tr><tr><td>iPhone</td><td>iPhone 17</td><td class='num'>30</td></tr><tr><td>iPhone</td><td>iPhone 17e</td><td class='num'>4</td></tr><tr><td>iPhone</td><td>iPhone Air</td><td class='num'>3</td></tr><tr><td>iPad</td><td>iPad (A16)</td><td class='num'>2</td></tr><tr><td>iPad</td><td>iPad Air 11in (M4)</td><td class='num'>2</td></tr><tr><td>AirPods</td><td>AirPods (4th Gen)</td><td class='num'>2</td></tr><tr><td>Watch</td><td>Ultra 3</td><td class='num'>1</td></tr><tr><td>Accessories</td><td>Others</td><td class='num'>1</td></tr></tbody></table>
-      </div>
+      <div class="card" style="margin:0"><div class="card-title">📤 最常被換出舊機 Top 10</div><table class="data-table"><thead><tr><th>舊機型號</th><th>次數</th></tr></thead><tbody><tr><td>iPhone 13</td><td class='num'>193</td></tr><tr><td>iPhone 15 Pro</td><td class='num'>121</td></tr><tr><td>iPhone 14 Pro</td><td class='num'>107</td></tr><tr><td>iPhone 11</td><td class='num'>106</td></tr><tr><td>iPhone 16 Pro</td><td class='num'>89</td></tr><tr><td>iPhone 13 Pro</td><td class='num'>88</td></tr><tr><td>iPhone 13 Pro Max</td><td class='num'>86</td></tr><tr><td>iPhone 14</td><td class='num'>74</td></tr><tr><td>iPhone 14 Pro Max</td><td class='num'>73</td></tr><tr><td>iPhone 16 Pro Max</td><td class='num'>73</td></tr></tbody></table></div>
+      <div class="card" style="margin:0"><div class="card-title">📥 最常換購新品 Top 10</div><table class="data-table"><thead><tr><th>類別</th><th>新品型號</th><th>次數</th></tr></thead><tbody><tr><td>iPhone</td><td>iPhone 17 Pro</td><td class='num'>46</td></tr><tr><td>iPhone</td><td>iPhone 17 Pro Max</td><td class='num'>33</td></tr><tr><td>iPhone</td><td>iPhone 17</td><td class='num'>30</td></tr><tr><td>iPhone</td><td>iPhone 17e</td><td class='num'>4</td></tr><tr><td>iPhone</td><td>iPhone Air</td><td class='num'>3</td></tr><tr><td>iPad</td><td>iPad (A16)</td><td class='num'>2</td></tr><tr><td>iPad</td><td>iPad Air 11in (M4)</td><td class='num'>2</td></tr><tr><td>AirPods</td><td>AirPods (4th Gen)</td><td class='num'>2</td></tr><tr><td>Watch</td><td>Ultra 3</td><td class='num'>1</td></tr><tr><td>Accessories</td><td>Others</td><td class='num'>1</td></tr></tbody></table></div>
     </div>
   </div>
-
-  <!-- 回收率排行榜 -->
   <div class="section-title">📈 iPhone 回收率排行榜</div>
   <div class="card">
-    <p style="font-size:13px;color:var(--sub);margin-bottom:14px">
-      在下方各門市卡片輸入 iPhone 銷量後，此排行榜會自動更新。
-      回收率 ＝ <strong>成交數 ÷ iPhone 銷量 × 100%</strong>
-    </p>
+    <p style="font-size:13px;color:var(--sub);margin-bottom:14px">在下方各門市卡片輸入 iPhone 銷量後，此排行榜會自動更新。回收率 ＝ <strong>成交數 ÷ iPhone 銷量 × 100%</strong></p>
     <div class="rate-legend" style="margin-bottom:16px">
       <div class="rl-item"><div class="rl-dot" style="background:#25a244"></div><span style="color:#25a244;font-weight:600">≥ 10% 優秀</span></div>
       <div class="rl-item"><div class="rl-dot" style="background:#c97200"></div><span style="color:#c97200;font-weight:600">5–9% 良好</span></div>
@@ -211,530 +142,157 @@ footer{text-align:center;color:var(--sub);font-size:12px;padding:28px}
       </table>
     </div>
   </div>
-
-  <!-- ③ 各門市：拿掉 Kiosk 欄 -->
   <div class="section-title">🏪 各門市週次明細</div>
   <div class="filter-bar">
     <input type="text" id="storeSearch" placeholder="🔍 搜尋門市名稱..." oninput="filterStores(this.value)">
     <span style="font-size:13px;color:var(--sub)">共 20 間門市</span>
   </div>
-  <div id="stores-container"><div class="store-card" id="store-0" data-store-idx="0" data-deal="6">
+  <div id="stores-container"><div class="store-card" id="store-0" data-store-idx="0" data-deal="8">
 <div class="store-header">
   <div class="store-title">🏪 TK3C@009華榮</div>
   <div class="store-kpis">
-    <div class="kpi-chip exec-chip">執行 112</div>
-    <div class="kpi-chip plugin-chip">Plugin 🔌 26</div>
-    <div class="kpi-chip deal-chip">成交 6</div>
+    <div class="kpi-chip exec-chip">執行 127</div>
+    <div class="kpi-chip plugin-chip">Plugin 🔌 33</div>
+    <div class="kpi-chip deal-chip">成交 8</div>
   </div>
 </div>
 <div class="sales-row">
   <span class="sales-label">📱 iPhone 銷量（手動輸入）</span>
-  <input type="number" class="sales-input" id="sales-0"
-    data-idx="0" data-deal="6"
-    placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
+  <input type="number" class="sales-input" id="sales-0" data-idx="0" data-deal="8" placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
   <span class="sales-arrow">→</span>
   <span class="sales-rate-label">回收率</span>
   <span class="rate-badge" id="rate-badge-0">—</span>
 </div>
-<div class="op-summary-bar"><span class="op-label">👤 操作人（全期成交）：</span><span class='op-pill'>鄭宇廷 <span class='op-cnt'>3</span></span><span class='op-pill'>羅文伶 <span class='op-cnt'>3</span></span></div>
+<div class="op-summary-bar"><span class="op-label">👤 操作人（全期成交）：</span><span class='op-pill'>鄭宇廷 <span class='op-cnt'>5</span></span><span class='op-pill'>羅文伶 <span class='op-cnt'>3</span></span></div>
 <table class="data-table">
-  <thead><tr>
-    <th>週次</th><th>執行數</th><th>Plugin🔌</th><th>成交數</th>
-    <th>操作人（成交筆數）</th><th>主要舊機（前3）</th><th>換購新品（前3）</th>
-  </tr></thead>
-  <tbody><tr class="">
-  <td>FY26Q3W01<br><small>3/29–4/4</small></td>
-  <td class="num">26</td>
-  <td class="num plugin-cell">🔌 14</td>
-  <td class="num deal-yes">2</td>
-  <td class="op-cell"><span class='op-pill'>鄭宇廷 <span class='op-cnt'>2</span></span></td>
-  <td class="small-text">iPhone SE 3×4、iPhone 12 Pro×4、iPhone 14 Pro Max×4</td>
-  <td class="small-text">iPad Air 11in (M4)×1、iPhone 17 Pro Max×1</td>
-</tr><tr class="">
-  <td>FY26Q3W02<br><small>4/5–4/11</small></td>
-  <td class="num">19</td>
-  <td class="num plugin-cell">🔌 5</td>
-  <td class="num deal-yes">2</td>
-  <td class="op-cell"><span class='op-pill'>羅文伶 <span class='op-cnt'>2</span></span></td>
-  <td class="small-text">iPhone 15 Pro×5、iPhone 12 Pro Max×4、iPhone 11×2</td>
-  <td class="small-text">iPhone 17 Pro×1、iPhone 17 Pro Max×1</td>
-</tr><tr class="">
-  <td>FY26Q3W03<br><small>4/12–4/18</small></td>
-  <td class="num">10</td>
-  <td class="num plugin-cell">0</td>
-  <td class="num ">0</td>
-  <td class="op-cell"><span style='color:#ccc;font-size:12px'>—</span></td>
-  <td class="small-text">iPhone 13×5、iPhone 12×2、iPhone 15 Pro Max×1</td>
-  <td class="small-text">—</td>
-</tr><tr class="">
-  <td>FY26Q3W04<br><small>4/19–4/25</small></td>
-  <td class="num">20</td>
-  <td class="num plugin-cell">🔌 6</td>
-  <td class="num deal-yes">2</td>
-  <td class="op-cell"><span class='op-pill'>鄭宇廷 <span class='op-cnt'>1</span></span><span class='op-pill'>羅文伶 <span class='op-cnt'>1</span></span></td>
-  <td class="small-text">iPhone 14 Pro Max×4、Galaxy S22 5G×3、iPhone 13×3</td>
-  <td class="small-text">iPhone 17×1、iPhone 17 Pro Max×1</td>
-</tr><tr class="">
-  <td>FY26Q3W05<br><small>4/26–5/2</small></td>
-  <td class="num">14</td>
-  <td class="num plugin-cell">🔌 1</td>
-  <td class="num ">0</td>
-  <td class="op-cell"><span style='color:#ccc;font-size:12px'>—</span></td>
-  <td class="small-text">Y78×3、iPhone 15 Pro×2、iPhone 14×2</td>
-  <td class="small-text">—</td>
-</tr><tr class="">
-  <td>FY26Q3W06<br><small>5/3–5/9</small></td>
-  <td class="num">23</td>
-  <td class="num plugin-cell">0</td>
-  <td class="num ">0</td>
-  <td class="op-cell"><span style='color:#ccc;font-size:12px'>—</span></td>
-  <td class="small-text">iPhone 13×4、iPhone 15 Pro Max×3、iPhone 15 Pro×3</td>
-  <td class="small-text">—</td>
-</tr></tbody>
+  <thead><tr><th>週次</th><th>執行數</th><th>Plugin🔌</th><th>成交數</th><th>操作人（成交筆數）</th><th>主要舊機（前3）</th><th>換購新品（前3）</th></tr></thead>
+  <tbody><tr class=''><td>FY26Q3W01<br><small>3/29–4/4</small></td><td class='num'>26</td><td class='num plugin-cell'>🔌 14</td><td class='num deal-yes'>2</td><td class='op-cell'><span class='op-pill'>鄭宇廷 <span class='op-cnt'>2</span></span></td><td class='small-text'>iPhone SE 3×4、iPhone 12 Pro×4、iPhone 14 Pro Max×4</td><td class='small-text'>iPad Air 11in (M4)×1、iPhone 17 Pro Max×1</td></tr><tr class=''><td>FY26Q3W02<br><small>4/5–4/11</small></td><td class='num'>19</td><td class='num plugin-cell'>🔌 5</td><td class='num deal-yes'>2</td><td class='op-cell'><span class='op-pill'>羅文伶 <span class='op-cnt'>2</span></span></td><td class='small-text'>iPhone 15 Pro×5、iPhone 12 Pro Max×4、iPhone 11×2</td><td class='small-text'>iPhone 17 Pro×1、iPhone 17 Pro Max×1</td></tr><tr class=''><td>FY26Q3W03<br><small>4/12–4/18</small></td><td class='num'>10</td><td class='num plugin-cell'>0</td><td class='num '>0</td><td class='op-cell'><span style='color:#ccc;font-size:12px'>—</span></td><td class='small-text'>iPhone 13×5、iPhone 12×2、iPhone 15 Pro Max×1</td><td class='small-text'>—</td></tr><tr class=''><td>FY26Q3W04<br><small>4/19–4/25</small></td><td class='num'>20</td><td class='num plugin-cell'>🔌 6</td><td class='num deal-yes'>2</td><td class='op-cell'><span class='op-pill'>鄭宇廷 <span class='op-cnt'>1</span></span><span class='op-pill'>羅文伶 <span class='op-cnt'>1</span></span></td><td class='small-text'>iPhone 14 Pro Max×4、Galaxy S22 5G×3、iPhone 13×3</td><td class='small-text'>iPhone 17×1、iPhone 17 Pro Max×1</td></tr><tr class=''><td>FY26Q3W05<br><small>4/26–5/2</small></td><td class='num'>14</td><td class='num plugin-cell'>🔌 1</td><td class='num '>0</td><td class='op-cell'><span style='color:#ccc;font-size:12px'>—</span></td><td class='small-text'>Y78×3、iPhone 15 Pro×2、iPhone 14×2</td><td class='small-text'>—</td></tr><tr class=''><td>FY26Q3W06<br><small>5/3–5/9</small></td><td class='num'>23</td><td class='num plugin-cell'>0</td><td class='num '>0</td><td class='op-cell'><span style='color:#ccc;font-size:12px'>—</span></td><td class='small-text'>iPhone 13×4、iPhone 15 Pro Max×3、iPhone 15 Pro×3</td><td class='small-text'>—</td></tr><tr class=' new-week-row'><td>FY26Q3W07<span class="new-badge">NEW</span><br><small>5/10–5/16</small></td><td class='num'>15</td><td class='num plugin-cell'>🔌 7</td><td class='num deal-yes'>2</td><td class='op-cell'><span class='op-pill'>鄭宇廷 <span class='op-cnt'>2</span></span></td><td class='small-text'>iPhone 11×3、iPhone 12 Pro Max×3、iPhone 14 Pro×2</td><td class='small-text'>iPhone 17×1、iPhone 17 Pro×1</td></tr></tbody>
 </table>
 </div><div class="store-card" id="store-1" data-store-idx="1" data-deal="8">
 <div class="store-header">
   <div class="store-title">🏪 燦坤中華店</div>
   <div class="store-kpis">
-    <div class="kpi-chip exec-chip">執行 63</div>
+    <div class="kpi-chip exec-chip">執行 73</div>
     <div class="kpi-chip plugin-chip">Plugin 🔌 18</div>
     <div class="kpi-chip deal-chip">成交 8</div>
   </div>
 </div>
 <div class="sales-row">
   <span class="sales-label">📱 iPhone 銷量（手動輸入）</span>
-  <input type="number" class="sales-input" id="sales-1"
-    data-idx="1" data-deal="8"
-    placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
+  <input type="number" class="sales-input" id="sales-1" data-idx="1" data-deal="8" placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
   <span class="sales-arrow">→</span>
   <span class="sales-rate-label">回收率</span>
   <span class="rate-badge" id="rate-badge-1">—</span>
 </div>
 <div class="op-summary-bar"><span class="op-label">👤 操作人（全期成交）：</span><span class='op-pill'>李璟和 <span class='op-cnt'>8</span></span></div>
 <table class="data-table">
-  <thead><tr>
-    <th>週次</th><th>執行數</th><th>Plugin🔌</th><th>成交數</th>
-    <th>操作人（成交筆數）</th><th>主要舊機（前3）</th><th>換購新品（前3）</th>
-  </tr></thead>
-  <tbody><tr class="">
-  <td>FY26Q3W01<br><small>3/29–4/4</small></td>
-  <td class="num">14</td>
-  <td class="num plugin-cell">🔌 8</td>
-  <td class="num deal-yes">3</td>
-  <td class="op-cell"><span class='op-pill'>李璟和 <span class='op-cnt'>3</span></span></td>
-  <td class="small-text">iPhone 13 Pro×4、iPhone 14 Pro×3、iPhone 15 Pro Max×2</td>
-  <td class="small-text">iPhone 17 Pro×2、iPhone 17e×1</td>
-</tr><tr class="">
-  <td>FY26Q3W02<br><small>4/5–4/11</small></td>
-  <td class="num">18</td>
-  <td class="num plugin-cell">🔌 5</td>
-  <td class="num deal-yes">2</td>
-  <td class="op-cell"><span class='op-pill'>李璟和 <span class='op-cnt'>2</span></span></td>
-  <td class="small-text">iPhone 11×3、iPhone 15 Pro Max×2、iPhone 16 Pro×2</td>
-  <td class="small-text">iPhone 17×1、iPhone 17 Pro Max×1</td>
-</tr><tr class="">
-  <td>FY26Q3W03<br><small>4/12–4/18</small></td>
-  <td class="num">11</td>
-  <td class="num plugin-cell">🔌 3</td>
-  <td class="num deal-yes">2</td>
-  <td class="op-cell"><span class='op-pill'>李璟和 <span class='op-cnt'>2</span></span></td>
-  <td class="small-text">iPhone 13×3、iPhone 16e×2、iPhone 14 Pro×1</td>
-  <td class="small-text">iPhone 17×2</td>
-</tr><tr class="">
-  <td>FY26Q3W04<br><small>4/19–4/25</small></td>
-  <td class="num">13</td>
-  <td class="num plugin-cell">🔌 2</td>
-  <td class="num deal-yes">1</td>
-  <td class="op-cell"><span class='op-pill'>李璟和 <span class='op-cnt'>1</span></span></td>
-  <td class="small-text">iPhone 16 Pro×3、iPhone 13×2、iPhone 14 Pro Max×2</td>
-  <td class="small-text">iPhone 17×1</td>
-</tr><tr class="">
-  <td>FY26Q3W05<br><small>4/26–5/2</small></td>
-  <td class="num">3</td>
-  <td class="num plugin-cell">0</td>
-  <td class="num ">0</td>
-  <td class="op-cell"><span style='color:#ccc;font-size:12px'>—</span></td>
-  <td class="small-text">iPhone 14×2、iPhone 15 Pro×1</td>
-  <td class="small-text">—</td>
-</tr><tr class="">
-  <td>FY26Q3W06<br><small>5/3–5/9</small></td>
-  <td class="num">4</td>
-  <td class="num plugin-cell">0</td>
-  <td class="num ">0</td>
-  <td class="op-cell"><span style='color:#ccc;font-size:12px'>—</span></td>
-  <td class="small-text">iPhone 14 Pro×3、iPhone 14×1</td>
-  <td class="small-text">—</td>
-</tr></tbody>
+  <thead><tr><th>週次</th><th>執行數</th><th>Plugin🔌</th><th>成交數</th><th>操作人（成交筆數）</th><th>主要舊機（前3）</th><th>換購新品（前3）</th></tr></thead>
+  <tbody><tr class=''><td>FY26Q3W01<br><small>3/29–4/4</small></td><td class='num'>14</td><td class='num plugin-cell'>🔌 8</td><td class='num deal-yes'>3</td><td class='op-cell'><span class='op-pill'>李璟和 <span class='op-cnt'>3</span></span></td><td class='small-text'>iPhone 13 Pro×4、iPhone 14 Pro×3、iPhone 15 Pro Max×2</td><td class='small-text'>iPhone 17 Pro×2、iPhone 17e×1</td></tr><tr class=''><td>FY26Q3W02<br><small>4/5–4/11</small></td><td class='num'>18</td><td class='num plugin-cell'>🔌 5</td><td class='num deal-yes'>2</td><td class='op-cell'><span class='op-pill'>李璟和 <span class='op-cnt'>2</span></span></td><td class='small-text'>iPhone 11×3、iPhone 15 Pro Max×2、iPhone 16 Pro×2</td><td class='small-text'>iPhone 17×1、iPhone 17 Pro Max×1</td></tr><tr class=''><td>FY26Q3W03<br><small>4/12–4/18</small></td><td class='num'>11</td><td class='num plugin-cell'>🔌 3</td><td class='num deal-yes'>2</td><td class='op-cell'><span class='op-pill'>李璟和 <span class='op-cnt'>2</span></span></td><td class='small-text'>iPhone 13×3、iPhone 16e×2、iPhone 14 Pro×1</td><td class='small-text'>iPhone 17×2</td></tr><tr class=''><td>FY26Q3W04<br><small>4/19–4/25</small></td><td class='num'>13</td><td class='num plugin-cell'>🔌 2</td><td class='num deal-yes'>1</td><td class='op-cell'><span class='op-pill'>李璟和 <span class='op-cnt'>1</span></span></td><td class='small-text'>iPhone 16 Pro×3、iPhone 13×2、iPhone 14 Pro Max×2</td><td class='small-text'>iPhone 17×1</td></tr><tr class=''><td>FY26Q3W05<br><small>4/26–5/2</small></td><td class='num'>3</td><td class='num plugin-cell'>0</td><td class='num '>0</td><td class='op-cell'><span style='color:#ccc;font-size:12px'>—</span></td><td class='small-text'>iPhone 14×2、iPhone 15 Pro×1</td><td class='small-text'>—</td></tr><tr class=''><td>FY26Q3W06<br><small>5/3–5/9</small></td><td class='num'>4</td><td class='num plugin-cell'>0</td><td class='num '>0</td><td class='op-cell'><span style='color:#ccc;font-size:12px'>—</span></td><td class='small-text'>iPhone 14 Pro×3、iPhone 14×1</td><td class='small-text'>—</td></tr><tr class=' new-week-row'><td>FY26Q3W07<span class="new-badge">NEW</span><br><small>5/10–5/16</small></td><td class='num'>10</td><td class='num plugin-cell'>0</td><td class='num '>0</td><td class='op-cell'><span style='color:#ccc;font-size:12px'>—</span></td><td class='small-text'>iPhone 14 Pro×3、iPhone 16 Pro×2、iPhone 16×1</td><td class='small-text'>—</td></tr></tbody>
 </table>
-</div><div class="store-card" id="store-2" data-store-idx="2" data-deal="5">
+</div><div class="store-card" id="store-2" data-store-idx="2" data-deal="6">
 <div class="store-header">
   <div class="store-title">🏪 燦坤五甲店</div>
   <div class="store-kpis">
-    <div class="kpi-chip exec-chip">執行 94</div>
-    <div class="kpi-chip plugin-chip">Plugin 🔌 8</div>
-    <div class="kpi-chip deal-chip">成交 5</div>
+    <div class="kpi-chip exec-chip">執行 109</div>
+    <div class="kpi-chip plugin-chip">Plugin 🔌 14</div>
+    <div class="kpi-chip deal-chip">成交 6</div>
   </div>
 </div>
 <div class="sales-row">
   <span class="sales-label">📱 iPhone 銷量（手動輸入）</span>
-  <input type="number" class="sales-input" id="sales-2"
-    data-idx="2" data-deal="5"
-    placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
+  <input type="number" class="sales-input" id="sales-2" data-idx="2" data-deal="6" placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
   <span class="sales-arrow">→</span>
   <span class="sales-rate-label">回收率</span>
   <span class="rate-badge" id="rate-badge-2">—</span>
 </div>
-<div class="op-summary-bar"><span class="op-label">👤 操作人（全期成交）：</span><span class='op-pill'>張育誌 <span class='op-cnt'>3</span></span><span class='op-pill'>黃至偉 <span class='op-cnt'>2</span></span></div>
+<div class="op-summary-bar"><span class="op-label">👤 操作人（全期成交）：</span><span class='op-pill'>張育誌 <span class='op-cnt'>3</span></span><span class='op-pill'>黃至偉 <span class='op-cnt'>3</span></span></div>
 <table class="data-table">
-  <thead><tr>
-    <th>週次</th><th>執行數</th><th>Plugin🔌</th><th>成交數</th>
-    <th>操作人（成交筆數）</th><th>主要舊機（前3）</th><th>換購新品（前3）</th>
-  </tr></thead>
-  <tbody><tr class="">
-  <td>FY26Q3W01<br><small>3/29–4/4</small></td>
-  <td class="num">14</td>
-  <td class="num plugin-cell">0</td>
-  <td class="num ">0</td>
-  <td class="op-cell"><span style='color:#ccc;font-size:12px'>—</span></td>
-  <td class="small-text">iPhone 13×4、iPhone 13 Pro Max×3、iPhone 14 Pro Max×3</td>
-  <td class="small-text">—</td>
-</tr><tr class="">
-  <td>FY26Q3W02<br><small>4/5–4/11</small></td>
-  <td class="num">17</td>
-  <td class="num plugin-cell">0</td>
-  <td class="num ">0</td>
-  <td class="op-cell"><span style='color:#ccc;font-size:12px'>—</span></td>
-  <td class="small-text">iPhone 12×3、iPhone SE 3×3、iPhone 16×2</td>
-  <td class="small-text">—</td>
-</tr><tr class="">
-  <td>FY26Q3W03<br><small>4/12–4/18</small></td>
-  <td class="num">29</td>
-  <td class="num plugin-cell">🔌 2</td>
-  <td class="num deal-yes">2</td>
-  <td class="op-cell"><span class='op-pill'>張育誌 <span class='op-cnt'>2</span></span></td>
-  <td class="small-text">iPhone 14 Pro Max×5、iPhone 11×4、iPhone 12×3</td>
-  <td class="small-text">iPhone 17×1、iPhone 17 Pro Max×1</td>
-</tr><tr class="">
-  <td>FY26Q3W04<br><small>4/19–4/25</small></td>
-  <td class="num">7</td>
-  <td class="num plugin-cell">🔌 1</td>
-  <td class="num deal-yes">1</td>
-  <td class="op-cell"><span class='op-pill'>張育誌 <span class='op-cnt'>1</span></span></td>
-  <td class="small-text">iPhone 13 Pro×3、iPhone 12 Pro Max×2、iPhone 13×1</td>
-  <td class="small-text">iPhone 17 Pro Max×1</td>
-</tr><tr class="">
-  <td>FY26Q3W05<br><small>4/26–5/2</small></td>
-  <td class="num">11</td>
-  <td class="num plugin-cell">🔌 1</td>
-  <td class="num deal-yes">1</td>
-  <td class="op-cell"><span class='op-pill'>黃至偉 <span class='op-cnt'>1</span></span></td>
-  <td class="small-text">iPhone 14 Pro×2、iPhone 14×2、iPhone 15 Pro×2</td>
-  <td class="small-text">iPhone 17 Pro Max×1</td>
-</tr><tr class="">
-  <td>FY26Q3W06<br><small>5/3–5/9</small></td>
-  <td class="num">16</td>
-  <td class="num plugin-cell">🔌 4</td>
-  <td class="num deal-yes">1</td>
-  <td class="op-cell"><span class='op-pill'>黃至偉 <span class='op-cnt'>1</span></span></td>
-  <td class="small-text">iPhone 11×5、iPhone 14 Pro×3、iPhone 13×3</td>
-  <td class="small-text">iPhone 17 Pro×1</td>
-</tr></tbody>
+  <thead><tr><th>週次</th><th>執行數</th><th>Plugin🔌</th><th>成交數</th><th>操作人（成交筆數）</th><th>主要舊機（前3）</th><th>換購新品（前3）</th></tr></thead>
+  <tbody><tr class=''><td>FY26Q3W01<br><small>3/29–4/4</small></td><td class='num'>14</td><td class='num plugin-cell'>0</td><td class='num '>0</td><td class='op-cell'><span style='color:#ccc;font-size:12px'>—</span></td><td class='small-text'>iPhone 13×4、iPhone 13 Pro Max×3、iPhone 14 Pro Max×3</td><td class='small-text'>—</td></tr><tr class=''><td>FY26Q3W02<br><small>4/5–4/11</small></td><td class='num'>17</td><td class='num plugin-cell'>0</td><td class='num '>0</td><td class='op-cell'><span style='color:#ccc;font-size:12px'>—</span></td><td class='small-text'>iPhone 12×3、iPhone SE 3×3、iPhone 16×2</td><td class='small-text'>—</td></tr><tr class=''><td>FY26Q3W03<br><small>4/12–4/18</small></td><td class='num'>29</td><td class='num plugin-cell'>🔌 2</td><td class='num deal-yes'>2</td><td class='op-cell'><span class='op-pill'>張育誌 <span class='op-cnt'>2</span></span></td><td class='small-text'>iPhone 14 Pro Max×5、iPhone 11×4、iPhone 12×3</td><td class='small-text'>iPhone 17×1、iPhone 17 Pro Max×1</td></tr><tr class=''><td>FY26Q3W04<br><small>4/19–4/25</small></td><td class='num'>7</td><td class='num plugin-cell'>🔌 1</td><td class='num deal-yes'>1</td><td class='op-cell'><span class='op-pill'>張育誌 <span class='op-cnt'>1</span></span></td><td class='small-text'>iPhone 13 Pro×3、iPhone 12 Pro Max×2、iPhone 13×1</td><td class='small-text'>iPhone 17 Pro Max×1</td></tr><tr class=''><td>FY26Q3W05<br><small>4/26–5/2</small></td><td class='num'>11</td><td class='num plugin-cell'>🔌 1</td><td class='num deal-yes'>1</td><td class='op-cell'><span class='op-pill'>黃至偉 <span class='op-cnt'>1</span></span></td><td class='small-text'>iPhone 14 Pro×2、iPhone 14×2、iPhone 15 Pro×2</td><td class='small-text'>iPhone 17 Pro Max×1</td></tr><tr class=''><td>FY26Q3W06<br><small>5/3–5/9</small></td><td class='num'>16</td><td class='num plugin-cell'>🔌 4</td><td class='num deal-yes'>1</td><td class='op-cell'><span class='op-pill'>黃至偉 <span class='op-cnt'>1</span></span></td><td class='small-text'>iPhone 11×5、iPhone 14 Pro×3、iPhone 13×3</td><td class='small-text'>iPhone 17 Pro×1</td></tr><tr class=' new-week-row'><td>FY26Q3W07<span class="new-badge">NEW</span><br><small>5/10–5/16</small></td><td class='num'>15</td><td class='num plugin-cell'>🔌 6</td><td class='num deal-yes'>1</td><td class='op-cell'><span class='op-pill'>黃至偉 <span class='op-cnt'>1</span></span></td><td class='small-text'>iPhone 11×6、iPhone 13×3、iPhone 14 Pro Max×2</td><td class='small-text'>iPhone 17×1</td></tr></tbody>
 </table>
 </div><div class="store-card" id="store-3" data-store-idx="3" data-deal="1">
 <div class="store-header">
   <div class="store-title">🏪 燦坤信義店</div>
   <div class="store-kpis">
-    <div class="kpi-chip exec-chip">執行 45</div>
+    <div class="kpi-chip exec-chip">執行 50</div>
     <div class="kpi-chip plugin-chip">Plugin 🔌 4</div>
     <div class="kpi-chip deal-chip">成交 1</div>
   </div>
 </div>
 <div class="sales-row">
   <span class="sales-label">📱 iPhone 銷量（手動輸入）</span>
-  <input type="number" class="sales-input" id="sales-3"
-    data-idx="3" data-deal="1"
-    placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
+  <input type="number" class="sales-input" id="sales-3" data-idx="3" data-deal="1" placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
   <span class="sales-arrow">→</span>
   <span class="sales-rate-label">回收率</span>
   <span class="rate-badge" id="rate-badge-3">—</span>
 </div>
 <div class="op-summary-bar"><span class="op-label">👤 操作人（全期成交）：</span><span class='op-pill'>陳泓錦 <span class='op-cnt'>1</span></span></div>
 <table class="data-table">
-  <thead><tr>
-    <th>週次</th><th>執行數</th><th>Plugin🔌</th><th>成交數</th>
-    <th>操作人（成交筆數）</th><th>主要舊機（前3）</th><th>換購新品（前3）</th>
-  </tr></thead>
-  <tbody><tr class="">
-  <td>FY26Q3W01<br><small>3/29–4/4</small></td>
-  <td class="num">11</td>
-  <td class="num plugin-cell">0</td>
-  <td class="num ">0</td>
-  <td class="op-cell"><span style='color:#ccc;font-size:12px'>—</span></td>
-  <td class="small-text">iPhone 15 Pro×2、iPhone 12×2、Reno14 Pro×1</td>
-  <td class="small-text">—</td>
-</tr><tr class="zero-row">
-  <td>FY26Q3W02<br><small>4/5–4/11</small></td>
-  <td class="num">0</td>
-  <td class="num plugin-cell">0</td>
-  <td class="num ">0</td>
-  <td class="op-cell"><span style='color:#ccc;font-size:12px'>—</span></td>
-  <td class="small-text">—</td>
-  <td class="small-text">—</td>
-</tr><tr class="">
-  <td>FY26Q3W03<br><small>4/12–4/18</small></td>
-  <td class="num">11</td>
-  <td class="num plugin-cell">0</td>
-  <td class="num ">0</td>
-  <td class="op-cell"><span style='color:#ccc;font-size:12px'>—</span></td>
-  <td class="small-text">iPhone 13 Pro Max×4、iPhone 16 Pro Max×2、iPhone 13×2</td>
-  <td class="small-text">—</td>
-</tr><tr class="">
-  <td>FY26Q3W04<br><small>4/19–4/25</small></td>
-  <td class="num">6</td>
-  <td class="num plugin-cell">🔌 1</td>
-  <td class="num ">0</td>
-  <td class="op-cell"><span style='color:#ccc;font-size:12px'>—</span></td>
-  <td class="small-text">iPhone 13 Pro Max×2、iPhone 11×1、iPhone 14 Pro×1</td>
-  <td class="small-text">—</td>
-</tr><tr class="">
-  <td>FY26Q3W05<br><small>4/26–5/2</small></td>
-  <td class="num">7</td>
-  <td class="num plugin-cell">🔌 3</td>
-  <td class="num deal-yes">1</td>
-  <td class="op-cell"><span class='op-pill'>陳泓錦 <span class='op-cnt'>1</span></span></td>
-  <td class="small-text">iPhone 11 Pro×4、iPhone 12 Pro×1、iPhone 13 Pro Max×1</td>
-  <td class="small-text">iPhone 17 Pro×1</td>
-</tr><tr class="">
-  <td>FY26Q3W06<br><small>5/3–5/9</small></td>
-  <td class="num">10</td>
-  <td class="num plugin-cell">0</td>
-  <td class="num ">0</td>
-  <td class="op-cell"><span style='color:#ccc;font-size:12px'>—</span></td>
-  <td class="small-text">iPhone 15 Pro×2、iPhone 14 Pro×1、iPhone 12×1</td>
-  <td class="small-text">—</td>
-</tr></tbody>
+  <thead><tr><th>週次</th><th>執行數</th><th>Plugin🔌</th><th>成交數</th><th>操作人（成交筆數）</th><th>主要舊機（前3）</th><th>換購新品（前3）</th></tr></thead>
+  <tbody><tr class=''><td>FY26Q3W01<br><small>3/29–4/4</small></td><td class='num'>11</td><td class='num plugin-cell'>0</td><td class='num '>0</td><td class='op-cell'><span style='color:#ccc;font-size:12px'>—</span></td><td class='small-text'>iPhone 15 Pro×2、iPhone 12×2、Reno14 Pro×1</td><td class='small-text'>—</td></tr><tr class='zero-row'><td>FY26Q3W02<br><small>4/5–4/11</small></td><td class='num'>0</td><td class='num plugin-cell'>0</td><td class='num '>0</td><td class='op-cell'><span style='color:#ccc;font-size:12px'>—</span></td><td class='small-text'>—</td><td class='small-text'>—</td></tr><tr class=''><td>FY26Q3W03<br><small>4/12–4/18</small></td><td class='num'>11</td><td class='num plugin-cell'>0</td><td class='num '>0</td><td class='op-cell'><span style='color:#ccc;font-size:12px'>—</span></td><td class='small-text'>iPhone 13 Pro Max×4、iPhone 16 Pro Max×2、iPhone 13×2</td><td class='small-text'>—</td></tr><tr class=''><td>FY26Q3W04<br><small>4/19–4/25</small></td><td class='num'>6</td><td class='num plugin-cell'>🔌 1</td><td class='num '>0</td><td class='op-cell'><span style='color:#ccc;font-size:12px'>—</span></td><td class='small-text'>iPhone 13 Pro Max×2、iPhone 11×1、iPhone 14 Pro×1</td><td class='small-text'>—</td></tr><tr class=''><td>FY26Q3W05<br><small>4/26–5/2</small></td><td class='num'>7</td><td class='num plugin-cell'>🔌 3</td><td class='num deal-yes'>1</td><td class='op-cell'><span class='op-pill'>陳泓錦 <span class='op-cnt'>1</span></span></td><td class='small-text'>iPhone 11 Pro×4、iPhone 12 Pro×1、iPhone 13 Pro Max×1</td><td class='small-text'>iPhone 17 Pro×1</td></tr><tr class=''><td>FY26Q3W06<br><small>5/3–5/9</small></td><td class='num'>10</td><td class='num plugin-cell'>0</td><td class='num '>0</td><td class='op-cell'><span style='color:#ccc;font-size:12px'>—</span></td><td class='small-text'>iPhone 15 Pro×2、iPhone 14 Pro×1、iPhone 12×1</td><td class='small-text'>—</td></tr><tr class=' new-week-row'><td>FY26Q3W07<span class="new-badge">NEW</span><br><small>5/10–5/16</small></td><td class='num'>5</td><td class='num plugin-cell'>0</td><td class='num '>0</td><td class='op-cell'><span style='color:#ccc;font-size:12px'>—</span></td><td class='small-text'>iPhone 14 Pro×2、Galaxy S23 5G×1、iPhone 15×1</td><td class='small-text'>—</td></tr></tbody>
 </table>
-</div><div class="store-card" id="store-4" data-store-idx="4" data-deal="9">
+</div><div class="store-card" id="store-4" data-store-idx="4" data-deal="11">
 <div class="store-header">
   <div class="store-title">🏪 燦坤光復店</div>
   <div class="store-kpis">
-    <div class="kpi-chip exec-chip">執行 45</div>
-    <div class="kpi-chip plugin-chip">Plugin 🔌 15</div>
-    <div class="kpi-chip deal-chip">成交 9</div>
+    <div class="kpi-chip exec-chip">執行 53</div>
+    <div class="kpi-chip plugin-chip">Plugin 🔌 17</div>
+    <div class="kpi-chip deal-chip">成交 11</div>
   </div>
 </div>
 <div class="sales-row">
   <span class="sales-label">📱 iPhone 銷量（手動輸入）</span>
-  <input type="number" class="sales-input" id="sales-4"
-    data-idx="4" data-deal="9"
-    placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
+  <input type="number" class="sales-input" id="sales-4" data-idx="4" data-deal="11" placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
   <span class="sales-arrow">→</span>
   <span class="sales-rate-label">回收率</span>
   <span class="rate-badge" id="rate-badge-4">—</span>
 </div>
-<div class="op-summary-bar"><span class="op-label">👤 操作人（全期成交）：</span><span class='op-pill'>楊爵福 <span class='op-cnt'>9</span></span></div>
+<div class="op-summary-bar"><span class="op-label">👤 操作人（全期成交）：</span><span class='op-pill'>楊爵福 <span class='op-cnt'>11</span></span></div>
 <table class="data-table">
-  <thead><tr>
-    <th>週次</th><th>執行數</th><th>Plugin🔌</th><th>成交數</th>
-    <th>操作人（成交筆數）</th><th>主要舊機（前3）</th><th>換購新品（前3）</th>
-  </tr></thead>
-  <tbody><tr class="">
-  <td>FY26Q3W01<br><small>3/29–4/4</small></td>
-  <td class="num">14</td>
-  <td class="num plugin-cell">🔌 7</td>
-  <td class="num deal-yes">4</td>
-  <td class="op-cell"><span class='op-pill'>楊爵福 <span class='op-cnt'>4</span></span></td>
-  <td class="small-text">iPhone 15 Pro×3、iPhone 16×3、iPhone 14 Pro×3</td>
-  <td class="small-text">iPhone 17 Pro×2、iPhone 17 Pro Max×1、iPhone 17e×1</td>
-</tr><tr class="">
-  <td>FY26Q3W02<br><small>4/5–4/11</small></td>
-  <td class="num">17</td>
-  <td class="num plugin-cell">🔌 5</td>
-  <td class="num deal-yes">2</td>
-  <td class="op-cell"><span class='op-pill'>楊爵福 <span class='op-cnt'>2</span></span></td>
-  <td class="small-text">iPhone 13 Pro Max×5、iPhone 14 Pro Max×5、iPhone 14 Pro×3</td>
-  <td class="small-text">iPhone 17×1、iPhone 17 Pro Max×1</td>
-</tr><tr class="">
-  <td>FY26Q3W03<br><small>4/12–4/18</small></td>
-  <td class="num">4</td>
-  <td class="num plugin-cell">🔌 1</td>
-  <td class="num deal-yes">1</td>
-  <td class="op-cell"><span class='op-pill'>楊爵福 <span class='op-cnt'>1</span></span></td>
-  <td class="small-text">iPhone 14 Pro Max×1、iPhone 16 Pro Max×1、iPhone 12 Pro Max×1</td>
-  <td class="small-text">iPhone 17 Pro Max×1</td>
-</tr><tr class="">
-  <td>FY26Q3W04<br><small>4/19–4/25</small></td>
-  <td class="num">2</td>
-  <td class="num plugin-cell">0</td>
-  <td class="num ">0</td>
-  <td class="op-cell"><span style='color:#ccc;font-size:12px'>—</span></td>
-  <td class="small-text">iPhone 13 Pro×1、iPhone 14 Pro×1</td>
-  <td class="small-text">—</td>
-</tr><tr class="">
-  <td>FY26Q3W05<br><small>4/26–5/2</small></td>
-  <td class="num">5</td>
-  <td class="num plugin-cell">🔌 2</td>
-  <td class="num deal-yes">2</td>
-  <td class="op-cell"><span class='op-pill'>楊爵福 <span class='op-cnt'>2</span></span></td>
-  <td class="small-text">iPhone 13×4、iPhone 16 Pro×1</td>
-  <td class="small-text">iPhone 17×1、iPhone 17 Pro Max×1</td>
-</tr><tr class="">
-  <td>FY26Q3W06<br><small>5/3–5/9</small></td>
-  <td class="num">3</td>
-  <td class="num plugin-cell">0</td>
-  <td class="num ">0</td>
-  <td class="op-cell"><span style='color:#ccc;font-size:12px'>—</span></td>
-  <td class="small-text">iPhone 13×2、iPhone 14×1</td>
-  <td class="small-text">—</td>
-</tr></tbody>
+  <thead><tr><th>週次</th><th>執行數</th><th>Plugin🔌</th><th>成交數</th><th>操作人（成交筆數）</th><th>主要舊機（前3）</th><th>換購新品（前3）</th></tr></thead>
+  <tbody><tr class=''><td>FY26Q3W01<br><small>3/29–4/4</small></td><td class='num'>14</td><td class='num plugin-cell'>🔌 7</td><td class='num deal-yes'>4</td><td class='op-cell'><span class='op-pill'>楊爵福 <span class='op-cnt'>4</span></span></td><td class='small-text'>iPhone 15 Pro×3、iPhone 16×3、iPhone 14 Pro×3</td><td class='small-text'>iPhone 17 Pro×2、iPhone 17 Pro Max×1、iPhone 17e×1</td></tr><tr class=''><td>FY26Q3W02<br><small>4/5–4/11</small></td><td class='num'>17</td><td class='num plugin-cell'>🔌 5</td><td class='num deal-yes'>2</td><td class='op-cell'><span class='op-pill'>楊爵福 <span class='op-cnt'>2</span></span></td><td class='small-text'>iPhone 13 Pro Max×5、iPhone 14 Pro Max×5、iPhone 14 Pro×3</td><td class='small-text'>iPhone 17×1、iPhone 17 Pro Max×1</td></tr><tr class=''><td>FY26Q3W03<br><small>4/12–4/18</small></td><td class='num'>4</td><td class='num plugin-cell'>🔌 1</td><td class='num deal-yes'>1</td><td class='op-cell'><span class='op-pill'>楊爵福 <span class='op-cnt'>1</span></span></td><td class='small-text'>iPhone 14 Pro Max×1、iPhone 16 Pro Max×1、iPhone 12 Pro Max×1</td><td class='small-text'>iPhone 17 Pro Max×1</td></tr><tr class=''><td>FY26Q3W04<br><small>4/19–4/25</small></td><td class='num'>2</td><td class='num plugin-cell'>0</td><td class='num '>0</td><td class='op-cell'><span style='color:#ccc;font-size:12px'>—</span></td><td class='small-text'>iPhone 13 Pro×1、iPhone 14 Pro×1</td><td class='small-text'>—</td></tr><tr class=''><td>FY26Q3W05<br><small>4/26–5/2</small></td><td class='num'>5</td><td class='num plugin-cell'>🔌 2</td><td class='num deal-yes'>2</td><td class='op-cell'><span class='op-pill'>楊爵福 <span class='op-cnt'>2</span></span></td><td class='small-text'>iPhone 13×4、iPhone 16 Pro×1</td><td class='small-text'>iPhone 17×1、iPhone 17 Pro Max×1</td></tr><tr class=''><td>FY26Q3W06<br><small>5/3–5/9</small></td><td class='num'>3</td><td class='num plugin-cell'>0</td><td class='num '>0</td><td class='op-cell'><span style='color:#ccc;font-size:12px'>—</span></td><td class='small-text'>iPhone 13×2、iPhone 14×1</td><td class='small-text'>—</td></tr><tr class=' new-week-row'><td>FY26Q3W07<span class="new-badge">NEW</span><br><small>5/10–5/16</small></td><td class='num'>8</td><td class='num plugin-cell'>🔌 2</td><td class='num deal-yes'>2</td><td class='op-cell'><span class='op-pill'>楊爵福 <span class='op-cnt'>2</span></span></td><td class='small-text'>iPhone 14×2、iPhone 13×2、iPhone 13 Pro×2</td><td class='small-text'>iPhone 17 Pro×1、iPhone 17e×1</td></tr></tbody>
 </table>
 </div><div class="store-card" id="store-5" data-store-idx="5" data-deal="6">
 <div class="store-header">
   <div class="store-title">🏪 燦坤內湖店</div>
   <div class="store-kpis">
-    <div class="kpi-chip exec-chip">執行 121</div>
+    <div class="kpi-chip exec-chip">執行 124</div>
     <div class="kpi-chip plugin-chip">Plugin 🔌 27</div>
     <div class="kpi-chip deal-chip">成交 6</div>
   </div>
 </div>
 <div class="sales-row">
   <span class="sales-label">📱 iPhone 銷量（手動輸入）</span>
-  <input type="number" class="sales-input" id="sales-5"
-    data-idx="5" data-deal="6"
-    placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
+  <input type="number" class="sales-input" id="sales-5" data-idx="5" data-deal="6" placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
   <span class="sales-arrow">→</span>
   <span class="sales-rate-label">回收率</span>
   <span class="rate-badge" id="rate-badge-5">—</span>
 </div>
 <div class="op-summary-bar"><span class="op-label">👤 操作人（全期成交）：</span><span class='op-pill'>陳帛汶 <span class='op-cnt'>6</span></span></div>
 <table class="data-table">
-  <thead><tr>
-    <th>週次</th><th>執行數</th><th>Plugin🔌</th><th>成交數</th>
-    <th>操作人（成交筆數）</th><th>主要舊機（前3）</th><th>換購新品（前3）</th>
-  </tr></thead>
-  <tbody><tr class="">
-  <td>FY26Q3W01<br><small>3/29–4/4</small></td>
-  <td class="num">11</td>
-  <td class="num plugin-cell">0</td>
-  <td class="num ">0</td>
-  <td class="op-cell"><span style='color:#ccc;font-size:12px'>—</span></td>
-  <td class="small-text">iPhone 14 Pro×3、iPhone 12 mini×1、Pixel 10 Pro XL×1</td>
-  <td class="small-text">—</td>
-</tr><tr class="">
-  <td>FY26Q3W02<br><small>4/5–4/11</small></td>
-  <td class="num">16</td>
-  <td class="num plugin-cell">🔌 2</td>
-  <td class="num deal-yes">1</td>
-  <td class="op-cell"><span class='op-pill'>陳帛汶 <span class='op-cnt'>1</span></span></td>
-  <td class="small-text">iPhone 16 Pro Max×3、iPhone 13 Pro Max×2、iPhone 14 Pro Max×2</td>
-  <td class="small-text">iPhone 17×1</td>
-</tr><tr class="">
-  <td>FY26Q3W03<br><small>4/12–4/18</small></td>
-  <td class="num">29</td>
-  <td class="num plugin-cell">🔌 7</td>
-  <td class="num deal-yes">2</td>
-  <td class="op-cell"><span class='op-pill'>陳帛汶 <span class='op-cnt'>2</span></span></td>
-  <td class="small-text">iPhone 14×4、iPhone 15×3、iPhone 13×2</td>
-  <td class="small-text">iPhone 17×1、iPhone Air×1</td>
-</tr><tr class="">
-  <td>FY26Q3W04<br><small>4/19–4/25</small></td>
-  <td class="num">19</td>
-  <td class="num plugin-cell">🔌 5</td>
-  <td class="num deal-yes">2</td>
-  <td class="op-cell"><span class='op-pill'>陳帛汶 <span class='op-cnt'>2</span></span></td>
-  <td class="small-text">iPhone 11×6、iPhone 13 Pro Max×3、iPhone XR×2</td>
-  <td class="small-text">iPhone 17 Pro×1、iPhone 17 Pro Max×1</td>
-</tr><tr class="">
-  <td>FY26Q3W05<br><small>4/26–5/2</small></td>
-  <td class="num">25</td>
-  <td class="num plugin-cell">🔌 9</td>
-  <td class="num ">0</td>
-  <td class="op-cell"><span style='color:#ccc;font-size:12px'>—</span></td>
-  <td class="small-text">iPhone 13×9、iPhone 14 Pro×2、iPhone 15×2</td>
-  <td class="small-text">—</td>
-</tr><tr class="">
-  <td>FY26Q3W06<br><small>5/3–5/9</small></td>
-  <td class="num">21</td>
-  <td class="num plugin-cell">🔌 4</td>
-  <td class="num deal-yes">1</td>
-  <td class="op-cell"><span class='op-pill'>陳帛汶 <span class='op-cnt'>1</span></span></td>
-  <td class="small-text">iPhone 14×4、iPhone 13×4、iPhone 15 Pro Max×3</td>
-  <td class="small-text">iPad Air 11in (M4)×1</td>
-</tr></tbody>
+  <thead><tr><th>週次</th><th>執行數</th><th>Plugin🔌</th><th>成交數</th><th>操作人（成交筆數）</th><th>主要舊機（前3）</th><th>換購新品（前3）</th></tr></thead>
+  <tbody><tr class=''><td>FY26Q3W01<br><small>3/29–4/4</small></td><td class='num'>11</td><td class='num plugin-cell'>0</td><td class='num '>0</td><td class='op-cell'><span style='color:#ccc;font-size:12px'>—</span></td><td class='small-text'>iPhone 14 Pro×3、iPhone 12 mini×1、Pixel 10 Pro XL×1</td><td class='small-text'>—</td></tr><tr class=''><td>FY26Q3W02<br><small>4/5–4/11</small></td><td class='num'>16</td><td class='num plugin-cell'>🔌 2</td><td class='num deal-yes'>1</td><td class='op-cell'><span class='op-pill'>陳帛汶 <span class='op-cnt'>1</span></span></td><td class='small-text'>iPhone 16 Pro Max×3、iPhone 13 Pro Max×2、iPhone 14 Pro Max×2</td><td class='small-text'>iPhone 17×1</td></tr><tr class=''><td>FY26Q3W03<br><small>4/12–4/18</small></td><td class='num'>29</td><td class='num plugin-cell'>🔌 7</td><td class='num deal-yes'>2</td><td class='op-cell'><span class='op-pill'>陳帛汶 <span class='op-cnt'>2</span></span></td><td class='small-text'>iPhone 14×4、iPhone 15×3、iPhone 13×2</td><td class='small-text'>iPhone 17×1、iPhone Air×1</td></tr><tr class=''><td>FY26Q3W04<br><small>4/19–4/25</small></td><td class='num'>19</td><td class='num plugin-cell'>🔌 5</td><td class='num deal-yes'>2</td><td class='op-cell'><span class='op-pill'>陳帛汶 <span class='op-cnt'>2</span></span></td><td class='small-text'>iPhone 11×6、iPhone 13 Pro Max×3、iPhone XR×2</td><td class='small-text'>iPhone 17 Pro×1、iPhone 17 Pro Max×1</td></tr><tr class=''><td>FY26Q3W05<br><small>4/26–5/2</small></td><td class='num'>25</td><td class='num plugin-cell'>🔌 9</td><td class='num '>0</td><td class='op-cell'><span style='color:#ccc;font-size:12px'>—</span></td><td class='small-text'>iPhone 13×9、iPhone 14 Pro×2、iPhone 15×2</td><td class='small-text'>—</td></tr><tr class=''><td>FY26Q3W06<br><small>5/3–5/9</small></td><td class='num'>21</td><td class='num plugin-cell'>🔌 4</td><td class='num deal-yes'>1</td><td class='op-cell'><span class='op-pill'>陳帛汶 <span class='op-cnt'>1</span></span></td><td class='small-text'>iPhone 14×4、iPhone 13×4、iPhone 15 Pro Max×3</td><td class='small-text'>iPad Air 11in (M4)×1</td></tr><tr class=' new-week-row'><td>FY26Q3W07<span class="new-badge">NEW</span><br><small>5/10–5/16</small></td><td class='num'>3</td><td class='num plugin-cell'>0</td><td class='num '>0</td><td class='op-cell'><span style='color:#ccc;font-size:12px'>—</span></td><td class='small-text'>iPhone 15 Plus×1、iPhone 11×1、iPhone 13×1</td><td class='small-text'>—</td></tr></tbody>
 </table>
-</div><div class="store-card" id="store-6" data-store-idx="6" data-deal="5">
+</div><div class="store-card" id="store-6" data-store-idx="6" data-deal="8">
 <div class="store-header">
   <div class="store-title">🏪 燦坤公益店</div>
   <div class="store-kpis">
-    <div class="kpi-chip exec-chip">執行 107</div>
-    <div class="kpi-chip plugin-chip">Plugin 🔌 16</div>
-    <div class="kpi-chip deal-chip">成交 5</div>
+    <div class="kpi-chip exec-chip">執行 124</div>
+    <div class="kpi-chip plugin-chip">Plugin 🔌 19</div>
+    <div class="kpi-chip deal-chip">成交 8</div>
   </div>
 </div>
 <div class="sales-row">
   <span class="sales-label">📱 iPhone 銷量（手動輸入）</span>
-  <input type="number" class="sales-input" id="sales-6"
-    data-idx="6" data-deal="5"
-    placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
+  <input type="number" class="sales-input" id="sales-6" data-idx="6" data-deal="8" placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
   <span class="sales-arrow">→</span>
   <span class="sales-rate-label">回收率</span>
   <span class="rate-badge" id="rate-badge-6">—</span>
 </div>
-<div class="op-summary-bar"><span class="op-label">👤 操作人（全期成交）：</span><span class='op-pill'>黃子豪 <span class='op-cnt'>3</span></span><span class='op-pill'>梁祐維 <span class='op-cnt'>2</span></span></div>
+<div class="op-summary-bar"><span class="op-label">👤 操作人（全期成交）：</span><span class='op-pill'>黃子豪 <span class='op-cnt'>5</span></span><span class='op-pill'>梁祐維 <span class='op-cnt'>3</span></span></div>
 <table class="data-table">
-  <thead><tr>
-    <th>週次</th><th>執行數</th><th>Plugin🔌</th><th>成交數</th>
-    <th>操作人（成交筆數）</th><th>主要舊機（前3）</th><th>換購新品（前3）</th>
-  </tr></thead>
-  <tbody><tr class="">
-  <td>FY26Q3W01<br><small>3/29–4/4</small></td>
-  <td class="num">14</td>
-  <td class="num plugin-cell">🔌 3</td>
-  <td class="num deal-yes">1</td>
-  <td class="op-cell"><span class='op-pill'>梁祐維 <span class='op-cnt'>1</span></span></td>
-  <td class="small-text">iPhone 16 Plus×3、iPhone 12×2、iPhone 13×2</td>
-  <td class="small-text">iPhone 17 Pro Max×1</td>
-</tr><tr class="">
-  <td>FY26Q3W02<br><small>4/5–4/11</small></td>
-  <td class="num">14</td>
-  <td class="num plugin-cell">🔌 3</td>
-  <td class="num deal-yes">1</td>
-  <td class="op-cell"><span class='op-pill'>黃子豪 <span class='op-cnt'>1</span></span></td>
-  <td class="small-text">iPhone 14 Pro×4、iPhone 13×2、iPhone 12×1</td>
-  <td class="small-text">iPhone 17×1</td>
-</tr><tr class="">
-  <td>FY26Q3W03<br><small>4/12–4/18</small></td>
-  <td class="num">35</td>
-  <td class="num plugin-cell">🔌 7</td>
-  <td class="num deal-yes">1</td>
-  <td class="op-cell"><span class='op-pill'>梁祐維 <span class='op-cnt'>1</span></span></td>
-  <td class="small-text">iPhone 13 Pro×6、iPhone 15 Pro×6、iPhone 12 Pro×5</td>
-  <td class="small-text">iPhone 16 Pro Max×1</td>
-</tr><tr class="">
-  <td>FY26Q3W04<br><small>4/19–4/25</small></td>
-  <td class="num">13</td>
-  <td class="num plugin-cell">🔌 1</td>
-  <td class="num ">0</td>
-  <td class="op-cell"><span style='color:#ccc;font-size:12px'>—</span></td>
-  <td class="small-text">iPhone 13×3、iPhone 15 Pro×3、iPhone 14×2</td>
-  <td class="small-text">—</td>
-</tr><tr class="">
-  <td>FY26Q3W05<br><small>4/26–5/2</small></td>
-  <td class="num">19</td>
-  <td class="num plugin-cell">🔌 2</td>
-  <td class="num deal-yes">2</td>
-  <td class="op-cell"><span class='op-pill'>黃子豪 <span class='op-cnt'>2</span></span></td>
-  <td class="small-text">iPhone 15 Pro×4、iPhone 14 Pro×2、iPhone 13 Pro Max×2</td>
-  <td class="small-text">iPhone 17×1、iPhone 17 Pro Max×1</td>
-</tr><tr class="">
-  <td>FY26Q3W06<br><small>5/3–5/9</small></td>
-  <td class="num">12</td>
-  <td class="num plugin-cell">0</td>
-  <td class="num ">0</td>
-  <td class="op-cell"><span style='color:#ccc;font-size:12px'>—</span></td>
-  <td class="small-text">iPhone 16 Pro Max×5、iPhone 12×1、iPhone 13×1</td>
-  <td class="small-text">—</td>
-</tr></tbody>
+  <thead><tr><th>週次</th><th>執行數</th><th>Plugin🔌</th><th>成交數</th><th>操作人（成交筆數）</th><th>主要舊機（前3）</th><th>換購新品（前3）</th></tr></thead>
+  <tbody><tr class=''><td>FY26Q3W01<br><small>3/29–4/4</small></td><td class='num'>14</td><td class='num plugin-cell'>🔌 3</td><td class='num deal-yes'>1</td><td class='op-cell'><span class='op-pill'>梁祐維 <span class='op-cnt'>1</span></span></td><td class='small-text'>iPhone 16 Plus×3、iPhone 12×2、iPhone 13×2</td><td class='small-text'>iPhone 17 Pro Max×1</td></tr><tr class=''><td>FY26Q3W02<br><small>4/5–4/11</small></td><td class='num'>14</td><td class='num plugin-cell'>🔌 3</td><td class='num deal-yes'>1</td><td class='op-cell'><span class='op-pill'>黃子豪 <span class='op-cnt'>1</span></span></td><td class='small-text'>iPhone 14 Pro×4、iPhone 13×2、iPhone 12×1</td><td class='small-text'>iPhone 17×1</td></tr><tr class=''><td>FY26Q3W03<br><small>4/12–4/18</small></td><td class='num'>35</td><td class='num plugin-cell'>🔌 7</td><td class='num deal-yes'>1</td><td class='op-cell'><span class='op-pill'>梁祐維 <span class='op-cnt'>1</span></span></td><td class='small-text'>iPhone 13 Pro×6、iPhone 15 Pro×6、iPhone 12 Pro×5</td><td class='small-text'>iPhone 16 Pro Max×1</td></tr><tr class=''><td>FY26Q3W04<br><small>4/19–4/25</small></td><td class='num'>13</td><td class='num plugin-cell'>🔌 1</td><td class='num '>0</td><td class='op-cell'><span style='color:#ccc;font-size:12px'>—</span></td><td class='small-text'>iPhone 13×3、iPhone 15 Pro×3、iPhone 14×2</td><td class='small-text'>—</td></tr><tr class=''><td>FY26Q3W05<br><small>4/26–5/2</small></td><td class='num'>19</td><td class='num plugin-cell'>🔌 2</td><td class='num deal-yes'>2</td><td class='op-cell'><span class='op-pill'>黃子豪 <span class='op-cnt'>2</span></span></td><td class='small-text'>iPhone 15 Pro×4、iPhone 14 Pro×2、iPhone 13 Pro Max×2</td><td class='small-text'>iPhone 17×1、iPhone 17 Pro Max×1</td></tr><tr class=''><td>FY26Q3W06<br><small>5/3–5/9</small></td><td class='num'>12</td><td class='num plugin-cell'>0</td><td class='num '>0</td><td class='op-cell'><span style='color:#ccc;font-size:12px'>—</span></td><td class='small-text'>iPhone 16 Pro Max×5、iPhone 12×1、iPhone 13×1</td><td class='small-text'>—</td></tr><tr class=' new-week-row'><td>FY26Q3W07<span class="new-badge">NEW</span><br><small>5/10–5/16</small></td><td class='num'>17</td><td class='num plugin-cell'>🔌 3</td><td class='num deal-yes'>3</td><td class='op-cell'><span class='op-pill'>黃子豪 <span class='op-cnt'>2</span></span><span class='op-pill'>梁祐維 <span class='op-cnt'>1</span></span></td><td class='small-text'>iPhone 13 Pro×7、iPhone 15 Pro×3、iPhone 11 Pro Max×2</td><td class='small-text'>iPhone 17×1、iPhone 17 Pro×1、iPhone Air×1</td></tr></tbody>
 </table>
 </div><div class="store-card" id="store-7" data-store-idx="7" data-deal="1">
 <div class="store-header">
@@ -747,998 +305,295 @@ footer{text-align:center;color:var(--sub);font-size:12px;padding:28px}
 </div>
 <div class="sales-row">
   <span class="sales-label">📱 iPhone 銷量（手動輸入）</span>
-  <input type="number" class="sales-input" id="sales-7"
-    data-idx="7" data-deal="1"
-    placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
+  <input type="number" class="sales-input" id="sales-7" data-idx="7" data-deal="1" placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
   <span class="sales-arrow">→</span>
   <span class="sales-rate-label">回收率</span>
   <span class="rate-badge" id="rate-badge-7">—</span>
 </div>
 <div class="op-summary-bar"><span class="op-label">👤 操作人（全期成交）：</span><span class='op-pill'>曾常明 <span class='op-cnt'>1</span></span></div>
 <table class="data-table">
-  <thead><tr>
-    <th>週次</th><th>執行數</th><th>Plugin🔌</th><th>成交數</th>
-    <th>操作人（成交筆數）</th><th>主要舊機（前3）</th><th>換購新品（前3）</th>
-  </tr></thead>
-  <tbody><tr class="">
-  <td>FY26Q3W01<br><small>3/29–4/4</small></td>
-  <td class="num">8</td>
-  <td class="num plugin-cell">🔌 2</td>
-  <td class="num ">0</td>
-  <td class="op-cell"><span style='color:#ccc;font-size:12px'>—</span></td>
-  <td class="small-text">iPhone 15 Pro×3、iPhone 13 mini×2、iPhone 13 Pro×1</td>
-  <td class="small-text">—</td>
-</tr><tr class="">
-  <td>FY26Q3W02<br><small>4/5–4/11</small></td>
-  <td class="num">9</td>
-  <td class="num plugin-cell">0</td>
-  <td class="num ">0</td>
-  <td class="op-cell"><span style='color:#ccc;font-size:12px'>—</span></td>
-  <td class="small-text">iPhone 15 Pro×3、iPhone 11 Pro×2、iPhone 12 Pro Max×1</td>
-  <td class="small-text">—</td>
-</tr><tr class="">
-  <td>FY26Q3W03<br><small>4/12–4/18</small></td>
-  <td class="num">10</td>
-  <td class="num plugin-cell">0</td>
-  <td class="num ">0</td>
-  <td class="op-cell"><span style='color:#ccc;font-size:12px'>—</span></td>
-  <td class="small-text">iPhone 16 Pro Max×3、iPhone 16e×2、iPhone 13×1</td>
-  <td class="small-text">—</td>
-</tr><tr class="">
-  <td>FY26Q3W04<br><small>4/19–4/25</small></td>
-  <td class="num">1</td>
-  <td class="num plugin-cell">0</td>
-  <td class="num ">0</td>
-  <td class="op-cell"><span style='color:#ccc;font-size:12px'>—</span></td>
-  <td class="small-text">iPhone 14 Pro×1</td>
-  <td class="small-text">—</td>
-</tr><tr class="">
-  <td>FY26Q3W05<br><small>4/26–5/2</small></td>
-  <td class="num">2</td>
-  <td class="num plugin-cell">0</td>
-  <td class="num ">0</td>
-  <td class="op-cell"><span style='color:#ccc;font-size:12px'>—</span></td>
-  <td class="small-text">iPhone SE 3×1、iPhone 15 Pro×1</td>
-  <td class="small-text">—</td>
-</tr><tr class="">
-  <td>FY26Q3W06<br><small>5/3–5/9</small></td>
-  <td class="num">10</td>
-  <td class="num plugin-cell">🔌 5</td>
-  <td class="num deal-yes">1</td>
-  <td class="op-cell"><span class='op-pill'>曾常明 <span class='op-cnt'>1</span></span></td>
-  <td class="small-text">iPhone 14 Pro Max×5、iPhone 11×3、iPhone 13×1</td>
-  <td class="small-text">iPhone 17×1</td>
-</tr></tbody>
+  <thead><tr><th>週次</th><th>執行數</th><th>Plugin🔌</th><th>成交數</th><th>操作人（成交筆數）</th><th>主要舊機（前3）</th><th>換購新品（前3）</th></tr></thead>
+  <tbody><tr class=''><td>FY26Q3W01<br><small>3/29–4/4</small></td><td class='num'>8</td><td class='num plugin-cell'>🔌 2</td><td class='num '>0</td><td class='op-cell'><span style='color:#ccc;font-size:12px'>—</span></td><td class='small-text'>iPhone 15 Pro×3、iPhone 13 mini×2、iPhone 13 Pro×1</td><td class='small-text'>—</td></tr><tr class=''><td>FY26Q3W02<br><small>4/5–4/11</small></td><td class='num'>9</td><td class='num plugin-cell'>0</td><td class='num '>0</td><td class='op-cell'><span style='color:#ccc;font-size:12px'>—</span></td><td class='small-text'>iPhone 15 Pro×3、iPhone 11 Pro×2、iPhone 12 Pro Max×1</td><td class='small-text'>—</td></tr><tr class=''><td>FY26Q3W03<br><small>4/12–4/18</small></td><td class='num'>10</td><td class='num plugin-cell'>0</td><td class='num '>0</td><td class='op-cell'><span style='color:#ccc;font-size:12px'>—</span></td><td class='small-text'>iPhone 16 Pro Max×3、iPhone 16e×2、iPhone 13×1</td><td class='small-text'>—</td></tr><tr class=''><td>FY26Q3W04<br><small>4/19–4/25</small></td><td class='num'>1</td><td class='num plugin-cell'>0</td><td class='num '>0</td><td class='op-cell'><span style='color:#ccc;font-size:12px'>—</span></td><td class='small-text'>iPhone 14 Pro×1</td><td class='small-text'>—</td></tr><tr class=''><td>FY26Q3W05<br><small>4/26–5/2</small></td><td class='num'>2</td><td class='num plugin-cell'>0</td><td class='num '>0</td><td class='op-cell'><span style='color:#ccc;font-size:12px'>—</span></td><td class='small-text'>iPhone SE 3×1、iPhone 15 Pro×1</td><td class='small-text'>—</td></tr><tr class=''><td>FY26Q3W06<br><small>5/3–5/9</small></td><td class='num'>10</td><td class='num plugin-cell'>🔌 5</td><td class='num deal-yes'>1</td><td class='op-cell'><span class='op-pill'>曾常明 <span class='op-cnt'>1</span></span></td><td class='small-text'>iPhone 14 Pro Max×5、iPhone 11×3、iPhone 13×1</td><td class='small-text'>iPhone 17×1</td></tr><tr class='zero-row new-week-row'><td>FY26Q3W07<span class="new-badge">NEW</span><br><small>5/10–5/16</small></td><td class='num'>0</td><td class='num plugin-cell'>0</td><td class='num '>0</td><td class='op-cell'><span style='color:#ccc;font-size:12px'>—</span></td><td class='small-text'>—</td><td class='small-text'>—</td></tr></tbody>
 </table>
 </div><div class="store-card" id="store-8" data-store-idx="8" data-deal="11">
 <div class="store-header">
   <div class="store-title">🏪 燦坤右昌店</div>
   <div class="store-kpis">
-    <div class="kpi-chip exec-chip">執行 102</div>
+    <div class="kpi-chip exec-chip">執行 122</div>
     <div class="kpi-chip plugin-chip">Plugin 🔌 27</div>
     <div class="kpi-chip deal-chip">成交 11</div>
   </div>
 </div>
 <div class="sales-row">
   <span class="sales-label">📱 iPhone 銷量（手動輸入）</span>
-  <input type="number" class="sales-input" id="sales-8"
-    data-idx="8" data-deal="11"
-    placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
+  <input type="number" class="sales-input" id="sales-8" data-idx="8" data-deal="11" placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
   <span class="sales-arrow">→</span>
   <span class="sales-rate-label">回收率</span>
   <span class="rate-badge" id="rate-badge-8">—</span>
 </div>
 <div class="op-summary-bar"><span class="op-label">👤 操作人（全期成交）：</span><span class='op-pill'>史昀靈 <span class='op-cnt'>6</span></span><span class='op-pill'>吳啟禎 <span class='op-cnt'>5</span></span></div>
 <table class="data-table">
-  <thead><tr>
-    <th>週次</th><th>執行數</th><th>Plugin🔌</th><th>成交數</th>
-    <th>操作人（成交筆數）</th><th>主要舊機（前3）</th><th>換購新品（前3）</th>
-  </tr></thead>
-  <tbody><tr class="">
-  <td>FY26Q3W01<br><small>3/29–4/4</small></td>
-  <td class="num">18</td>
-  <td class="num plugin-cell">🔌 3</td>
-  <td class="num deal-yes">1</td>
-  <td class="op-cell"><span class='op-pill'>史昀靈 <span class='op-cnt'>1</span></span></td>
-  <td class="small-text">iPhone 12 Pro×4、iPhone 13×2、iPhone 11×2</td>
-  <td class="small-text">iPhone 17e×1</td>
-</tr><tr class="">
-  <td>FY26Q3W02<br><small>4/5–4/11</small></td>
-  <td class="num">15</td>
-  <td class="num plugin-cell">🔌 5</td>
-  <td class="num deal-yes">1</td>
-  <td class="op-cell"><span class='op-pill'>吳啟禎 <span class='op-cnt'>1</span></span></td>
-  <td class="small-text">iPhone 13 Pro×4、iPhone 13×3、XPERIA 10 V×1</td>
-  <td class="small-text">AirPods (4th Gen)×1</td>
-</tr><tr class="">
-  <td>FY26Q3W03<br><small>4/12–4/18</small></td>
-  <td class="num">21</td>
-  <td class="num plugin-cell">🔌 6</td>
-  <td class="num deal-yes">2</td>
-  <td class="op-cell"><span class='op-pill'>吳啟禎 <span class='op-cnt'>1</span></span><span class='op-pill'>史昀靈 <span class='op-cnt'>1</span></span></td>
-  <td class="small-text">iPhone 11×5、iPhone 16×3、iPhone 15 Plus×2</td>
-  <td class="small-text">iPhone 17 Pro×1、iPhone 17e×1</td>
-</tr><tr class="">
-  <td>FY26Q3W04<br><small>4/19–4/25</small></td>
-  <td class="num">14</td>
-  <td class="num plugin-cell">🔌 6</td>
-  <td class="num deal-yes">4</td>
-  <td class="op-cell"><span class='op-pill'>史昀靈 <span class='op-cnt'>2</span></span><span class='op-pill'>吳啟禎 <span class='op-cnt'>2</span></span></td>
-  <td class="small-text">iPhone 13×5、iPhone 12×2、iPhone 12 Pro×2</td>
-  <td class="small-text">iPhone 17 Pro×2、iPhone 17×1、iPhone 17 Pro Max×1</td>
-</tr><tr class="">
-  <td>FY26Q3W05<br><small>4/26–5/2</small></td>
-  <td class="num">22</td>
-  <td class="num plugin-cell">🔌 5</td>
-  <td class="num deal-yes">2</td>
-  <td class="op-cell"><span class='op-pill'>史昀靈 <span class='op-cnt'>1</span></span><span class='op-pill'>吳啟禎 <span class='op-cnt'>1</span></span></td>
-  <td class="small-text">iPhone 16 Pro Max×3、XPERIA 1III×3、iPhone 12 Pro×3</td>
-  <td class="small-text">iPhone 17×2</td>
-</tr><tr class="">
-  <td>FY26Q3W06<br><small>5/3–5/9</small></td>
-  <td class="num">12</td>
-  <td class="num plugin-cell">🔌 2</td>
-  <td class="num deal-yes">1</td>
-  <td class="op-cell"><span class='op-pill'>史昀靈 <span class='op-cnt'>1</span></span></td>
-  <td class="small-text">iPhone 13×2、iPhone 13 Pro Max×2、iPhone 15 Pro Max×2</td>
-  <td class="small-text">iPhone 17 Pro×1</td>
-</tr></tbody>
+  <thead><tr><th>週次</th><th>執行數</th><th>Plugin🔌</th><th>成交數</th><th>操作人（成交筆數）</th><th>主要舊機（前3）</th><th>換購新品（前3）</th></tr></thead>
+  <tbody><tr class=''><td>FY26Q3W01<br><small>3/29–4/4</small></td><td class='num'>18</td><td class='num plugin-cell'>🔌 3</td><td class='num deal-yes'>1</td><td class='op-cell'><span class='op-pill'>史昀靈 <span class='op-cnt'>1</span></span></td><td class='small-text'>iPhone 12 Pro×4、iPhone 13×2、iPhone 11×2</td><td class='small-text'>iPhone 17e×1</td></tr><tr class=''><td>FY26Q3W02<br><small>4/5–4/11</small></td><td class='num'>15</td><td class='num plugin-cell'>🔌 5</td><td class='num deal-yes'>1</td><td class='op-cell'><span class='op-pill'>吳啟禎 <span class='op-cnt'>1</span></span></td><td class='small-text'>iPhone 13 Pro×4、iPhone 13×3、XPERIA 10 V×1</td><td class='small-text'>AirPods (4th Gen)×1</td></tr><tr class=''><td>FY26Q3W03<br><small>4/12–4/18</small></td><td class='num'>21</td><td class='num plugin-cell'>🔌 6</td><td class='num deal-yes'>2</td><td class='op-cell'><span class='op-pill'>吳啟禎 <span class='op-cnt'>1</span></span><span class='op-pill'>史昀靈 <span class='op-cnt'>1</span></span></td><td class='small-text'>iPhone 11×5、iPhone 16×3、iPhone 15 Plus×2</td><td class='small-text'>iPhone 17 Pro×1、iPhone 17e×1</td></tr><tr class=''><td>FY26Q3W04<br><small>4/19–4/25</small></td><td class='num'>14</td><td class='num plugin-cell'>🔌 6</td><td class='num deal-yes'>4</td><td class='op-cell'><span class='op-pill'>史昀靈 <span class='op-cnt'>2</span></span><span class='op-pill'>吳啟禎 <span class='op-cnt'>2</span></span></td><td class='small-text'>iPhone 13×5、iPhone 12×2、iPhone 12 Pro×2</td><td class='small-text'>iPhone 17 Pro×2、iPhone 17×1、iPhone 17 Pro Max×1</td></tr><tr class=''><td>FY26Q3W05<br><small>4/26–5/2</small></td><td class='num'>22</td><td class='num plugin-cell'>🔌 5</td><td class='num deal-yes'>2</td><td class='op-cell'><span class='op-pill'>史昀靈 <span class='op-cnt'>1</span></span><span class='op-pill'>吳啟禎 <span class='op-cnt'>1</span></span></td><td class='small-text'>iPhone 16 Pro Max×3、XPERIA 1III×3、iPhone 12 Pro×3</td><td class='small-text'>iPhone 17×2</td></tr><tr class=''><td>FY26Q3W06<br><small>5/3–5/9</small></td><td class='num'>12</td><td class='num plugin-cell'>🔌 2</td><td class='num deal-yes'>1</td><td class='op-cell'><span class='op-pill'>史昀靈 <span class='op-cnt'>1</span></span></td><td class='small-text'>iPhone 13×2、iPhone 13 Pro Max×2、iPhone 15 Pro Max×2</td><td class='small-text'>iPhone 17 Pro×1</td></tr><tr class=' new-week-row'><td>FY26Q3W07<span class="new-badge">NEW</span><br><small>5/10–5/16</small></td><td class='num'>20</td><td class='num plugin-cell'>0</td><td class='num '>0</td><td class='op-cell'><span style='color:#ccc;font-size:12px'>—</span></td><td class='small-text'>iPhone 12 mini×4、iPhone 15 Pro×3、iPhone 16 Pro×2</td><td class='small-text'>—</td></tr></tbody>
 </table>
 </div><div class="store-card" id="store-9" data-store-idx="9" data-deal="12">
 <div class="store-header">
   <div class="store-title">🏪 燦坤基隆旗艦店</div>
   <div class="store-kpis">
-    <div class="kpi-chip exec-chip">執行 87</div>
+    <div class="kpi-chip exec-chip">執行 98</div>
     <div class="kpi-chip plugin-chip">Plugin 🔌 28</div>
     <div class="kpi-chip deal-chip">成交 12</div>
   </div>
 </div>
 <div class="sales-row">
   <span class="sales-label">📱 iPhone 銷量（手動輸入）</span>
-  <input type="number" class="sales-input" id="sales-9"
-    data-idx="9" data-deal="12"
-    placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
+  <input type="number" class="sales-input" id="sales-9" data-idx="9" data-deal="12" placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
   <span class="sales-arrow">→</span>
   <span class="sales-rate-label">回收率</span>
   <span class="rate-badge" id="rate-badge-9">—</span>
 </div>
 <div class="op-summary-bar"><span class="op-label">👤 操作人（全期成交）：</span><span class='op-pill'>傅淑怡 <span class='op-cnt'>11</span></span><span class='op-pill'>謝函君 <span class='op-cnt'>1</span></span></div>
 <table class="data-table">
-  <thead><tr>
-    <th>週次</th><th>執行數</th><th>Plugin🔌</th><th>成交數</th>
-    <th>操作人（成交筆數）</th><th>主要舊機（前3）</th><th>換購新品（前3）</th>
-  </tr></thead>
-  <tbody><tr class="">
-  <td>FY26Q3W01<br><small>3/29–4/4</small></td>
-  <td class="num">5</td>
-  <td class="num plugin-cell">🔌 1</td>
-  <td class="num deal-yes">1</td>
-  <td class="op-cell"><span class='op-pill'>傅淑怡 <span class='op-cnt'>1</span></span></td>
-  <td class="small-text">iPhone 16 Pro×1、iPhone 16 Pro Max×1、iPhone 13×1</td>
-  <td class="small-text">iPhone 17×1</td>
-</tr><tr class="">
-  <td>FY26Q3W02<br><small>4/5–4/11</small></td>
-  <td class="num">24</td>
-  <td class="num plugin-cell">🔌 6</td>
-  <td class="num deal-yes">1</td>
-  <td class="op-cell"><span class='op-pill'>傅淑怡 <span class='op-cnt'>1</span></span></td>
-  <td class="small-text">iPhone 12×4、iPhone 15 Pro×4、iPhone 11×4</td>
-  <td class="small-text">iPhone 17×1</td>
-</tr><tr class="">
-  <td>FY26Q3W03<br><small>4/12–4/18</small></td>
-  <td class="num">21</td>
-  <td class="num plugin-cell">🔌 6</td>
-  <td class="num deal-yes">4</td>
-  <td class="op-cell"><span class='op-pill'>傅淑怡 <span class='op-cnt'>4</span></span></td>
-  <td class="small-text">iPhone 13×6、iPhone 12×2、iPhone 16 Pro Max×2</td>
-  <td class="small-text">iPhone 17 Pro Max×3、iPhone 17 Pro×1</td>
-</tr><tr class="">
-  <td>FY26Q3W04<br><small>4/19–4/25</small></td>
-  <td class="num">11</td>
-  <td class="num plugin-cell">🔌 4</td>
-  <td class="num deal-yes">1</td>
-  <td class="op-cell"><span class='op-pill'>傅淑怡 <span class='op-cnt'>1</span></span></td>
-  <td class="small-text">iPhone 12×3、iPhone 16 Pro Max×3、iPhone 16 Pro×1</td>
-  <td class="small-text">iPhone 17 Pro Max×1</td>
-</tr><tr class="">
-  <td>FY26Q3W05<br><small>4/26–5/2</small></td>
-  <td class="num">12</td>
-  <td class="num plugin-cell">🔌 6</td>
-  <td class="num deal-yes">4</td>
-  <td class="op-cell"><span class='op-pill'>傅淑怡 <span class='op-cnt'>4</span></span></td>
-  <td class="small-text">iPhone 13×4、iPhone 15×2、iPhone 13 Pro×2</td>
-  <td class="small-text">iPhone 17 Pro×2、AirPods (4th Gen)×1、iPhone 17 Pro Max×1</td>
-</tr><tr class="">
-  <td>FY26Q3W06<br><small>5/3–5/9</small></td>
-  <td class="num">14</td>
-  <td class="num plugin-cell">🔌 5</td>
-  <td class="num deal-yes">1</td>
-  <td class="op-cell"><span class='op-pill'>謝函君 <span class='op-cnt'>1</span></span></td>
-  <td class="small-text">iPhone 15 Pro×6、iPhone 13 Pro Max×3、iPhone 14 Pro×1</td>
-  <td class="small-text">iPhone 17 Pro Max×1</td>
-</tr></tbody>
+  <thead><tr><th>週次</th><th>執行數</th><th>Plugin🔌</th><th>成交數</th><th>操作人（成交筆數）</th><th>主要舊機（前3）</th><th>換購新品（前3）</th></tr></thead>
+  <tbody><tr class=''><td>FY26Q3W01<br><small>3/29–4/4</small></td><td class='num'>5</td><td class='num plugin-cell'>🔌 1</td><td class='num deal-yes'>1</td><td class='op-cell'><span class='op-pill'>傅淑怡 <span class='op-cnt'>1</span></span></td><td class='small-text'>iPhone 16 Pro×1、iPhone 16 Pro Max×1、iPhone 13×1</td><td class='small-text'>iPhone 17×1</td></tr><tr class=''><td>FY26Q3W02<br><small>4/5–4/11</small></td><td class='num'>24</td><td class='num plugin-cell'>🔌 6</td><td class='num deal-yes'>1</td><td class='op-cell'><span class='op-pill'>傅淑怡 <span class='op-cnt'>1</span></span></td><td class='small-text'>iPhone 12×4、iPhone 15 Pro×4、iPhone 11×4</td><td class='small-text'>iPhone 17×1</td></tr><tr class=''><td>FY26Q3W03<br><small>4/12–4/18</small></td><td class='num'>21</td><td class='num plugin-cell'>🔌 6</td><td class='num deal-yes'>4</td><td class='op-cell'><span class='op-pill'>傅淑怡 <span class='op-cnt'>4</span></span></td><td class='small-text'>iPhone 13×6、iPhone 12×2、iPhone 16 Pro Max×2</td><td class='small-text'>iPhone 17 Pro Max×3、iPhone 17 Pro×1</td></tr><tr class=''><td>FY26Q3W04<br><small>4/19–4/25</small></td><td class='num'>11</td><td class='num plugin-cell'>🔌 4</td><td class='num deal-yes'>1</td><td class='op-cell'><span class='op-pill'>傅淑怡 <span class='op-cnt'>1</span></span></td><td class='small-text'>iPhone 12×3、iPhone 16 Pro Max×3、iPhone 16 Pro×1</td><td class='small-text'>iPhone 17 Pro Max×1</td></tr><tr class=''><td>FY26Q3W05<br><small>4/26–5/2</small></td><td class='num'>12</td><td class='num plugin-cell'>🔌 6</td><td class='num deal-yes'>4</td><td class='op-cell'><span class='op-pill'>傅淑怡 <span class='op-cnt'>4</span></span></td><td class='small-text'>iPhone 13×4、iPhone 15×2、iPhone 13 Pro×2</td><td class='small-text'>iPhone 17 Pro×2、AirPods (4th Gen)×1、iPhone 17 Pro Max×1</td></tr><tr class=''><td>FY26Q3W06<br><small>5/3–5/9</small></td><td class='num'>14</td><td class='num plugin-cell'>🔌 5</td><td class='num deal-yes'>1</td><td class='op-cell'><span class='op-pill'>謝函君 <span class='op-cnt'>1</span></span></td><td class='small-text'>iPhone 15 Pro×6、iPhone 13 Pro Max×3、iPhone 14 Pro×1</td><td class='small-text'>iPhone 17 Pro Max×1</td></tr><tr class=' new-week-row'><td>FY26Q3W07<span class="new-badge">NEW</span><br><small>5/10–5/16</small></td><td class='num'>11</td><td class='num plugin-cell'>0</td><td class='num '>0</td><td class='op-cell'><span style='color:#ccc;font-size:12px'>—</span></td><td class='small-text'>iPhone 13×3、iPhone 11×2、iPhone 16 Pro×1</td><td class='small-text'>—</td></tr></tbody>
 </table>
 </div><div class="store-card" id="store-10" data-store-idx="10" data-deal="4">
 <div class="store-header">
   <div class="store-title">🏪 燦坤大甲店</div>
   <div class="store-kpis">
-    <div class="kpi-chip exec-chip">執行 42</div>
-    <div class="kpi-chip plugin-chip">Plugin 🔌 4</div>
+    <div class="kpi-chip exec-chip">執行 52</div>
+    <div class="kpi-chip plugin-chip">Plugin 🔌 8</div>
     <div class="kpi-chip deal-chip">成交 4</div>
   </div>
 </div>
 <div class="sales-row">
   <span class="sales-label">📱 iPhone 銷量（手動輸入）</span>
-  <input type="number" class="sales-input" id="sales-10"
-    data-idx="10" data-deal="4"
-    placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
+  <input type="number" class="sales-input" id="sales-10" data-idx="10" data-deal="4" placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
   <span class="sales-arrow">→</span>
   <span class="sales-rate-label">回收率</span>
   <span class="rate-badge" id="rate-badge-10">—</span>
 </div>
 <div class="op-summary-bar"><span class="op-label">👤 操作人（全期成交）：</span><span class='op-pill'>曾婷儀 <span class='op-cnt'>4</span></span></div>
 <table class="data-table">
-  <thead><tr>
-    <th>週次</th><th>執行數</th><th>Plugin🔌</th><th>成交數</th>
-    <th>操作人（成交筆數）</th><th>主要舊機（前3）</th><th>換購新品（前3）</th>
-  </tr></thead>
-  <tbody><tr class="">
-  <td>FY26Q3W01<br><small>3/29–4/4</small></td>
-  <td class="num">6</td>
-  <td class="num plugin-cell">🔌 1</td>
-  <td class="num deal-yes">1</td>
-  <td class="op-cell"><span class='op-pill'>曾婷儀 <span class='op-cnt'>1</span></span></td>
-  <td class="small-text">iPhone 12×1、iPhone 11 Pro Max×1、iPhone 15×1</td>
-  <td class="small-text">iPhone 17 Pro×1</td>
-</tr><tr class="">
-  <td>FY26Q3W02<br><small>4/5–4/11</small></td>
-  <td class="num">10</td>
-  <td class="num plugin-cell">0</td>
-  <td class="num ">0</td>
-  <td class="op-cell"><span style='color:#ccc;font-size:12px'>—</span></td>
-  <td class="small-text">Galaxy S25 Ultra×2、iPhone 13 Pro×2、iPhone 14×1</td>
-  <td class="small-text">—</td>
-</tr><tr class="">
-  <td>FY26Q3W03<br><small>4/12–4/18</small></td>
-  <td class="num">3</td>
-  <td class="num plugin-cell">🔌 1</td>
-  <td class="num deal-yes">1</td>
-  <td class="op-cell"><span class='op-pill'>曾婷儀 <span class='op-cnt'>1</span></span></td>
-  <td class="small-text">iPhone 13 Pro Max×3</td>
-  <td class="small-text">iPhone 17 Pro Max×1</td>
-</tr><tr class="">
-  <td>FY26Q3W04<br><small>4/19–4/25</small></td>
-  <td class="num">4</td>
-  <td class="num plugin-cell">0</td>
-  <td class="num ">0</td>
-  <td class="op-cell"><span style='color:#ccc;font-size:12px'>—</span></td>
-  <td class="small-text">iPhone 14×1、iPhone 16 Pro×1、iPhone 13 mini×1</td>
-  <td class="small-text">—</td>
-</tr><tr class="">
-  <td>FY26Q3W05<br><small>4/26–5/2</small></td>
-  <td class="num">12</td>
-  <td class="num plugin-cell">🔌 2</td>
-  <td class="num deal-yes">2</td>
-  <td class="op-cell"><span class='op-pill'>曾婷儀 <span class='op-cnt'>2</span></span></td>
-  <td class="small-text">iPhone 13 Pro×3、iPhone 15 Pro×3、iPhone 13×2</td>
-  <td class="small-text">iPhone 17×1、iPhone 17 Pro×1</td>
-</tr><tr class="">
-  <td>FY26Q3W06<br><small>5/3–5/9</small></td>
-  <td class="num">7</td>
-  <td class="num plugin-cell">0</td>
-  <td class="num ">0</td>
-  <td class="op-cell"><span style='color:#ccc;font-size:12px'>—</span></td>
-  <td class="small-text">Pixel 10×3、iPhone 16 Pro×1、iPhone 12×1</td>
-  <td class="small-text">—</td>
-</tr></tbody>
+  <thead><tr><th>週次</th><th>執行數</th><th>Plugin🔌</th><th>成交數</th><th>操作人（成交筆數）</th><th>主要舊機（前3）</th><th>換購新品（前3）</th></tr></thead>
+  <tbody><tr class=''><td>FY26Q3W01<br><small>3/29–4/4</small></td><td class='num'>6</td><td class='num plugin-cell'>🔌 1</td><td class='num deal-yes'>1</td><td class='op-cell'><span class='op-pill'>曾婷儀 <span class='op-cnt'>1</span></span></td><td class='small-text'>iPhone 12×1、iPhone 11 Pro Max×1、iPhone 15×1</td><td class='small-text'>iPhone 17 Pro×1</td></tr><tr class=''><td>FY26Q3W02<br><small>4/5–4/11</small></td><td class='num'>10</td><td class='num plugin-cell'>0</td><td class='num '>0</td><td class='op-cell'><span style='color:#ccc;font-size:12px'>—</span></td><td class='small-text'>Galaxy S25 Ultra×2、iPhone 13 Pro×2、iPhone 14×1</td><td class='small-text'>—</td></tr><tr class=''><td>FY26Q3W03<br><small>4/12–4/18</small></td><td class='num'>3</td><td class='num plugin-cell'>🔌 1</td><td class='num deal-yes'>1</td><td class='op-cell'><span class='op-pill'>曾婷儀 <span class='op-cnt'>1</span></span></td><td class='small-text'>iPhone 13 Pro Max×3</td><td class='small-text'>iPhone 17 Pro Max×1</td></tr><tr class=''><td>FY26Q3W04<br><small>4/19–4/25</small></td><td class='num'>4</td><td class='num plugin-cell'>0</td><td class='num '>0</td><td class='op-cell'><span style='color:#ccc;font-size:12px'>—</span></td><td class='small-text'>iPhone 14×1、iPhone 16 Pro×1、iPhone 13 mini×1</td><td class='small-text'>—</td></tr><tr class=''><td>FY26Q3W05<br><small>4/26–5/2</small></td><td class='num'>12</td><td class='num plugin-cell'>🔌 2</td><td class='num deal-yes'>2</td><td class='op-cell'><span class='op-pill'>曾婷儀 <span class='op-cnt'>2</span></span></td><td class='small-text'>iPhone 13 Pro×3、iPhone 15 Pro×3、iPhone 13×2</td><td class='small-text'>iPhone 17×1、iPhone 17 Pro×1</td></tr><tr class=''><td>FY26Q3W06<br><small>5/3–5/9</small></td><td class='num'>7</td><td class='num plugin-cell'>0</td><td class='num '>0</td><td class='op-cell'><span style='color:#ccc;font-size:12px'>—</span></td><td class='small-text'>Pixel 10×3、iPhone 16 Pro×1、iPhone 12×1</td><td class='small-text'>—</td></tr><tr class=' new-week-row'><td>FY26Q3W07<span class="new-badge">NEW</span><br><small>5/10–5/16</small></td><td class='num'>10</td><td class='num plugin-cell'>🔌 4</td><td class='num '>0</td><td class='op-cell'><span style='color:#ccc;font-size:12px'>—</span></td><td class='small-text'>iPhone 13 Pro×2、iPhone XS×2、iPhone XS Max×2</td><td class='small-text'>—</td></tr></tbody>
 </table>
-</div><div class="store-card" id="store-11" data-store-idx="11" data-deal="12">
+</div><div class="store-card" id="store-11" data-store-idx="11" data-deal="18">
 <div class="store-header">
   <div class="store-title">🏪 燦坤岡山家電館</div>
   <div class="store-kpis">
-    <div class="kpi-chip exec-chip">執行 155</div>
-    <div class="kpi-chip plugin-chip">Plugin 🔌 32</div>
-    <div class="kpi-chip deal-chip">成交 12</div>
+    <div class="kpi-chip exec-chip">執行 203</div>
+    <div class="kpi-chip plugin-chip">Plugin 🔌 49</div>
+    <div class="kpi-chip deal-chip">成交 18</div>
   </div>
 </div>
 <div class="sales-row">
   <span class="sales-label">📱 iPhone 銷量（手動輸入）</span>
-  <input type="number" class="sales-input" id="sales-11"
-    data-idx="11" data-deal="12"
-    placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
+  <input type="number" class="sales-input" id="sales-11" data-idx="11" data-deal="18" placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
   <span class="sales-arrow">→</span>
   <span class="sales-rate-label">回收率</span>
   <span class="rate-badge" id="rate-badge-11">—</span>
 </div>
-<div class="op-summary-bar"><span class="op-label">👤 操作人（全期成交）：</span><span class='op-pill'>張云瑞 <span class='op-cnt'>7</span></span><span class='op-pill'>孫靜雅 <span class='op-cnt'>5</span></span></div>
+<div class="op-summary-bar"><span class="op-label">👤 操作人（全期成交）：</span><span class='op-pill'>張云瑞 <span class='op-cnt'>11</span></span><span class='op-pill'>孫靜雅 <span class='op-cnt'>7</span></span></div>
 <table class="data-table">
-  <thead><tr>
-    <th>週次</th><th>執行數</th><th>Plugin🔌</th><th>成交數</th>
-    <th>操作人（成交筆數）</th><th>主要舊機（前3）</th><th>換購新品（前3）</th>
-  </tr></thead>
-  <tbody><tr class="">
-  <td>FY26Q3W01<br><small>3/29–4/4</small></td>
-  <td class="num">20</td>
-  <td class="num plugin-cell">🔌 8</td>
-  <td class="num deal-yes">1</td>
-  <td class="op-cell"><span class='op-pill'>張云瑞 <span class='op-cnt'>1</span></span></td>
-  <td class="small-text">iPhone 12×5、iPhone 14 Plus×5、iPhone 14×2</td>
-  <td class="small-text">iPhone 17×1</td>
-</tr><tr class="">
-  <td>FY26Q3W02<br><small>4/5–4/11</small></td>
-  <td class="num">43</td>
-  <td class="num plugin-cell">🔌 10</td>
-  <td class="num deal-yes">5</td>
-  <td class="op-cell"><span class='op-pill'>張云瑞 <span class='op-cnt'>3</span></span><span class='op-pill'>孫靜雅 <span class='op-cnt'>2</span></span></td>
-  <td class="small-text">iPhone 15 Pro×7、iPhone 11×5、iPhone 12×4</td>
-  <td class="small-text">iPhone 17 Pro×2、iPhone 17 Pro Max×2、iPhone Air×1</td>
-</tr><tr class="">
-  <td>FY26Q3W03<br><small>4/12–4/18</small></td>
-  <td class="num">55</td>
-  <td class="num plugin-cell">🔌 7</td>
-  <td class="num deal-yes">5</td>
-  <td class="op-cell"><span class='op-pill'>張云瑞 <span class='op-cnt'>3</span></span><span class='op-pill'>孫靜雅 <span class='op-cnt'>2</span></span></td>
-  <td class="small-text">iPhone 16 Pro×12、iPhone 15 Pro×11、iPhone 13 Pro×6</td>
-  <td class="small-text">iPhone 17 Pro×3、iPhone 17×1、iPhone 17 Pro Max×1</td>
-</tr><tr class="">
-  <td>FY26Q3W04<br><small>4/19–4/25</small></td>
-  <td class="num">7</td>
-  <td class="num plugin-cell">🔌 1</td>
-  <td class="num ">0</td>
-  <td class="op-cell"><span style='color:#ccc;font-size:12px'>—</span></td>
-  <td class="small-text">iPhone 16e×2、iPhone 13×1、iPhone 16 Plus×1</td>
-  <td class="small-text">—</td>
-</tr><tr class="">
-  <td>FY26Q3W05<br><small>4/26–5/2</small></td>
-  <td class="num">11</td>
-  <td class="num plugin-cell">🔌 1</td>
-  <td class="num ">0</td>
-  <td class="op-cell"><span style='color:#ccc;font-size:12px'>—</span></td>
-  <td class="small-text">iPhone 11×3、iPhone 15 Pro×2、iPhone 13 Pro×1</td>
-  <td class="small-text">—</td>
-</tr><tr class="">
-  <td>FY26Q3W06<br><small>5/3–5/9</small></td>
-  <td class="num">19</td>
-  <td class="num plugin-cell">🔌 5</td>
-  <td class="num deal-yes">1</td>
-  <td class="op-cell"><span class='op-pill'>孫靜雅 <span class='op-cnt'>1</span></span></td>
-  <td class="small-text">iPhone 15 Pro×4、iPhone 14 Pro×3、iPhone XS×2</td>
-  <td class="small-text">Display×1</td>
-</tr></tbody>
+  <thead><tr><th>週次</th><th>執行數</th><th>Plugin🔌</th><th>成交數</th><th>操作人（成交筆數）</th><th>主要舊機（前3）</th><th>換購新品（前3）</th></tr></thead>
+  <tbody><tr class=''><td>FY26Q3W01<br><small>3/29–4/4</small></td><td class='num'>20</td><td class='num plugin-cell'>🔌 8</td><td class='num deal-yes'>1</td><td class='op-cell'><span class='op-pill'>張云瑞 <span class='op-cnt'>1</span></span></td><td class='small-text'>iPhone 12×5、iPhone 14 Plus×5、iPhone 14×2</td><td class='small-text'>iPhone 17×1</td></tr><tr class=''><td>FY26Q3W02<br><small>4/5–4/11</small></td><td class='num'>43</td><td class='num plugin-cell'>🔌 10</td><td class='num deal-yes'>5</td><td class='op-cell'><span class='op-pill'>張云瑞 <span class='op-cnt'>3</span></span><span class='op-pill'>孫靜雅 <span class='op-cnt'>2</span></span></td><td class='small-text'>iPhone 15 Pro×7、iPhone 11×5、iPhone 12×4</td><td class='small-text'>iPhone 17 Pro×2、iPhone 17 Pro Max×2、iPhone Air×1</td></tr><tr class=''><td>FY26Q3W03<br><small>4/12–4/18</small></td><td class='num'>55</td><td class='num plugin-cell'>🔌 7</td><td class='num deal-yes'>5</td><td class='op-cell'><span class='op-pill'>張云瑞 <span class='op-cnt'>3</span></span><span class='op-pill'>孫靜雅 <span class='op-cnt'>2</span></span></td><td class='small-text'>iPhone 16 Pro×12、iPhone 15 Pro×11、iPhone 13 Pro×6</td><td class='small-text'>iPhone 17 Pro×3、iPhone 17×1、iPhone 17 Pro Max×1</td></tr><tr class=''><td>FY26Q3W04<br><small>4/19–4/25</small></td><td class='num'>7</td><td class='num plugin-cell'>🔌 1</td><td class='num '>0</td><td class='op-cell'><span style='color:#ccc;font-size:12px'>—</span></td><td class='small-text'>iPhone 16e×2、iPhone 13×1、iPhone 16 Plus×1</td><td class='small-text'>—</td></tr><tr class=''><td>FY26Q3W05<br><small>4/26–5/2</small></td><td class='num'>11</td><td class='num plugin-cell'>🔌 1</td><td class='num '>0</td><td class='op-cell'><span style='color:#ccc;font-size:12px'>—</span></td><td class='small-text'>iPhone 11×3、iPhone 15 Pro×2、iPhone 13 Pro×1</td><td class='small-text'>—</td></tr><tr class=''><td>FY26Q3W06<br><small>5/3–5/9</small></td><td class='num'>19</td><td class='num plugin-cell'>🔌 5</td><td class='num deal-yes'>1</td><td class='op-cell'><span class='op-pill'>孫靜雅 <span class='op-cnt'>1</span></span></td><td class='small-text'>iPhone 15 Pro×4、iPhone 14 Pro×3、iPhone XS×2</td><td class='small-text'>Display×1</td></tr><tr class=' new-week-row'><td>FY26Q3W07<span class="new-badge">NEW</span><br><small>5/10–5/16</small></td><td class='num'>48</td><td class='num plugin-cell'>🔌 17</td><td class='num deal-yes'>6</td><td class='op-cell'><span class='op-pill'>張云瑞 <span class='op-cnt'>4</span></span><span class='op-pill'>孫靜雅 <span class='op-cnt'>2</span></span></td><td class='small-text'>iPhone 15×8、iPhone 16 Pro Max×6、Galaxy S22 Ultra 5G×4</td><td class='small-text'>iPhone 17 Pro×3、iPhone 17 Pro Max×2、iPhone 17×1</td></tr></tbody>
 </table>
-</div><div class="store-card" id="store-12" data-store-idx="12" data-deal="12">
+</div><div class="store-card" id="store-12" data-store-idx="12" data-deal="15">
 <div class="store-header">
   <div class="store-title">🏪 燦坤斗六店</div>
   <div class="store-kpis">
-    <div class="kpi-chip exec-chip">執行 119</div>
-    <div class="kpi-chip plugin-chip">Plugin 🔌 20</div>
-    <div class="kpi-chip deal-chip">成交 12</div>
+    <div class="kpi-chip exec-chip">執行 143</div>
+    <div class="kpi-chip plugin-chip">Plugin 🔌 27</div>
+    <div class="kpi-chip deal-chip">成交 15</div>
   </div>
 </div>
 <div class="sales-row">
   <span class="sales-label">📱 iPhone 銷量（手動輸入）</span>
-  <input type="number" class="sales-input" id="sales-12"
-    data-idx="12" data-deal="12"
-    placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
+  <input type="number" class="sales-input" id="sales-12" data-idx="12" data-deal="15" placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
   <span class="sales-arrow">→</span>
   <span class="sales-rate-label">回收率</span>
   <span class="rate-badge" id="rate-badge-12">—</span>
 </div>
-<div class="op-summary-bar"><span class="op-label">👤 操作人（全期成交）：</span><span class='op-pill'>張易生 <span class='op-cnt'>7</span></span><span class='op-pill'>朱俐穎 <span class='op-cnt'>5</span></span></div>
+<div class="op-summary-bar"><span class="op-label">👤 操作人（全期成交）：</span><span class='op-pill'>張易生 <span class='op-cnt'>8</span></span><span class='op-pill'>朱俐穎 <span class='op-cnt'>7</span></span></div>
 <table class="data-table">
-  <thead><tr>
-    <th>週次</th><th>執行數</th><th>Plugin🔌</th><th>成交數</th>
-    <th>操作人（成交筆數）</th><th>主要舊機（前3）</th><th>換購新品（前3）</th>
-  </tr></thead>
-  <tbody><tr class="">
-  <td>FY26Q3W01<br><small>3/29–4/4</small></td>
-  <td class="num">22</td>
-  <td class="num plugin-cell">🔌 2</td>
-  <td class="num deal-yes">1</td>
-  <td class="op-cell"><span class='op-pill'>張易生 <span class='op-cnt'>1</span></span></td>
-  <td class="small-text">iPhone 14 Pro Max×5、iPhone 13×3、iPhone 16 Pro Max×2</td>
-  <td class="small-text">iPhone 17 Pro×1</td>
-</tr><tr class="">
-  <td>FY26Q3W02<br><small>4/5–4/11</small></td>
-  <td class="num">19</td>
-  <td class="num plugin-cell">🔌 6</td>
-  <td class="num deal-yes">4</td>
-  <td class="op-cell"><span class='op-pill'>張易生 <span class='op-cnt'>2</span></span><span class='op-pill'>朱俐穎 <span class='op-cnt'>2</span></span></td>
-  <td class="small-text">iPhone 13 Pro Max×5、iPhone 13×3、iPhone 11×2</td>
-  <td class="small-text">iPhone 17 Pro Max×2、Series 11×1、iPhone 17 Pro×1</td>
-</tr><tr class="">
-  <td>FY26Q3W03<br><small>4/12–4/18</small></td>
-  <td class="num">18</td>
-  <td class="num plugin-cell">🔌 2</td>
-  <td class="num deal-yes">2</td>
-  <td class="op-cell"><span class='op-pill'>朱俐穎 <span class='op-cnt'>1</span></span><span class='op-pill'>張易生 <span class='op-cnt'>1</span></span></td>
-  <td class="small-text">iPhone 13×4、iPhone 15 Pro Max×4、iPhone 12 mini×2</td>
-  <td class="small-text">iPhone 17 Pro×1、iPhone 17 Pro Max×1</td>
-</tr><tr class="">
-  <td>FY26Q3W04<br><small>4/19–4/25</small></td>
-  <td class="num">20</td>
-  <td class="num plugin-cell">🔌 7</td>
-  <td class="num deal-yes">3</td>
-  <td class="op-cell"><span class='op-pill'>張易生 <span class='op-cnt'>2</span></span><span class='op-pill'>朱俐穎 <span class='op-cnt'>1</span></span></td>
-  <td class="small-text">iPhone 15×5、iPhone 14 Pro×5、iPhone 16 Pro×3</td>
-  <td class="small-text">iPhone 17 Pro×3</td>
-</tr><tr class="">
-  <td>FY26Q3W05<br><small>4/26–5/2</small></td>
-  <td class="num">26</td>
-  <td class="num plugin-cell">🔌 3</td>
-  <td class="num deal-yes">2</td>
-  <td class="op-cell"><span class='op-pill'>張易生 <span class='op-cnt'>1</span></span><span class='op-pill'>朱俐穎 <span class='op-cnt'>1</span></span></td>
-  <td class="small-text">iPhone 12 Pro×5、iPhone 14×5、Galaxy S22 5G×3</td>
-  <td class="small-text">iPhone 17×1、iPhone 17 Pro Max×1</td>
-</tr><tr class="">
-  <td>FY26Q3W06<br><small>5/3–5/9</small></td>
-  <td class="num">14</td>
-  <td class="num plugin-cell">0</td>
-  <td class="num ">0</td>
-  <td class="op-cell"><span style='color:#ccc;font-size:12px'>—</span></td>
-  <td class="small-text">iPhone 16 Pro×3、iPhone 13×3、iPhone 13 Pro×2</td>
-  <td class="small-text">—</td>
-</tr></tbody>
+  <thead><tr><th>週次</th><th>執行數</th><th>Plugin🔌</th><th>成交數</th><th>操作人（成交筆數）</th><th>主要舊機（前3）</th><th>換購新品（前3）</th></tr></thead>
+  <tbody><tr class=''><td>FY26Q3W01<br><small>3/29–4/4</small></td><td class='num'>22</td><td class='num plugin-cell'>🔌 2</td><td class='num deal-yes'>1</td><td class='op-cell'><span class='op-pill'>張易生 <span class='op-cnt'>1</span></span></td><td class='small-text'>iPhone 14 Pro Max×5、iPhone 13×3、iPhone 16 Pro Max×2</td><td class='small-text'>iPhone 17 Pro×1</td></tr><tr class=''><td>FY26Q3W02<br><small>4/5–4/11</small></td><td class='num'>19</td><td class='num plugin-cell'>🔌 6</td><td class='num deal-yes'>4</td><td class='op-cell'><span class='op-pill'>張易生 <span class='op-cnt'>2</span></span><span class='op-pill'>朱俐穎 <span class='op-cnt'>2</span></span></td><td class='small-text'>iPhone 13 Pro Max×5、iPhone 13×3、iPhone 11×2</td><td class='small-text'>iPhone 17 Pro Max×2、Series 11×1、iPhone 17 Pro×1</td></tr><tr class=''><td>FY26Q3W03<br><small>4/12–4/18</small></td><td class='num'>18</td><td class='num plugin-cell'>🔌 2</td><td class='num deal-yes'>2</td><td class='op-cell'><span class='op-pill'>朱俐穎 <span class='op-cnt'>1</span></span><span class='op-pill'>張易生 <span class='op-cnt'>1</span></span></td><td class='small-text'>iPhone 13×4、iPhone 15 Pro Max×4、iPhone 12 mini×2</td><td class='small-text'>iPhone 17 Pro×1、iPhone 17 Pro Max×1</td></tr><tr class=''><td>FY26Q3W04<br><small>4/19–4/25</small></td><td class='num'>20</td><td class='num plugin-cell'>🔌 7</td><td class='num deal-yes'>3</td><td class='op-cell'><span class='op-pill'>張易生 <span class='op-cnt'>2</span></span><span class='op-pill'>朱俐穎 <span class='op-cnt'>1</span></span></td><td class='small-text'>iPhone 15×5、iPhone 14 Pro×5、iPhone 16 Pro×3</td><td class='small-text'>iPhone 17 Pro×3</td></tr><tr class=''><td>FY26Q3W05<br><small>4/26–5/2</small></td><td class='num'>26</td><td class='num plugin-cell'>🔌 3</td><td class='num deal-yes'>2</td><td class='op-cell'><span class='op-pill'>張易生 <span class='op-cnt'>1</span></span><span class='op-pill'>朱俐穎 <span class='op-cnt'>1</span></span></td><td class='small-text'>iPhone 12 Pro×5、iPhone 14×5、Galaxy S22 5G×3</td><td class='small-text'>iPhone 17×1、iPhone 17 Pro Max×1</td></tr><tr class=''><td>FY26Q3W06<br><small>5/3–5/9</small></td><td class='num'>14</td><td class='num plugin-cell'>0</td><td class='num '>0</td><td class='op-cell'><span style='color:#ccc;font-size:12px'>—</span></td><td class='small-text'>iPhone 16 Pro×3、iPhone 13×3、iPhone 13 Pro×2</td><td class='small-text'>—</td></tr><tr class=' new-week-row'><td>FY26Q3W07<span class="new-badge">NEW</span><br><small>5/10–5/16</small></td><td class='num'>24</td><td class='num plugin-cell'>🔌 7</td><td class='num deal-yes'>3</td><td class='op-cell'><span class='op-pill'>朱俐穎 <span class='op-cnt'>2</span></span><span class='op-pill'>張易生 <span class='op-cnt'>1</span></span></td><td class='small-text'>iPhone 12 mini×5、iPhone 13×3、iPhone 14 Pro Max×3</td><td class='small-text'>iPhone 17×2、iPhone 17 Pro Max×1</td></tr></tbody>
 </table>
-</div><div class="store-card" id="store-13" data-store-idx="13" data-deal="8">
+</div><div class="store-card" id="store-13" data-store-idx="13" data-deal="9">
 <div class="store-header">
   <div class="store-title">🏪 燦坤新光華店</div>
   <div class="store-kpis">
-    <div class="kpi-chip exec-chip">執行 117</div>
-    <div class="kpi-chip plugin-chip">Plugin 🔌 13</div>
-    <div class="kpi-chip deal-chip">成交 8</div>
+    <div class="kpi-chip exec-chip">執行 133</div>
+    <div class="kpi-chip plugin-chip">Plugin 🔌 16</div>
+    <div class="kpi-chip deal-chip">成交 9</div>
   </div>
 </div>
 <div class="sales-row">
   <span class="sales-label">📱 iPhone 銷量（手動輸入）</span>
-  <input type="number" class="sales-input" id="sales-13"
-    data-idx="13" data-deal="8"
-    placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
+  <input type="number" class="sales-input" id="sales-13" data-idx="13" data-deal="9" placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
   <span class="sales-arrow">→</span>
   <span class="sales-rate-label">回收率</span>
   <span class="rate-badge" id="rate-badge-13">—</span>
 </div>
-<div class="op-summary-bar"><span class="op-label">👤 操作人（全期成交）：</span><span class='op-pill'>陶俊宏 <span class='op-cnt'>6</span></span><span class='op-pill'>林達妮 <span class='op-cnt'>2</span></span></div>
+<div class="op-summary-bar"><span class="op-label">👤 操作人（全期成交）：</span><span class='op-pill'>陶俊宏 <span class='op-cnt'>6</span></span><span class='op-pill'>林達妮 <span class='op-cnt'>3</span></span></div>
 <table class="data-table">
-  <thead><tr>
-    <th>週次</th><th>執行數</th><th>Plugin🔌</th><th>成交數</th>
-    <th>操作人（成交筆數）</th><th>主要舊機（前3）</th><th>換購新品（前3）</th>
-  </tr></thead>
-  <tbody><tr class="">
-  <td>FY26Q3W01<br><small>3/29–4/4</small></td>
-  <td class="num">14</td>
-  <td class="num plugin-cell">🔌 2</td>
-  <td class="num deal-yes">2</td>
-  <td class="op-cell"><span class='op-pill'>陶俊宏 <span class='op-cnt'>1</span></span><span class='op-pill'>林達妮 <span class='op-cnt'>1</span></span></td>
-  <td class="small-text">iPhone 11×4、iPhone 16 Pro×2、iPhone 12 Pro Max×2</td>
-  <td class="small-text">iPhone 17×1、iPhone 17 Pro×1</td>
-</tr><tr class="">
-  <td>FY26Q3W02<br><small>4/5–4/11</small></td>
-  <td class="num">20</td>
-  <td class="num plugin-cell">🔌 3</td>
-  <td class="num deal-yes">2</td>
-  <td class="op-cell"><span class='op-pill'>陶俊宏 <span class='op-cnt'>2</span></span></td>
-  <td class="small-text">iPhone 12 Pro×6、iPhone 13×3、iPhone XR×3</td>
-  <td class="small-text">iPhone 17×1、iPhone 17 Pro×1</td>
-</tr><tr class="">
-  <td>FY26Q3W03<br><small>4/12–4/18</small></td>
-  <td class="num">38</td>
-  <td class="num plugin-cell">🔌 3</td>
-  <td class="num deal-yes">2</td>
-  <td class="op-cell"><span class='op-pill'>陶俊宏 <span class='op-cnt'>2</span></span></td>
-  <td class="small-text">iPhone 11×7、iPhone 16 Pro Max×5、iPhone 15×5</td>
-  <td class="small-text">iPhone 17×2</td>
-</tr><tr class="">
-  <td>FY26Q3W04<br><small>4/19–4/25</small></td>
-  <td class="num">14</td>
-  <td class="num plugin-cell">🔌 2</td>
-  <td class="num deal-yes">1</td>
-  <td class="op-cell"><span class='op-pill'>陶俊宏 <span class='op-cnt'>1</span></span></td>
-  <td class="small-text">iPhone 11×3、iPhone 13×1、iPhone 15×1</td>
-  <td class="small-text">iPad Pro 11in (M5)×1</td>
-</tr><tr class="">
-  <td>FY26Q3W05<br><small>4/26–5/2</small></td>
-  <td class="num">15</td>
-  <td class="num plugin-cell">0</td>
-  <td class="num ">0</td>
-  <td class="op-cell"><span style='color:#ccc;font-size:12px'>—</span></td>
-  <td class="small-text">iPhone 14×3、iPhone 13×2、iPhone 14 Pro×2</td>
-  <td class="small-text">—</td>
-</tr><tr class="">
-  <td>FY26Q3W06<br><small>5/3–5/9</small></td>
-  <td class="num">16</td>
-  <td class="num plugin-cell">🔌 3</td>
-  <td class="num deal-yes">1</td>
-  <td class="op-cell"><span class='op-pill'>林達妮 <span class='op-cnt'>1</span></span></td>
-  <td class="small-text">iPhone 13×3、iPhone 16×3、iPhone 13 Pro Max×2</td>
-  <td class="small-text">iPhone Air×1</td>
-</tr></tbody>
+  <thead><tr><th>週次</th><th>執行數</th><th>Plugin🔌</th><th>成交數</th><th>操作人（成交筆數）</th><th>主要舊機（前3）</th><th>換購新品（前3）</th></tr></thead>
+  <tbody><tr class=''><td>FY26Q3W01<br><small>3/29–4/4</small></td><td class='num'>14</td><td class='num plugin-cell'>🔌 2</td><td class='num deal-yes'>2</td><td class='op-cell'><span class='op-pill'>陶俊宏 <span class='op-cnt'>1</span></span><span class='op-pill'>林達妮 <span class='op-cnt'>1</span></span></td><td class='small-text'>iPhone 11×4、iPhone 16 Pro×2、iPhone 12 Pro Max×2</td><td class='small-text'>iPhone 17×1、iPhone 17 Pro×1</td></tr><tr class=''><td>FY26Q3W02<br><small>4/5–4/11</small></td><td class='num'>20</td><td class='num plugin-cell'>🔌 3</td><td class='num deal-yes'>2</td><td class='op-cell'><span class='op-pill'>陶俊宏 <span class='op-cnt'>2</span></span></td><td class='small-text'>iPhone 12 Pro×6、iPhone 13×3、iPhone XR×3</td><td class='small-text'>iPhone 17×1、iPhone 17 Pro×1</td></tr><tr class=''><td>FY26Q3W03<br><small>4/12–4/18</small></td><td class='num'>38</td><td class='num plugin-cell'>🔌 3</td><td class='num deal-yes'>2</td><td class='op-cell'><span class='op-pill'>陶俊宏 <span class='op-cnt'>2</span></span></td><td class='small-text'>iPhone 11×7、iPhone 16 Pro Max×5、iPhone 15×5</td><td class='small-text'>iPhone 17×2</td></tr><tr class=''><td>FY26Q3W04<br><small>4/19–4/25</small></td><td class='num'>14</td><td class='num plugin-cell'>🔌 2</td><td class='num deal-yes'>1</td><td class='op-cell'><span class='op-pill'>陶俊宏 <span class='op-cnt'>1</span></span></td><td class='small-text'>iPhone 11×3、iPhone 13×1、iPhone 15×1</td><td class='small-text'>iPad Pro 11in (M5)×1</td></tr><tr class=''><td>FY26Q3W05<br><small>4/26–5/2</small></td><td class='num'>15</td><td class='num plugin-cell'>0</td><td class='num '>0</td><td class='op-cell'><span style='color:#ccc;font-size:12px'>—</span></td><td class='small-text'>iPhone 14×3、iPhone 13×2、iPhone 14 Pro×2</td><td class='small-text'>—</td></tr><tr class=''><td>FY26Q3W06<br><small>5/3–5/9</small></td><td class='num'>16</td><td class='num plugin-cell'>🔌 3</td><td class='num deal-yes'>1</td><td class='op-cell'><span class='op-pill'>林達妮 <span class='op-cnt'>1</span></span></td><td class='small-text'>iPhone 13×3、iPhone 16×3、iPhone 13 Pro Max×2</td><td class='small-text'>iPhone Air×1</td></tr><tr class=' new-week-row'><td>FY26Q3W07<span class="new-badge">NEW</span><br><small>5/10–5/16</small></td><td class='num'>16</td><td class='num plugin-cell'>🔌 3</td><td class='num deal-yes'>1</td><td class='op-cell'><span class='op-pill'>林達妮 <span class='op-cnt'>1</span></span></td><td class='small-text'>iPhone 11×3、iPhone 15 Pro Max×3、iPhone 12 Pro×2</td><td class='small-text'>MacBook Neo×1</td></tr></tbody>
 </table>
-</div><div class="store-card" id="store-14" data-store-idx="14" data-deal="8">
+</div><div class="store-card" id="store-14" data-store-idx="14" data-deal="11">
 <div class="store-header">
   <div class="store-title">🏪 燦坤新文心店</div>
   <div class="store-kpis">
-    <div class="kpi-chip exec-chip">執行 83</div>
-    <div class="kpi-chip plugin-chip">Plugin 🔌 18</div>
-    <div class="kpi-chip deal-chip">成交 8</div>
+    <div class="kpi-chip exec-chip">執行 95</div>
+    <div class="kpi-chip plugin-chip">Plugin 🔌 25</div>
+    <div class="kpi-chip deal-chip">成交 11</div>
   </div>
 </div>
 <div class="sales-row">
   <span class="sales-label">📱 iPhone 銷量（手動輸入）</span>
-  <input type="number" class="sales-input" id="sales-14"
-    data-idx="14" data-deal="8"
-    placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
+  <input type="number" class="sales-input" id="sales-14" data-idx="14" data-deal="11" placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
   <span class="sales-arrow">→</span>
   <span class="sales-rate-label">回收率</span>
   <span class="rate-badge" id="rate-badge-14">—</span>
 </div>
-<div class="op-summary-bar"><span class="op-label">👤 操作人（全期成交）：</span><span class='op-pill'>呂丞凱 <span class='op-cnt'>6</span></span><span class='op-pill'>陳威志 <span class='op-cnt'>2</span></span></div>
+<div class="op-summary-bar"><span class="op-label">👤 操作人（全期成交）：</span><span class='op-pill'>呂丞凱 <span class='op-cnt'>7</span></span><span class='op-pill'>陳威志 <span class='op-cnt'>4</span></span></div>
 <table class="data-table">
-  <thead><tr>
-    <th>週次</th><th>執行數</th><th>Plugin🔌</th><th>成交數</th>
-    <th>操作人（成交筆數）</th><th>主要舊機（前3）</th><th>換購新品（前3）</th>
-  </tr></thead>
-  <tbody><tr class="">
-  <td>FY26Q3W01<br><small>3/29–4/4</small></td>
-  <td class="num">11</td>
-  <td class="num plugin-cell">🔌 2</td>
-  <td class="num deal-yes">1</td>
-  <td class="op-cell"><span class='op-pill'>陳威志 <span class='op-cnt'>1</span></span></td>
-  <td class="small-text">iPhone 13×4、iPhone 11 Pro Max×2、iPhone 12 Pro Max×2</td>
-  <td class="small-text">iPad (A16)×1</td>
-</tr><tr class="">
-  <td>FY26Q3W02<br><small>4/5–4/11</small></td>
-  <td class="num">17</td>
-  <td class="num plugin-cell">🔌 7</td>
-  <td class="num deal-yes">3</td>
-  <td class="op-cell"><span class='op-pill'>呂丞凱 <span class='op-cnt'>3</span></span></td>
-  <td class="small-text">iPhone 13×4、iPhone 11×3、iPhone 11 Pro Max×2</td>
-  <td class="small-text">AirPods Pro (3rd Gen)×1、iPhone 16 Pro×1、iPhone 17 Pro×1</td>
-</tr><tr class="">
-  <td>FY26Q3W03<br><small>4/12–4/18</small></td>
-  <td class="num">13</td>
-  <td class="num plugin-cell">🔌 3</td>
-  <td class="num deal-yes">2</td>
-  <td class="op-cell"><span class='op-pill'>陳威志 <span class='op-cnt'>1</span></span><span class='op-pill'>呂丞凱 <span class='op-cnt'>1</span></span></td>
-  <td class="small-text">iPhone 13×4、iPhone 15 Pro×2、iPhone 11×2</td>
-  <td class="small-text">iPhone 17 Pro×2</td>
-</tr><tr class="">
-  <td>FY26Q3W04<br><small>4/19–4/25</small></td>
-  <td class="num">13</td>
-  <td class="num plugin-cell">🔌 4</td>
-  <td class="num deal-yes">1</td>
-  <td class="op-cell"><span class='op-pill'>呂丞凱 <span class='op-cnt'>1</span></span></td>
-  <td class="small-text">iPhone 13×3、iPhone 14 Pro×2、iPhone 12 Pro Max×2</td>
-  <td class="small-text">iPhone 17×1</td>
-</tr><tr class="">
-  <td>FY26Q3W05<br><small>4/26–5/2</small></td>
-  <td class="num">15</td>
-  <td class="num plugin-cell">🔌 1</td>
-  <td class="num deal-yes">1</td>
-  <td class="op-cell"><span class='op-pill'>呂丞凱 <span class='op-cnt'>1</span></span></td>
-  <td class="small-text">iPhone 14×5、iPhone 13×2、iPhone 15 Plus×2</td>
-  <td class="small-text">iPhone 17 Pro×1</td>
-</tr><tr class="">
-  <td>FY26Q3W06<br><small>5/3–5/9</small></td>
-  <td class="num">14</td>
-  <td class="num plugin-cell">🔌 1</td>
-  <td class="num ">0</td>
-  <td class="op-cell"><span style='color:#ccc;font-size:12px'>—</span></td>
-  <td class="small-text">iPhone 13 Pro Max×3、iPhone 15 Pro×3、iPhone 13×2</td>
-  <td class="small-text">—</td>
-</tr></tbody>
+  <thead><tr><th>週次</th><th>執行數</th><th>Plugin🔌</th><th>成交數</th><th>操作人（成交筆數）</th><th>主要舊機（前3）</th><th>換購新品（前3）</th></tr></thead>
+  <tbody><tr class=''><td>FY26Q3W01<br><small>3/29–4/4</small></td><td class='num'>11</td><td class='num plugin-cell'>🔌 2</td><td class='num deal-yes'>1</td><td class='op-cell'><span class='op-pill'>陳威志 <span class='op-cnt'>1</span></span></td><td class='small-text'>iPhone 13×4、iPhone 11 Pro Max×2、iPhone 12 Pro Max×2</td><td class='small-text'>iPad (A16)×1</td></tr><tr class=''><td>FY26Q3W02<br><small>4/5–4/11</small></td><td class='num'>17</td><td class='num plugin-cell'>🔌 7</td><td class='num deal-yes'>3</td><td class='op-cell'><span class='op-pill'>呂丞凱 <span class='op-cnt'>3</span></span></td><td class='small-text'>iPhone 13×4、iPhone 11×3、iPhone 11 Pro Max×2</td><td class='small-text'>AirPods Pro (3rd Gen)×1、iPhone 16 Pro×1、iPhone 17 Pro×1</td></tr><tr class=''><td>FY26Q3W03<br><small>4/12–4/18</small></td><td class='num'>13</td><td class='num plugin-cell'>🔌 3</td><td class='num deal-yes'>2</td><td class='op-cell'><span class='op-pill'>陳威志 <span class='op-cnt'>1</span></span><span class='op-pill'>呂丞凱 <span class='op-cnt'>1</span></span></td><td class='small-text'>iPhone 13×4、iPhone 15 Pro×2、iPhone 11×2</td><td class='small-text'>iPhone 17 Pro×2</td></tr><tr class=''><td>FY26Q3W04<br><small>4/19–4/25</small></td><td class='num'>13</td><td class='num plugin-cell'>🔌 4</td><td class='num deal-yes'>1</td><td class='op-cell'><span class='op-pill'>呂丞凱 <span class='op-cnt'>1</span></span></td><td class='small-text'>iPhone 13×3、iPhone 14 Pro×2、iPhone 12 Pro Max×2</td><td class='small-text'>iPhone 17×1</td></tr><tr class=''><td>FY26Q3W05<br><small>4/26–5/2</small></td><td class='num'>15</td><td class='num plugin-cell'>🔌 1</td><td class='num deal-yes'>1</td><td class='op-cell'><span class='op-pill'>呂丞凱 <span class='op-cnt'>1</span></span></td><td class='small-text'>iPhone 14×5、iPhone 13×2、iPhone 15 Plus×2</td><td class='small-text'>iPhone 17 Pro×1</td></tr><tr class=''><td>FY26Q3W06<br><small>5/3–5/9</small></td><td class='num'>14</td><td class='num plugin-cell'>🔌 1</td><td class='num '>0</td><td class='op-cell'><span style='color:#ccc;font-size:12px'>—</span></td><td class='small-text'>iPhone 13 Pro Max×3、iPhone 15 Pro×3、iPhone 13×2</td><td class='small-text'>—</td></tr><tr class=' new-week-row'><td>FY26Q3W07<span class="new-badge">NEW</span><br><small>5/10–5/16</small></td><td class='num'>12</td><td class='num plugin-cell'>🔌 7</td><td class='num deal-yes'>3</td><td class='op-cell'><span class='op-pill'>陳威志 <span class='op-cnt'>2</span></span><span class='op-pill'>呂丞凱 <span class='op-cnt'>1</span></span></td><td class='small-text'>iPhone 11×4、iPhone 15 Pro×3、iPhone 14 Plus×2</td><td class='small-text'>iPhone 17×1、iPhone 17 Pro×1、iPhone 17e×1</td></tr></tbody>
 </table>
 </div><div class="store-card" id="store-15" data-store-idx="15" data-deal="7">
 <div class="store-header">
   <div class="store-title">🏪 燦坤新莊店</div>
   <div class="store-kpis">
-    <div class="kpi-chip exec-chip">執行 61</div>
-    <div class="kpi-chip plugin-chip">Plugin 🔌 11</div>
+    <div class="kpi-chip exec-chip">執行 106</div>
+    <div class="kpi-chip plugin-chip">Plugin 🔌 12</div>
     <div class="kpi-chip deal-chip">成交 7</div>
   </div>
 </div>
 <div class="sales-row">
   <span class="sales-label">📱 iPhone 銷量（手動輸入）</span>
-  <input type="number" class="sales-input" id="sales-15"
-    data-idx="15" data-deal="7"
-    placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
+  <input type="number" class="sales-input" id="sales-15" data-idx="15" data-deal="7" placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
   <span class="sales-arrow">→</span>
   <span class="sales-rate-label">回收率</span>
   <span class="rate-badge" id="rate-badge-15">—</span>
 </div>
 <div class="op-summary-bar"><span class="op-label">👤 操作人（全期成交）：</span><span class='op-pill'>徐誌良 <span class='op-cnt'>5</span></span></div>
 <table class="data-table">
-  <thead><tr>
-    <th>週次</th><th>執行數</th><th>Plugin🔌</th><th>成交數</th>
-    <th>操作人（成交筆數）</th><th>主要舊機（前3）</th><th>換購新品（前3）</th>
-  </tr></thead>
-  <tbody><tr class="">
-  <td>FY26Q3W01<br><small>3/29–4/4</small></td>
-  <td class="num">13</td>
-  <td class="num plugin-cell">🔌 3</td>
-  <td class="num deal-yes">2</td>
-  <td class="op-cell"><span class='op-pill'>徐誌良 <span class='op-cnt'>2</span></span></td>
-  <td class="small-text">iPhone 15 Pro Max×5、iPhone 13 Pro Max×3、iPhone 13×2</td>
-  <td class="small-text">Mac Mini×1、iPhone 17 Pro Max×1</td>
-</tr><tr class="">
-  <td>FY26Q3W02<br><small>4/5–4/11</small></td>
-  <td class="num">5</td>
-  <td class="num plugin-cell">0</td>
-  <td class="num ">0</td>
-  <td class="op-cell"><span style='color:#ccc;font-size:12px'>—</span></td>
-  <td class="small-text">Galaxy S25 Ultra×2、iPhone 13 Pro×1、iPhone XS Max×1</td>
-  <td class="small-text">—</td>
-</tr><tr class="">
-  <td>FY26Q3W03<br><small>4/12–4/18</small></td>
-  <td class="num">6</td>
-  <td class="num plugin-cell">0</td>
-  <td class="num ">0</td>
-  <td class="op-cell"><span style='color:#ccc;font-size:12px'>—</span></td>
-  <td class="small-text">iPhone 16×2、RENO10 PRO+×1、iPhone 15 Pro×1</td>
-  <td class="small-text">—</td>
-</tr><tr class="">
-  <td>FY26Q3W04<br><small>4/19–4/25</small></td>
-  <td class="num">4</td>
-  <td class="num plugin-cell">0</td>
-  <td class="num ">0</td>
-  <td class="op-cell"><span style='color:#ccc;font-size:12px'>—</span></td>
-  <td class="small-text">iPhone 14 Pro×1、iPhone 15 Pro×1、iPhone 13×1</td>
-  <td class="small-text">—</td>
-</tr><tr class="">
-  <td>FY26Q3W05<br><small>4/26–5/2</small></td>
-  <td class="num">18</td>
-  <td class="num plugin-cell">🔌 5</td>
-  <td class="num deal-yes">3</td>
-  <td class="op-cell"><span class='op-pill'>徐誌良 <span class='op-cnt'>2</span></span></td>
-  <td class="small-text">iPhone 14 Pro×3、iPhone 12×3、iPhone 16 Pro×3</td>
-  <td class="small-text">iPhone 17 Pro×2、iPad (A16)×1</td>
-</tr><tr class="">
-  <td>FY26Q3W06<br><small>5/3–5/9</small></td>
-  <td class="num">15</td>
-  <td class="num plugin-cell">🔌 3</td>
-  <td class="num deal-yes">2</td>
-  <td class="op-cell"><span class='op-pill'>徐誌良 <span class='op-cnt'>1</span></span></td>
-  <td class="small-text">iPhone 12×3、iPhone 16×3、iPhone 13 Pro×2</td>
-  <td class="small-text">iPhone 17 Pro×1、iPhone 17 Pro Max×1</td>
-</tr></tbody>
+  <thead><tr><th>週次</th><th>執行數</th><th>Plugin🔌</th><th>成交數</th><th>操作人（成交筆數）</th><th>主要舊機（前3）</th><th>換購新品（前3）</th></tr></thead>
+  <tbody><tr class=''><td>FY26Q3W01<br><small>3/29–4/4</small></td><td class='num'>13</td><td class='num plugin-cell'>🔌 3</td><td class='num deal-yes'>2</td><td class='op-cell'><span class='op-pill'>徐誌良 <span class='op-cnt'>2</span></span></td><td class='small-text'>iPhone 15 Pro Max×5、iPhone 13 Pro Max×3、iPhone 13×2</td><td class='small-text'>Mac Mini×1、iPhone 17 Pro Max×1</td></tr><tr class=''><td>FY26Q3W02<br><small>4/5–4/11</small></td><td class='num'>5</td><td class='num plugin-cell'>0</td><td class='num '>0</td><td class='op-cell'><span style='color:#ccc;font-size:12px'>—</span></td><td class='small-text'>Galaxy S25 Ultra×2、iPhone 13 Pro×1、iPhone XS Max×1</td><td class='small-text'>—</td></tr><tr class=''><td>FY26Q3W03<br><small>4/12–4/18</small></td><td class='num'>6</td><td class='num plugin-cell'>0</td><td class='num '>0</td><td class='op-cell'><span style='color:#ccc;font-size:12px'>—</span></td><td class='small-text'>iPhone 16×2、RENO10 PRO+×1、iPhone 15 Pro×1</td><td class='small-text'>—</td></tr><tr class=''><td>FY26Q3W04<br><small>4/19–4/25</small></td><td class='num'>4</td><td class='num plugin-cell'>0</td><td class='num '>0</td><td class='op-cell'><span style='color:#ccc;font-size:12px'>—</span></td><td class='small-text'>iPhone 14 Pro×1、iPhone 15 Pro×1、iPhone 13×1</td><td class='small-text'>—</td></tr><tr class=''><td>FY26Q3W05<br><small>4/26–5/2</small></td><td class='num'>18</td><td class='num plugin-cell'>🔌 5</td><td class='num deal-yes'>3</td><td class='op-cell'><span class='op-pill'>徐誌良 <span class='op-cnt'>2</span></span></td><td class='small-text'>iPhone 14 Pro×3、iPhone 12×3、iPhone 16 Pro×3</td><td class='small-text'>iPhone 17 Pro×2、iPad (A16)×1</td></tr><tr class=''><td>FY26Q3W06<br><small>5/3–5/9</small></td><td class='num'>15</td><td class='num plugin-cell'>🔌 3</td><td class='num deal-yes'>2</td><td class='op-cell'><span class='op-pill'>徐誌良 <span class='op-cnt'>1</span></span></td><td class='small-text'>iPhone 12×3、iPhone 16×3、iPhone 13 Pro×2</td><td class='small-text'>iPhone 17 Pro×1、iPhone 17 Pro Max×1</td></tr><tr class=' new-week-row'><td>FY26Q3W07<span class="new-badge">NEW</span><br><small>5/10–5/16</small></td><td class='num'>45</td><td class='num plugin-cell'>🔌 1</td><td class='num '>0</td><td class='op-cell'><span style='color:#ccc;font-size:12px'>—</span></td><td class='small-text'>iPhone 16 Pro×10、iPhone 16 Pro Max×7、iPhone 16e×6</td><td class='small-text'>—</td></tr></tbody>
 </table>
-</div><div class="store-card" id="store-16" data-store-idx="16" data-deal="6">
+</div><div class="store-card" id="store-16" data-store-idx="16" data-deal="7">
 <div class="store-header">
   <div class="store-title">🏪 燦坤新豐原旗艦店</div>
   <div class="store-kpis">
-    <div class="kpi-chip exec-chip">執行 61</div>
-    <div class="kpi-chip plugin-chip">Plugin 🔌 15</div>
-    <div class="kpi-chip deal-chip">成交 6</div>
+    <div class="kpi-chip exec-chip">執行 76</div>
+    <div class="kpi-chip plugin-chip">Plugin 🔌 20</div>
+    <div class="kpi-chip deal-chip">成交 7</div>
   </div>
 </div>
 <div class="sales-row">
   <span class="sales-label">📱 iPhone 銷量（手動輸入）</span>
-  <input type="number" class="sales-input" id="sales-16"
-    data-idx="16" data-deal="6"
-    placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
+  <input type="number" class="sales-input" id="sales-16" data-idx="16" data-deal="7" placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
   <span class="sales-arrow">→</span>
   <span class="sales-rate-label">回收率</span>
   <span class="rate-badge" id="rate-badge-16">—</span>
 </div>
-<div class="op-summary-bar"><span class="op-label">👤 操作人（全期成交）：</span><span class='op-pill'>王建仁 <span class='op-cnt'>3</span></span><span class='op-pill'>張蕙雯 <span class='op-cnt'>3</span></span></div>
+<div class="op-summary-bar"><span class="op-label">👤 操作人（全期成交）：</span><span class='op-pill'>王建仁 <span class='op-cnt'>4</span></span><span class='op-pill'>張蕙雯 <span class='op-cnt'>3</span></span></div>
 <table class="data-table">
-  <thead><tr>
-    <th>週次</th><th>執行數</th><th>Plugin🔌</th><th>成交數</th>
-    <th>操作人（成交筆數）</th><th>主要舊機（前3）</th><th>換購新品（前3）</th>
-  </tr></thead>
-  <tbody><tr class="">
-  <td>FY26Q3W01<br><small>3/29–4/4</small></td>
-  <td class="num">19</td>
-  <td class="num plugin-cell">🔌 3</td>
-  <td class="num deal-yes">1</td>
-  <td class="op-cell"><span class='op-pill'>王建仁 <span class='op-cnt'>1</span></span></td>
-  <td class="small-text">iPhone 12×3、iPhone 13 Pro×3、iPhone 14×3</td>
-  <td class="small-text">iPhone 17 Pro×1</td>
-</tr><tr class="">
-  <td>FY26Q3W02<br><small>4/5–4/11</small></td>
-  <td class="num">10</td>
-  <td class="num plugin-cell">🔌 2</td>
-  <td class="num deal-yes">1</td>
-  <td class="op-cell"><span class='op-pill'>王建仁 <span class='op-cnt'>1</span></span></td>
-  <td class="small-text">iPhone 13×5、iPhone 15 Pro×1、POCO F5 PRO×1</td>
-  <td class="small-text">iPhone 17 Pro×1</td>
-</tr><tr class="">
-  <td>FY26Q3W03<br><small>4/12–4/18</small></td>
-  <td class="num">3</td>
-  <td class="num plugin-cell">0</td>
-  <td class="num ">0</td>
-  <td class="op-cell"><span style='color:#ccc;font-size:12px'>—</span></td>
-  <td class="small-text">iPhone 11×1、Xiaomi 13 Lite×1、iPhone 13×1</td>
-  <td class="small-text">—</td>
-</tr><tr class="">
-  <td>FY26Q3W04<br><small>4/19–4/25</small></td>
-  <td class="num">6</td>
-  <td class="num plugin-cell">🔌 1</td>
-  <td class="num ">0</td>
-  <td class="op-cell"><span style='color:#ccc;font-size:12px'>—</span></td>
-  <td class="small-text">iPhone 16 Pro Max×2、iPhone 13×2、iPhone 15×2</td>
-  <td class="small-text">—</td>
-</tr><tr class="">
-  <td>FY26Q3W05<br><small>4/26–5/2</small></td>
-  <td class="num">13</td>
-  <td class="num plugin-cell">🔌 4</td>
-  <td class="num deal-yes">1</td>
-  <td class="op-cell"><span class='op-pill'>張蕙雯 <span class='op-cnt'>1</span></span></td>
-  <td class="small-text">iPhone 15×6、Galaxy S24+×1、iPhone 15 Plus×1</td>
-  <td class="small-text">iPhone 17 Pro×1</td>
-</tr><tr class="">
-  <td>FY26Q3W06<br><small>5/3–5/9</small></td>
-  <td class="num">10</td>
-  <td class="num plugin-cell">🔌 5</td>
-  <td class="num deal-yes">3</td>
-  <td class="op-cell"><span class='op-pill'>張蕙雯 <span class='op-cnt'>2</span></span><span class='op-pill'>王建仁 <span class='op-cnt'>1</span></span></td>
-  <td class="small-text">iPhone 13 Pro Max×4、iPhone 13×2、iPhone 14×2</td>
-  <td class="small-text">iPhone 17 Pro×2、iPhone 17×1</td>
-</tr></tbody>
+  <thead><tr><th>週次</th><th>執行數</th><th>Plugin🔌</th><th>成交數</th><th>操作人（成交筆數）</th><th>主要舊機（前3）</th><th>換購新品（前3）</th></tr></thead>
+  <tbody><tr class=''><td>FY26Q3W01<br><small>3/29–4/4</small></td><td class='num'>19</td><td class='num plugin-cell'>🔌 3</td><td class='num deal-yes'>1</td><td class='op-cell'><span class='op-pill'>王建仁 <span class='op-cnt'>1</span></span></td><td class='small-text'>iPhone 12×3、iPhone 13 Pro×3、iPhone 14×3</td><td class='small-text'>iPhone 17 Pro×1</td></tr><tr class=''><td>FY26Q3W02<br><small>4/5–4/11</small></td><td class='num'>10</td><td class='num plugin-cell'>🔌 2</td><td class='num deal-yes'>1</td><td class='op-cell'><span class='op-pill'>王建仁 <span class='op-cnt'>1</span></span></td><td class='small-text'>iPhone 13×5、iPhone 15 Pro×1、POCO F5 PRO×1</td><td class='small-text'>iPhone 17 Pro×1</td></tr><tr class=''><td>FY26Q3W03<br><small>4/12–4/18</small></td><td class='num'>3</td><td class='num plugin-cell'>0</td><td class='num '>0</td><td class='op-cell'><span style='color:#ccc;font-size:12px'>—</span></td><td class='small-text'>iPhone 11×1、Xiaomi 13 Lite×1、iPhone 13×1</td><td class='small-text'>—</td></tr><tr class=''><td>FY26Q3W04<br><small>4/19–4/25</small></td><td class='num'>6</td><td class='num plugin-cell'>🔌 1</td><td class='num '>0</td><td class='op-cell'><span style='color:#ccc;font-size:12px'>—</span></td><td class='small-text'>iPhone 16 Pro Max×2、iPhone 13×2、iPhone 15×2</td><td class='small-text'>—</td></tr><tr class=''><td>FY26Q3W05<br><small>4/26–5/2</small></td><td class='num'>13</td><td class='num plugin-cell'>🔌 4</td><td class='num deal-yes'>1</td><td class='op-cell'><span class='op-pill'>張蕙雯 <span class='op-cnt'>1</span></span></td><td class='small-text'>iPhone 15×6、Galaxy S24+×1、iPhone 15 Plus×1</td><td class='small-text'>iPhone 17 Pro×1</td></tr><tr class=''><td>FY26Q3W06<br><small>5/3–5/9</small></td><td class='num'>10</td><td class='num plugin-cell'>🔌 5</td><td class='num deal-yes'>3</td><td class='op-cell'><span class='op-pill'>張蕙雯 <span class='op-cnt'>2</span></span><span class='op-pill'>王建仁 <span class='op-cnt'>1</span></span></td><td class='small-text'>iPhone 13 Pro Max×4、iPhone 13×2、iPhone 14×2</td><td class='small-text'>iPhone 17 Pro×2、iPhone 17×1</td></tr><tr class=' new-week-row'><td>FY26Q3W07<span class="new-badge">NEW</span><br><small>5/10–5/16</small></td><td class='num'>15</td><td class='num plugin-cell'>🔌 5</td><td class='num deal-yes'>1</td><td class='op-cell'><span class='op-pill'>王建仁 <span class='op-cnt'>1</span></span></td><td class='small-text'>iPhone 15 Pro Max×5、iPhone 13 Pro Max×4、iPhone 16e×2</td><td class='small-text'>Apple Pencil×1</td></tr></tbody>
 </table>
-</div><div class="store-card" id="store-17" data-store-idx="17" data-deal="2">
+</div><div class="store-card" id="store-17" data-store-idx="17" data-deal="4">
 <div class="store-header">
   <div class="store-title">🏪 燦坤林口文化店</div>
   <div class="store-kpis">
-    <div class="kpi-chip exec-chip">執行 37</div>
-    <div class="kpi-chip plugin-chip">Plugin 🔌 5</div>
-    <div class="kpi-chip deal-chip">成交 2</div>
+    <div class="kpi-chip exec-chip">執行 50</div>
+    <div class="kpi-chip plugin-chip">Plugin 🔌 12</div>
+    <div class="kpi-chip deal-chip">成交 4</div>
   </div>
 </div>
 <div class="sales-row">
   <span class="sales-label">📱 iPhone 銷量（手動輸入）</span>
-  <input type="number" class="sales-input" id="sales-17"
-    data-idx="17" data-deal="2"
-    placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
+  <input type="number" class="sales-input" id="sales-17" data-idx="17" data-deal="4" placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
   <span class="sales-arrow">→</span>
   <span class="sales-rate-label">回收率</span>
   <span class="rate-badge" id="rate-badge-17">—</span>
 </div>
-<div class="op-summary-bar"><span class="op-label">👤 操作人（全期成交）：</span><span class='op-pill'>徐裴溫 <span class='op-cnt'>2</span></span></div>
+<div class="op-summary-bar"><span class="op-label">👤 操作人（全期成交）：</span><span class='op-pill'>徐裴溫 <span class='op-cnt'>4</span></span></div>
 <table class="data-table">
-  <thead><tr>
-    <th>週次</th><th>執行數</th><th>Plugin🔌</th><th>成交數</th>
-    <th>操作人（成交筆數）</th><th>主要舊機（前3）</th><th>換購新品（前3）</th>
-  </tr></thead>
-  <tbody><tr class="">
-  <td>FY26Q3W01<br><small>3/29–4/4</small></td>
-  <td class="num">8</td>
-  <td class="num plugin-cell">🔌 3</td>
-  <td class="num deal-yes">1</td>
-  <td class="op-cell"><span class='op-pill'>徐裴溫 <span class='op-cnt'>1</span></span></td>
-  <td class="small-text">iPhone 12 mini×2、iPhone 16 Pro×1、iPhone 13 Pro Max×1</td>
-  <td class="small-text">iPhone 17 Pro×1</td>
-</tr><tr class="">
-  <td>FY26Q3W02<br><small>4/5–4/11</small></td>
-  <td class="num">4</td>
-  <td class="num plugin-cell">0</td>
-  <td class="num ">0</td>
-  <td class="op-cell"><span style='color:#ccc;font-size:12px'>—</span></td>
-  <td class="small-text">iPhone 13 Pro Max×1、iPhone 14 Pro×1、iPhone 15 Pro×1</td>
-  <td class="small-text">—</td>
-</tr><tr class="">
-  <td>FY26Q3W03<br><small>4/12–4/18</small></td>
-  <td class="num">5</td>
-  <td class="num plugin-cell">0</td>
-  <td class="num ">0</td>
-  <td class="op-cell"><span style='color:#ccc;font-size:12px'>—</span></td>
-  <td class="small-text">iPhone 13×2、iPhone 16 Pro Max×1、iPhone 14 Pro Max×1</td>
-  <td class="small-text">—</td>
-</tr><tr class="">
-  <td>FY26Q3W04<br><small>4/19–4/25</small></td>
-  <td class="num">11</td>
-  <td class="num plugin-cell">🔌 1</td>
-  <td class="num deal-yes">1</td>
-  <td class="op-cell"><span class='op-pill'>徐裴溫 <span class='op-cnt'>1</span></span></td>
-  <td class="small-text">iPhone 13 Pro Max×3、iPhone 13×2、iPhone 14×1</td>
-  <td class="small-text">iPhone 17 Pro Max×1</td>
-</tr><tr class="">
-  <td>FY26Q3W05<br><small>4/26–5/2</small></td>
-  <td class="num">5</td>
-  <td class="num plugin-cell">🔌 1</td>
-  <td class="num ">0</td>
-  <td class="op-cell"><span style='color:#ccc;font-size:12px'>—</span></td>
-  <td class="small-text">iPhone 15×3、iPhone 13 Pro Max×1、DESIRE 22 PRO×1</td>
-  <td class="small-text">—</td>
-</tr><tr class="">
-  <td>FY26Q3W06<br><small>5/3–5/9</small></td>
-  <td class="num">4</td>
-  <td class="num plugin-cell">0</td>
-  <td class="num ">0</td>
-  <td class="op-cell"><span style='color:#ccc;font-size:12px'>—</span></td>
-  <td class="small-text">iPhone 13 Pro Max×1、iPhone 13 mini×1、iPhone 11×1</td>
-  <td class="small-text">—</td>
-</tr></tbody>
+  <thead><tr><th>週次</th><th>執行數</th><th>Plugin🔌</th><th>成交數</th><th>操作人（成交筆數）</th><th>主要舊機（前3）</th><th>換購新品（前3）</th></tr></thead>
+  <tbody><tr class=''><td>FY26Q3W01<br><small>3/29–4/4</small></td><td class='num'>8</td><td class='num plugin-cell'>🔌 3</td><td class='num deal-yes'>1</td><td class='op-cell'><span class='op-pill'>徐裴溫 <span class='op-cnt'>1</span></span></td><td class='small-text'>iPhone 12 mini×2、iPhone 16 Pro×1、iPhone 13 Pro Max×1</td><td class='small-text'>iPhone 17 Pro×1</td></tr><tr class=''><td>FY26Q3W02<br><small>4/5–4/11</small></td><td class='num'>4</td><td class='num plugin-cell'>0</td><td class='num '>0</td><td class='op-cell'><span style='color:#ccc;font-size:12px'>—</span></td><td class='small-text'>iPhone 13 Pro Max×1、iPhone 14 Pro×1、iPhone 15 Pro×1</td><td class='small-text'>—</td></tr><tr class=''><td>FY26Q3W03<br><small>4/12–4/18</small></td><td class='num'>5</td><td class='num plugin-cell'>0</td><td class='num '>0</td><td class='op-cell'><span style='color:#ccc;font-size:12px'>—</span></td><td class='small-text'>iPhone 13×2、iPhone 16 Pro Max×1、iPhone 14 Pro Max×1</td><td class='small-text'>—</td></tr><tr class=''><td>FY26Q3W04<br><small>4/19–4/25</small></td><td class='num'>11</td><td class='num plugin-cell'>🔌 1</td><td class='num deal-yes'>1</td><td class='op-cell'><span class='op-pill'>徐裴溫 <span class='op-cnt'>1</span></span></td><td class='small-text'>iPhone 13 Pro Max×3、iPhone 13×2、iPhone 14×1</td><td class='small-text'>iPhone 17 Pro Max×1</td></tr><tr class=''><td>FY26Q3W05<br><small>4/26–5/2</small></td><td class='num'>5</td><td class='num plugin-cell'>🔌 1</td><td class='num '>0</td><td class='op-cell'><span style='color:#ccc;font-size:12px'>—</span></td><td class='small-text'>iPhone 15×3、iPhone 13 Pro Max×1、DESIRE 22 PRO×1</td><td class='small-text'>—</td></tr><tr class=''><td>FY26Q3W06<br><small>5/3–5/9</small></td><td class='num'>4</td><td class='num plugin-cell'>0</td><td class='num '>0</td><td class='op-cell'><span style='color:#ccc;font-size:12px'>—</span></td><td class='small-text'>iPhone 13 Pro Max×1、iPhone 13 mini×1、iPhone 11×1</td><td class='small-text'>—</td></tr><tr class=' new-week-row'><td>FY26Q3W07<span class="new-badge">NEW</span><br><small>5/10–5/16</small></td><td class='num'>13</td><td class='num plugin-cell'>🔌 7</td><td class='num deal-yes'>2</td><td class='op-cell'><span class='op-pill'>徐裴溫 <span class='op-cnt'>2</span></span></td><td class='small-text'>iPhone 12 Pro Max×5、iPhone 13×3、X200 FE×1</td><td class='small-text'>MacBook Neo×1、iPhone 17×1</td></tr></tbody>
 </table>
 </div><div class="store-card" id="store-18" data-store-idx="18" data-deal="4">
 <div class="store-header">
   <div class="store-title">🏪 燦坤桃園旗艦店</div>
   <div class="store-kpis">
-    <div class="kpi-chip exec-chip">執行 50</div>
+    <div class="kpi-chip exec-chip">執行 56</div>
     <div class="kpi-chip plugin-chip">Plugin 🔌 5</div>
     <div class="kpi-chip deal-chip">成交 4</div>
   </div>
 </div>
 <div class="sales-row">
   <span class="sales-label">📱 iPhone 銷量（手動輸入）</span>
-  <input type="number" class="sales-input" id="sales-18"
-    data-idx="18" data-deal="4"
-    placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
+  <input type="number" class="sales-input" id="sales-18" data-idx="18" data-deal="4" placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
   <span class="sales-arrow">→</span>
   <span class="sales-rate-label">回收率</span>
   <span class="rate-badge" id="rate-badge-18">—</span>
 </div>
 <div class="op-summary-bar"><span class="op-label">👤 操作人（全期成交）：</span><span class='op-pill'>謝昀燁 <span class='op-cnt'>4</span></span></div>
 <table class="data-table">
-  <thead><tr>
-    <th>週次</th><th>執行數</th><th>Plugin🔌</th><th>成交數</th>
-    <th>操作人（成交筆數）</th><th>主要舊機（前3）</th><th>換購新品（前3）</th>
-  </tr></thead>
-  <tbody><tr class="">
-  <td>FY26Q3W01<br><small>3/29–4/4</small></td>
-  <td class="num">11</td>
-  <td class="num plugin-cell">🔌 2</td>
-  <td class="num deal-yes">1</td>
-  <td class="op-cell"><span class='op-pill'>謝昀燁 <span class='op-cnt'>1</span></span></td>
-  <td class="small-text">iPhone 13 Pro×6、iPhone 15 Pro×2、iPhone 14 Pro Max×1</td>
-  <td class="small-text">Ultra 3×1</td>
-</tr><tr class="">
-  <td>FY26Q3W02<br><small>4/5–4/11</small></td>
-  <td class="num">19</td>
-  <td class="num plugin-cell">🔌 2</td>
-  <td class="num deal-yes">2</td>
-  <td class="op-cell"><span class='op-pill'>謝昀燁 <span class='op-cnt'>2</span></span></td>
-  <td class="small-text">iPhone 16 Pro Max×4、iPhone 13 Pro×4、iPhone 14×3</td>
-  <td class="small-text">iPhone 17 Pro×1、iPhone 17 Pro Max×1</td>
-</tr><tr class="">
-  <td>FY26Q3W03<br><small>4/12–4/18</small></td>
-  <td class="num">2</td>
-  <td class="num plugin-cell">0</td>
-  <td class="num ">0</td>
-  <td class="op-cell"><span style='color:#ccc;font-size:12px'>—</span></td>
-  <td class="small-text">iPhone 16 Pro×1、iPhone 14×1</td>
-  <td class="small-text">—</td>
-</tr><tr class="">
-  <td>FY26Q3W04<br><small>4/19–4/25</small></td>
-  <td class="num">11</td>
-  <td class="num plugin-cell">0</td>
-  <td class="num ">0</td>
-  <td class="op-cell"><span style='color:#ccc;font-size:12px'>—</span></td>
-  <td class="small-text">iPhone 14×5、iPhone 15×2、iPhone 16×2</td>
-  <td class="small-text">—</td>
-</tr><tr class="">
-  <td>FY26Q3W05<br><small>4/26–5/2</small></td>
-  <td class="num">4</td>
-  <td class="num plugin-cell">🔌 1</td>
-  <td class="num deal-yes">1</td>
-  <td class="op-cell"><span class='op-pill'>謝昀燁 <span class='op-cnt'>1</span></span></td>
-  <td class="small-text">iPhone 14×2、iPhone 13×2</td>
-  <td class="small-text">iPhone 17×1</td>
-</tr><tr class="">
-  <td>FY26Q3W06<br><small>5/3–5/9</small></td>
-  <td class="num">3</td>
-  <td class="num plugin-cell">0</td>
-  <td class="num ">0</td>
-  <td class="op-cell"><span style='color:#ccc;font-size:12px'>—</span></td>
-  <td class="small-text">iPhone 11×2、iPhone 13 mini×1</td>
-  <td class="small-text">—</td>
-</tr></tbody>
+  <thead><tr><th>週次</th><th>執行數</th><th>Plugin🔌</th><th>成交數</th><th>操作人（成交筆數）</th><th>主要舊機（前3）</th><th>換購新品（前3）</th></tr></thead>
+  <tbody><tr class=''><td>FY26Q3W01<br><small>3/29–4/4</small></td><td class='num'>11</td><td class='num plugin-cell'>🔌 2</td><td class='num deal-yes'>1</td><td class='op-cell'><span class='op-pill'>謝昀燁 <span class='op-cnt'>1</span></span></td><td class='small-text'>iPhone 13 Pro×6、iPhone 15 Pro×2、iPhone 14 Pro Max×1</td><td class='small-text'>Ultra 3×1</td></tr><tr class=''><td>FY26Q3W02<br><small>4/5–4/11</small></td><td class='num'>19</td><td class='num plugin-cell'>🔌 2</td><td class='num deal-yes'>2</td><td class='op-cell'><span class='op-pill'>謝昀燁 <span class='op-cnt'>2</span></span></td><td class='small-text'>iPhone 16 Pro Max×4、iPhone 13 Pro×4、iPhone 14×3</td><td class='small-text'>iPhone 17 Pro×1、iPhone 17 Pro Max×1</td></tr><tr class=''><td>FY26Q3W03<br><small>4/12–4/18</small></td><td class='num'>2</td><td class='num plugin-cell'>0</td><td class='num '>0</td><td class='op-cell'><span style='color:#ccc;font-size:12px'>—</span></td><td class='small-text'>iPhone 16 Pro×1、iPhone 14×1</td><td class='small-text'>—</td></tr><tr class=''><td>FY26Q3W04<br><small>4/19–4/25</small></td><td class='num'>11</td><td class='num plugin-cell'>0</td><td class='num '>0</td><td class='op-cell'><span style='color:#ccc;font-size:12px'>—</span></td><td class='small-text'>iPhone 14×5、iPhone 15×2、iPhone 16×2</td><td class='small-text'>—</td></tr><tr class=''><td>FY26Q3W05<br><small>4/26–5/2</small></td><td class='num'>4</td><td class='num plugin-cell'>🔌 1</td><td class='num deal-yes'>1</td><td class='op-cell'><span class='op-pill'>謝昀燁 <span class='op-cnt'>1</span></span></td><td class='small-text'>iPhone 14×2、iPhone 13×2</td><td class='small-text'>iPhone 17×1</td></tr><tr class=''><td>FY26Q3W06<br><small>5/3–5/9</small></td><td class='num'>3</td><td class='num plugin-cell'>0</td><td class='num '>0</td><td class='op-cell'><span style='color:#ccc;font-size:12px'>—</span></td><td class='small-text'>iPhone 11×2、iPhone 13 mini×1</td><td class='small-text'>—</td></tr><tr class=' new-week-row'><td>FY26Q3W07<span class="new-badge">NEW</span><br><small>5/10–5/16</small></td><td class='num'>6</td><td class='num plugin-cell'>0</td><td class='num '>0</td><td class='op-cell'><span style='color:#ccc;font-size:12px'>—</span></td><td class='small-text'>iPhone XR×2、iPhone 15 Pro Max×1、iPhone 14 Pro Max×1</td><td class='small-text'>—</td></tr></tbody>
 </table>
 </div><div class="store-card" id="store-19" data-store-idx="19" data-deal="4">
 <div class="store-header">
   <div class="store-title">🏪 燦坤永華二店</div>
   <div class="store-kpis">
-    <div class="kpi-chip exec-chip">執行 75</div>
-    <div class="kpi-chip plugin-chip">Plugin 🔌 10</div>
+    <div class="kpi-chip exec-chip">執行 91</div>
+    <div class="kpi-chip plugin-chip">Plugin 🔌 13</div>
     <div class="kpi-chip deal-chip">成交 4</div>
   </div>
 </div>
 <div class="sales-row">
   <span class="sales-label">📱 iPhone 銷量（手動輸入）</span>
-  <input type="number" class="sales-input" id="sales-19"
-    data-idx="19" data-deal="4"
-    placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
+  <input type="number" class="sales-input" id="sales-19" data-idx="19" data-deal="4" placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
   <span class="sales-arrow">→</span>
   <span class="sales-rate-label">回收率</span>
   <span class="rate-badge" id="rate-badge-19">—</span>
 </div>
 <div class="op-summary-bar"><span class="op-label">👤 操作人（全期成交）：</span><span class='op-pill'>黃孟娟 <span class='op-cnt'>3</span></span><span class='op-pill'>鄭伊婷 <span class='op-cnt'>1</span></span></div>
 <table class="data-table">
-  <thead><tr>
-    <th>週次</th><th>執行數</th><th>Plugin🔌</th><th>成交數</th>
-    <th>操作人（成交筆數）</th><th>主要舊機（前3）</th><th>換購新品（前3）</th>
-  </tr></thead>
-  <tbody><tr class="">
-  <td>FY26Q3W01<br><small>3/29–4/4</small></td>
-  <td class="num">7</td>
-  <td class="num plugin-cell">0</td>
-  <td class="num ">0</td>
-  <td class="op-cell"><span style='color:#ccc;font-size:12px'>—</span></td>
-  <td class="small-text">iPhone 15 Pro×3、iPhone 14 Pro×1、iPhone 13 Pro×1</td>
-  <td class="small-text">—</td>
-</tr><tr class="">
-  <td>FY26Q3W02<br><small>4/5–4/11</small></td>
-  <td class="num">15</td>
-  <td class="num plugin-cell">🔌 2</td>
-  <td class="num deal-yes">1</td>
-  <td class="op-cell"><span class='op-pill'>鄭伊婷 <span class='op-cnt'>1</span></span></td>
-  <td class="small-text">iPhone 14 Pro×4、iPhone 13 Pro Max×3、iPhone 12 Pro×2</td>
-  <td class="small-text">Others×1</td>
-</tr><tr class="">
-  <td>FY26Q3W03<br><small>4/12–4/18</small></td>
-  <td class="num">11</td>
-  <td class="num plugin-cell">🔌 2</td>
-  <td class="num ">0</td>
-  <td class="op-cell"><span style='color:#ccc;font-size:12px'>—</span></td>
-  <td class="small-text">iPhone 12 Pro×4、iPhone 13×3、iPhone 14 Plus×1</td>
-  <td class="small-text">—</td>
-</tr><tr class="">
-  <td>FY26Q3W04<br><small>4/19–4/25</small></td>
-  <td class="num">12</td>
-  <td class="num plugin-cell">🔌 3</td>
-  <td class="num deal-yes">1</td>
-  <td class="op-cell"><span class='op-pill'>黃孟娟 <span class='op-cnt'>1</span></span></td>
-  <td class="small-text">iPhone 13×4、iPhone 16e×1、iPhone 15 Pro×1</td>
-  <td class="small-text">iPhone 17 Pro×1</td>
-</tr><tr class="">
-  <td>FY26Q3W05<br><small>4/26–5/2</small></td>
-  <td class="num">29</td>
-  <td class="num plugin-cell">🔌 3</td>
-  <td class="num deal-yes">2</td>
-  <td class="op-cell"><span class='op-pill'>黃孟娟 <span class='op-cnt'>2</span></span></td>
-  <td class="small-text">iPhone 14 Pro×7、iPhone 14 Pro Max×4、iPhone 13 Pro×3</td>
-  <td class="small-text">iPhone 17×1、iPhone 17 Pro×1</td>
-</tr><tr class="">
-  <td>FY26Q3W06<br><small>5/3–5/9</small></td>
-  <td class="num">1</td>
-  <td class="num plugin-cell">0</td>
-  <td class="num ">0</td>
-  <td class="op-cell"><span style='color:#ccc;font-size:12px'>—</span></td>
-  <td class="small-text">iPhone 13 Pro Max×1</td>
-  <td class="small-text">—</td>
-</tr></tbody>
+  <thead><tr><th>週次</th><th>執行數</th><th>Plugin🔌</th><th>成交數</th><th>操作人（成交筆數）</th><th>主要舊機（前3）</th><th>換購新品（前3）</th></tr></thead>
+  <tbody><tr class=''><td>FY26Q3W01<br><small>3/29–4/4</small></td><td class='num'>7</td><td class='num plugin-cell'>0</td><td class='num '>0</td><td class='op-cell'><span style='color:#ccc;font-size:12px'>—</span></td><td class='small-text'>iPhone 15 Pro×3、iPhone 14 Pro×1、iPhone 13 Pro×1</td><td class='small-text'>—</td></tr><tr class=''><td>FY26Q3W02<br><small>4/5–4/11</small></td><td class='num'>15</td><td class='num plugin-cell'>🔌 2</td><td class='num deal-yes'>1</td><td class='op-cell'><span class='op-pill'>鄭伊婷 <span class='op-cnt'>1</span></span></td><td class='small-text'>iPhone 14 Pro×4、iPhone 13 Pro Max×3、iPhone 12 Pro×2</td><td class='small-text'>Others×1</td></tr><tr class=''><td>FY26Q3W03<br><small>4/12–4/18</small></td><td class='num'>11</td><td class='num plugin-cell'>🔌 2</td><td class='num '>0</td><td class='op-cell'><span style='color:#ccc;font-size:12px'>—</span></td><td class='small-text'>iPhone 12 Pro×4、iPhone 13×3、iPhone 14 Plus×1</td><td class='small-text'>—</td></tr><tr class=''><td>FY26Q3W04<br><small>4/19–4/25</small></td><td class='num'>12</td><td class='num plugin-cell'>🔌 3</td><td class='num deal-yes'>1</td><td class='op-cell'><span class='op-pill'>黃孟娟 <span class='op-cnt'>1</span></span></td><td class='small-text'>iPhone 13×4、iPhone 16e×1、iPhone 15 Pro×1</td><td class='small-text'>iPhone 17 Pro×1</td></tr><tr class=''><td>FY26Q3W05<br><small>4/26–5/2</small></td><td class='num'>29</td><td class='num plugin-cell'>🔌 3</td><td class='num deal-yes'>2</td><td class='op-cell'><span class='op-pill'>黃孟娟 <span class='op-cnt'>2</span></span></td><td class='small-text'>iPhone 14 Pro×7、iPhone 14 Pro Max×4、iPhone 13 Pro×3</td><td class='small-text'>iPhone 17×1、iPhone 17 Pro×1</td></tr><tr class=''><td>FY26Q3W06<br><small>5/3–5/9</small></td><td class='num'>1</td><td class='num plugin-cell'>0</td><td class='num '>0</td><td class='op-cell'><span style='color:#ccc;font-size:12px'>—</span></td><td class='small-text'>iPhone 13 Pro Max×1</td><td class='small-text'>—</td></tr><tr class=' new-week-row'><td>FY26Q3W07<span class="new-badge">NEW</span><br><small>5/10–5/16</small></td><td class='num'>16</td><td class='num plugin-cell'>🔌 3</td><td class='num '>0</td><td class='op-cell'><span style='color:#ccc;font-size:12px'>—</span></td><td class='small-text'>iPhone 13 mini×5、iPhone 13×3、iPhone 15 Pro Max×2</td><td class='small-text'>—</td></tr></tbody>
 </table>
 </div></div>
-
 </div>
-
 <footer>
-  燦坤 Trade-in 週報 · FY26Q3 W01–W06 · 2026/3/29–5/9<br>
+  燦坤 Trade-in 週報 · FY26Q3 W01–W07 · 2026/3/29–5/16<br>
   Plugin 判斷：检测信息含 IMEI 碼 · 成交判斷：回收類型＝以旧换新 · 操作人來源：XPOS操作人欄位<br>
   💡 iPhone 銷量為手動輸入，資料儲存於瀏覽器本機，不會上傳。
 </footer>
-
 <script>
-const STORES = {"0": {"name": "TK3C@009華榮", "deal": 6}, "1": {"name": "燦坤中華店", "deal": 8}, "2": {"name": "燦坤五甲店", "deal": 5}, "3": {"name": "燦坤信義店", "deal": 1}, "4": {"name": "燦坤光復店", "deal": 9}, "5": {"name": "燦坤內湖店", "deal": 6}, "6": {"name": "燦坤公益店", "deal": 5}, "7": {"name": "燦坤北投新旗艦店", "deal": 1}, "8": {"name": "燦坤右昌店", "deal": 11}, "9": {"name": "燦坤基隆旗艦店", "deal": 12}, "10": {"name": "燦坤大甲店", "deal": 4}, "11": {"name": "燦坤岡山家電館", "deal": 12}, "12": {"name": "燦坤斗六店", "deal": 12}, "13": {"name": "燦坤新光華店", "deal": 8}, "14": {"name": "燦坤新文心店", "deal": 8}, "15": {"name": "燦坤新莊店", "deal": 7}, "16": {"name": "燦坤新豐原旗艦店", "deal": 6}, "17": {"name": "燦坤林口文化店", "deal": 2}, "18": {"name": "燦坤桃園旗艦店", "deal": 4}, "19": {"name": "燦坤永華二店", "deal": 4}};
-const LS_KEY = 'ck_fy26q3_iphone_sales';
-
-function loadSales(){ try{ return JSON.parse(localStorage.getItem(LS_KEY))||{}; }catch{return{};} }
-function saveSales(s){ localStorage.setItem(LS_KEY,JSON.stringify(s)); }
-
+const STORES={"0": {"name": "TK3C@009華榮", "deal": 8}, "1": {"name": "燦坤中華店", "deal": 8}, "2": {"name": "燦坤五甲店", "deal": 6}, "3": {"name": "燦坤信義店", "deal": 1}, "4": {"name": "燦坤光復店", "deal": 11}, "5": {"name": "燦坤內湖店", "deal": 6}, "6": {"name": "燦坤公益店", "deal": 8}, "7": {"name": "燦坤北投新旗艦店", "deal": 1}, "8": {"name": "燦坤右昌店", "deal": 11}, "9": {"name": "燦坤基隆旗艦店", "deal": 12}, "10": {"name": "燦坤大甲店", "deal": 4}, "11": {"name": "燦坤岡山家電館", "deal": 18}, "12": {"name": "燦坤斗六店", "deal": 15}, "13": {"name": "燦坤新光華店", "deal": 9}, "14": {"name": "燦坤新文心店", "deal": 11}, "15": {"name": "燦坤新莊店", "deal": 7}, "16": {"name": "燦坤新豐原旗艦店", "deal": 7}, "17": {"name": "燦坤林口文化店", "deal": 4}, "18": {"name": "燦坤桃園旗艦店", "deal": 4}, "19": {"name": "燦坤永華二店", "deal": 4}};
+const LS_KEY='ck_fy26q3_iphone_sales';
+function loadSales(){try{return JSON.parse(localStorage.getItem(LS_KEY))||{};}catch{return{};}}
+function saveSales(s){localStorage.setItem(LS_KEY,JSON.stringify(s));}
 function calcRate(input){
-  const idx=parseInt(input.dataset.idx), deal=parseInt(input.dataset.deal);
+  const idx=parseInt(input.dataset.idx),deal=parseInt(input.dataset.deal);
   const sales=parseInt(input.value)||0;
   const badge=document.getElementById('rate-badge-'+idx);
   const all=loadSales();
-  if(sales>0) all[idx]=sales; else delete all[idx];
+  if(sales>0)all[idx]=sales;else delete all[idx];
   saveSales(all);
-  if(sales>0){
-    const pct=deal/sales*100;
-    badge.textContent=pct.toFixed(1)+'%';
-    badge.className='rate-badge '+(pct>=10?'high':pct>=5?'mid':'low');
-  }else{badge.textContent='—';badge.className='rate-badge';}
+  if(sales>0){const pct=deal/sales*100;badge.textContent=pct.toFixed(1)+'%';badge.className='rate-badge '+(pct>=10?'high':pct>=5?'mid':'low');}
+  else{badge.textContent='—';badge.className='rate-badge';}
   updateLeaderboard();
 }
-
 function updateLeaderboard(){
-  const all=loadSales(), rows=[];
-  Object.entries(all).forEach(([idx,sales])=>{
-    const s=STORES[idx]; if(!s) return;
-    rows.push({idx,name:s.name,deal:s.deal,sales,pct:s.deal/sales*100});
-  });
-  const empty=document.getElementById('leaderboard-empty');
-  const table=document.getElementById('leaderboard-table');
-  const tbody=document.getElementById('leaderboard-body');
+  const all=loadSales(),rows=[];
+  Object.entries(all).forEach(([idx,sales])=>{const s=STORES[idx];if(!s)return;rows.push({idx,name:s.name,deal:s.deal,sales,pct:s.deal/sales*100});});
+  const empty=document.getElementById('leaderboard-empty'),table=document.getElementById('leaderboard-table'),tbody=document.getElementById('leaderboard-body');
   if(rows.length===0){empty.style.display='';table.style.display='none';return;}
   empty.style.display='none';table.style.display='';
   rows.sort((a,b)=>b.pct-a.pct);
@@ -1750,22 +605,8 @@ function updateLeaderboard(){
     return `<tr><td><span class="rate-rank-badge ${rc}">${i+1}</span></td><td><strong>${nm}</strong></td><td class="num deal-yes">${r.deal}</td><td class="num">${r.sales.toLocaleString()}</td><td class="num" style="color:${colors[cl]};font-size:15px;font-weight:800">${r.pct.toFixed(1)}%</td></tr>`;
   }).join('');
 }
-
-function filterStores(q){
-  q=q.toLowerCase();
-  document.querySelectorAll('.store-card').forEach(c=>{
-    c.style.display=c.querySelector('.store-title').textContent.toLowerCase().includes(q)?'':'none';
-  });
-}
-
-window.addEventListener('load',()=>{
-  const all=loadSales();
-  Object.entries(all).forEach(([idx,sales])=>{
-    const input=document.getElementById('sales-'+idx);
-    if(input){input.value=sales;calcRate(input);}
-  });
-  updateLeaderboard();
-});
+function filterStores(q){q=q.toLowerCase();document.querySelectorAll('.store-card').forEach(c=>{c.style.display=c.querySelector('.store-title').textContent.toLowerCase().includes(q)?'':'none';});}
+window.addEventListener('load',()=>{const all=loadSales();Object.entries(all).forEach(([idx,sales])=>{const input=document.getElementById('sales-'+idx);if(input){input.value=sales;calcRate(input);}});updateLeaderboard();});
 </script>
 </body>
 </html>
