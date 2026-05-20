@@ -103,6 +103,8 @@ def analyze(files, dealer_kw: str, start_date: str, num_weeks: int):
         df["old_model"] = df["旧手机型号"].apply(clean)
         df["new_model"] = df["购新设备型号"].apply(clean)
         df["new_lob"]   = df["购新LOB"].apply(clean)
+        # 成交價格：用於獎金計算（只有 is_deal=True 的列才有意義的數值）
+        df["deal_price"] = pd.to_numeric(df["成交价格"], errors="coerce").fillna(0).astype(int)
         frames.append(df)
         print(f"   {len(df):,} 筆，null 替代字 = {null_vals or '無'}")
 
@@ -185,12 +187,29 @@ def analyze(files, dealer_kw: str, start_date: str, num_weeks: int):
                 global_op_dict[op] = global_op_dict.get(op, 0) + cnt
     global_op = sorted(global_op_dict.items(), key=lambda x: -x[1])
 
+    # ── 獎金計算用：每位操作人的成交記錄 ─────────────────────────
+    deal_df = ck[ck["is_deal"] & (ck["operator"] != "")].copy()
+    bonus_records = {}
+    for _, row in deal_df.iterrows():
+        op = row["operator"]
+        ts = row["订单创建时间"]
+        if pd.isna(ts):
+            continue
+        bonus_records.setdefault(op, []).append({
+            "date":  ts.strftime("%Y-%m-%d"),
+            "month": ts.strftime("%Y-%m"),
+            "week":  row["week"],
+            "store": row["门店名称"],
+            "price": int(row["deal_price"]),
+        })
+
     return {
         "results": results, "stores": stores,
         "weeks": weeks, "week_dates": week_dates,
         "all_old": all_old, "all_new": all_new,
         "weekly_totals": weekly_totals, "global_op": global_op,
         "latest_week": weeks[-1] if weeks else None,
+        "bonus_records": bonus_records,
     }
 
 
@@ -264,6 +283,23 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','PingFang TC'
 .rate-rank-badge.r2{background:#C0C0C0;color:#555}
 .rate-rank-badge.r3{background:#CD7F32;color:#fff}
 .empty-hint{text-align:center;color:#bbb;padding:24px;font-size:13px}
+/* ── 獎金計算機 ── */
+.bonus-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:18px}
+.bsum-card{background:#fafafc;border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center}
+.bsum-card.highlight{background:linear-gradient(135deg,rgba(255,204,0,.12),rgba(255,149,0,.06));border-color:rgba(255,149,0,.3)}
+.bsum-label{color:var(--sub);font-size:11px;font-weight:600}
+.bsum-val{font-size:18px;font-weight:700;margin-top:5px}
+.bonus-month-card{border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:14px;background:#fff}
+.bonus-month-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding-bottom:12px;border-bottom:1px solid var(--border);margin-bottom:14px}
+.rule-badge{padding:3px 10px;border-radius:14px;font-size:12px;font-weight:600}
+.rule-badge.basic{background:rgba(52,199,89,.12);color:#1a7a32}
+.rule-badge.adv{background:rgba(255,149,0,.15);color:#c97200}
+.bonus-calc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.bcalc{background:#fafafc;border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:6px}
+.bcalc.highlight{background:linear-gradient(135deg,rgba(255,204,0,.1),rgba(255,149,0,.04));border:1px solid rgba(255,149,0,.25)}
+.bcalc-title{font-weight:700;font-size:13px;margin-bottom:6px}
+.bcalc-row{display:flex;justify-content:space-between;font-size:13px;color:var(--text)}
+.bcalc-row.total{padding-top:8px;border-top:1px dashed var(--border);margin-top:4px}
 .filter-bar{display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
 .filter-bar input{flex:1;min-width:200px;padding:9px 16px;border:1px solid var(--border);border-radius:24px;font-size:14px;outline:none;font-family:inherit}
 footer{text-align:center;color:var(--sub);font-size:12px;padding:28px}
@@ -300,6 +336,21 @@ footer{text-align:center;color:var(--sub);font-size:12px;padding:28px}
       <div class="card" style="margin:0"><div class="card-title">📥 最常換購新品 Top 10</div><table class="data-table"><thead><tr><th>類別</th><th>新品型號</th><th>次數</th></tr></thead><tbody>{{new_rows}}</tbody></table></div>
     </div>
   </div>
+  <div class="section-title">💰 個人舊換新獎金計算機</div>
+  <div class="card">
+    <div style="display:flex;gap:18px;flex-wrap:wrap;font-size:12px;margin-bottom:14px;padding:10px 14px;background:#fff8e6;border-radius:10px;border-left:3px solid var(--orange)">
+      <div><strong>🟢 基本獎勵</strong>（月總回收 &lt; 20 萬）<br>
+        高回收(≥$10,001) → 總額 × <strong>1%</strong> ・ 低回收(≤$10,000) → 每件 <strong>$100</strong></div>
+      <div><strong>🟡 進階獎勵</strong>（月總回收 ≥ 20 萬）<br>
+        高回收(≥$10,001) → 總額 × <strong>2%</strong> ・ 低回收(≤$10,000) → 每件 <strong>$200</strong></div>
+    </div>
+    <div class="filter-bar" style="margin-bottom:18px">
+      <select id="bonusOpSelect" onchange="renderBonus(this.value)" style="flex:1;min-width:240px;padding:9px 16px;border:1px solid var(--border);border-radius:24px;font-size:14px;font-family:inherit;background:#fff">
+        <option value="">— 請選擇操作人（薪號／姓名）—</option>
+      </select>
+    </div>
+    <div id="bonus-result"><div class="empty-hint">👈 從上方選一位操作人來查詢個人獎金</div></div>
+  </div>
   <div class="section-title">📈 iPhone 回收率 / 接線率排行榜</div>
   <div class="card">
     <p style="font-size:13px;color:var(--sub);margin-bottom:10px">在下方各門市卡片輸入 iPhone 銷量後，此排行榜會自動更新並依回收率排序。</p>
@@ -325,18 +376,18 @@ footer{text-align:center;color:var(--sub);font-size:12px;padding:28px}
 <footer>{{dealer_kw}} Trade-in 週報 · 由 analyze_and_report.py 自動產生<br>Plugin 判斷：检测信息含 IMEI 碼 · 成交判斷：回收類型＝以旧换新</footer>
 <script>
 const STORES={{stores_json}};
+const BONUS_RECORDS={{bonus_records_json}};
 const LS_KEY='ck_iphone_sales';
 const LATEST_WEEK='{{latest_week}}';
 const RECYCLE_TARGET={{recycle_target}};   // 回收率達標 (%)
 const PLUGIN_TARGET ={{plugin_target}};    // 接線率達標 (%)
+const HIGH_THRESHOLD=10001;                // ≥ 10,001 算高回收
+const BASIC_HIGH_RATE=0.01, ADV_HIGH_RATE=0.02;
+const BASIC_LOW_PER=100, ADV_LOW_PER=200;
+const ADVANCE_THRESHOLD=200000;            // 月回收 ≥ 20 萬 → 進階
 function loadSales(){try{return JSON.parse(localStorage.getItem(LS_KEY))||{};}catch{return{};}}
 function saveSales(s){localStorage.setItem(LS_KEY,JSON.stringify(s));}
-function rateClass(pct,target){
-  // ≥ target → high；≥ target/2 → mid；其餘 low
-  if(pct>=target)return 'high';
-  if(pct>=target/2)return 'mid';
-  return 'low';
-}
+function rateClass(pct,target){if(pct>=target)return 'high';if(pct>=target/2)return 'mid';return 'low';}
 function calcRate(input){
   const idx=parseInt(input.dataset.idx);
   const deal=parseInt(input.dataset.deal);
@@ -389,7 +440,134 @@ function updateLeaderboard(){
   }).join('');
 }
 function filterStores(q){q=q.toLowerCase();document.querySelectorAll('.store-card').forEach(c=>{c.style.display=c.querySelector('.store-title').textContent.toLowerCase().includes(q)?'':'none';});}
-window.addEventListener('load',()=>{const all=loadSales();Object.entries(all).forEach(([idx,sales])=>{const input=document.getElementById('sales-'+idx);if(input){input.value=sales;calcRate(input);}});updateLeaderboard();});
+
+// ── 獎金計算 ───────────────────────────────────────────
+function calcMonthBonus(records){
+  // records: [{date,month,week,store,price}]
+  const high=records.filter(r=>r.price>=HIGH_THRESHOLD);
+  const low =records.filter(r=>r.price<HIGH_THRESHOLD);
+  const highSum=high.reduce((s,r)=>s+r.price,0);
+  const lowSum =low.reduce((s,r)=>s+r.price,0);
+  const total=highSum+lowSum;
+  const advanced=total>=ADVANCE_THRESHOLD;
+  const highBonus=Math.round(highSum*(advanced?ADV_HIGH_RATE:BASIC_HIGH_RATE));
+  const lowBonus=low.length*(advanced?ADV_LOW_PER:BASIC_LOW_PER);
+  return {high,low,highSum,lowSum,total,advanced,highBonus,lowBonus,bonus:highBonus+lowBonus};
+}
+function fmtMoney(n){return '$'+n.toLocaleString();}
+function renderBonus(op){
+  const target=document.getElementById('bonus-result');
+  if(!op){target.innerHTML='<div class="empty-hint">👈 從上方選一位操作人來查詢個人獎金</div>';return;}
+  const recs=BONUS_RECORDS[op]||[];
+  if(recs.length===0){target.innerHTML='<div class="empty-hint">該操作人無成交記錄</div>';return;}
+  // group by month
+  const monthMap={};
+  recs.forEach(r=>{(monthMap[r.month]=monthMap[r.month]||[]).push(r);});
+  const months=Object.keys(monthMap).sort();
+  const totalBonus=months.reduce((s,m)=>s+calcMonthBonus(monthMap[m]).bonus,0);
+  const totalDeals=recs.length;
+  const totalAmt=recs.reduce((s,r)=>s+r.price,0);
+  const stores=Array.from(new Set(recs.map(r=>r.store))).join('、');
+
+  let html=`<div class="bonus-summary">
+    <div class="bsum-card"><div class="bsum-label">操作人</div><div class="bsum-val">${op}</div></div>
+    <div class="bsum-card"><div class="bsum-label">服務門市</div><div class="bsum-val" style="font-size:13px">${stores}</div></div>
+    <div class="bsum-card"><div class="bsum-label">總成交件數</div><div class="bsum-val">${totalDeals} 件</div></div>
+    <div class="bsum-card"><div class="bsum-label">總回收金額</div><div class="bsum-val">${fmtMoney(totalAmt)}</div></div>
+    <div class="bsum-card highlight"><div class="bsum-label">總獎金（全期）</div><div class="bsum-val" style="color:#c97200">${fmtMoney(totalBonus)}</div></div>
+  </div>`;
+
+  // 月份卡片
+  months.forEach(m=>{
+    const b=calcMonthBonus(monthMap[m]);
+    const ruleBadge=b.advanced
+      ? '<span class="rule-badge adv">🟡 進階獎勵 (≥20萬)</span>'
+      : '<span class="rule-badge basic">🟢 基本獎勵</span>';
+    // 週次明細
+    const weekMap={};
+    monthMap[m].forEach(r=>{(weekMap[r.week]=weekMap[r.week]||[]).push(r);});
+    const weekKeys=Object.keys(weekMap).sort();
+    let weekRows='';
+    weekKeys.forEach(wk=>{
+      const wRecs=weekMap[wk];
+      const wHigh=wRecs.filter(r=>r.price>=HIGH_THRESHOLD);
+      const wLow =wRecs.filter(r=>r.price<HIGH_THRESHOLD);
+      const wHighSum=wHigh.reduce((s,r)=>s+r.price,0);
+      const wLowSum =wLow.reduce((s,r)=>s+r.price,0);
+      weekRows+=`<tr>
+        <td><strong>${wk}</strong></td>
+        <td class="num">${wHigh.length}</td><td class="num">${fmtMoney(wHighSum)}</td>
+        <td class="num">${wLow.length}</td><td class="num">${fmtMoney(wLowSum)}</td>
+        <td class="num"><strong>${fmtMoney(wHighSum+wLowSum)}</strong></td>
+      </tr>`;
+    });
+    // 全月詳細記錄
+    const detailRows=monthMap[m].slice().sort((a,b)=>a.date.localeCompare(b.date)).map(r=>{
+      const tier=r.price>=HIGH_THRESHOLD?'<span style="color:#0071e3;font-size:11px">高</span>':'<span style="color:var(--sub);font-size:11px">低</span>';
+      return `<tr><td>${r.date}</td><td>${r.week}</td><td>${r.store.replace('燦坤','').replace('TK3C@009','')}</td><td class="num">${fmtMoney(r.price)}</td><td>${tier}</td></tr>`;
+    }).join('');
+
+    html+=`<div class="bonus-month-card">
+      <div class="bonus-month-head">
+        <span style="font-size:18px;font-weight:700">📅 ${m}</span>
+        ${ruleBadge}
+        <span style="margin-left:auto;font-size:13px;color:var(--sub)">月總回收 <strong style="color:var(--text)">${fmtMoney(b.total)}</strong></span>
+      </div>
+      <div class="bonus-calc-grid">
+        <div class="bcalc">
+          <div class="bcalc-title" style="color:var(--accent)">🟦 高回收（≥${fmtMoney(HIGH_THRESHOLD)}）</div>
+          <div class="bcalc-row"><span>件數</span><strong>${b.high.length} 件</strong></div>
+          <div class="bcalc-row"><span>金額合計</span><strong>${fmtMoney(b.highSum)}</strong></div>
+          <div class="bcalc-row"><span>計算公式</span><span style="font-size:11px">${fmtMoney(b.highSum)} × ${(b.advanced?ADV_HIGH_RATE:BASIC_HIGH_RATE)*100}%</span></div>
+          <div class="bcalc-row total"><span>小計</span><strong style="color:var(--green)">${fmtMoney(b.highBonus)}</strong></div>
+        </div>
+        <div class="bcalc">
+          <div class="bcalc-title" style="color:var(--sub)">⬜️ 低回收（&lt;${fmtMoney(HIGH_THRESHOLD)}）</div>
+          <div class="bcalc-row"><span>件數</span><strong>${b.low.length} 件</strong></div>
+          <div class="bcalc-row"><span>金額合計</span><strong>${fmtMoney(b.lowSum)}</strong></div>
+          <div class="bcalc-row"><span>計算公式</span><span style="font-size:11px">${b.low.length} × ${fmtMoney(b.advanced?ADV_LOW_PER:BASIC_LOW_PER)}</span></div>
+          <div class="bcalc-row total"><span>小計</span><strong style="color:var(--green)">${fmtMoney(b.lowBonus)}</strong></div>
+        </div>
+        <div class="bcalc highlight">
+          <div class="bcalc-title" style="color:#c97200">💰 該月總獎金</div>
+          <div class="bcalc-row"><span>高回收獎金</span><strong>${fmtMoney(b.highBonus)}</strong></div>
+          <div class="bcalc-row"><span>低回收獎金</span><strong>${fmtMoney(b.lowBonus)}</strong></div>
+          <div class="bcalc-row total" style="margin-top:auto"><span>合計</span><strong style="color:#c97200;font-size:22px">${fmtMoney(b.bonus)}</strong></div>
+        </div>
+      </div>
+      <details style="margin-top:14px">
+        <summary style="cursor:pointer;font-size:13px;color:var(--accent);font-weight:600">📊 各週明細（${weekKeys.length} 週）</summary>
+        <table class="data-table" style="margin-top:8px">
+          <thead><tr><th>週次</th><th>高件數</th><th>高金額</th><th>低件數</th><th>低金額</th><th>週小計</th></tr></thead>
+          <tbody>${weekRows}</tbody>
+        </table>
+      </details>
+      <details style="margin-top:8px">
+        <summary style="cursor:pointer;font-size:13px;color:var(--accent);font-weight:600">📋 全月成交明細（${monthMap[m].length} 筆）</summary>
+        <table class="data-table" style="margin-top:8px">
+          <thead><tr><th>日期</th><th>週次</th><th>門市</th><th>成交價</th><th>級距</th></tr></thead>
+          <tbody>${detailRows}</tbody>
+        </table>
+      </details>
+    </div>`;
+  });
+  target.innerHTML=html;
+}
+function initBonusSelect(){
+  const sel=document.getElementById('bonusOpSelect');
+  if(!sel) return;
+  // 排序：依總成交件數降冪
+  const ops=Object.keys(BONUS_RECORDS).map(op=>{
+    const recs=BONUS_RECORDS[op];
+    return {op,count:recs.length,total:recs.reduce((s,r)=>s+r.price,0)};
+  }).sort((a,b)=>b.count-a.count);
+  ops.forEach(({op,count,total})=>{
+    const opt=document.createElement('option');
+    opt.value=op;opt.textContent=`${op} (${count} 件 / ${'$'+total.toLocaleString()})`;
+    sel.appendChild(opt);
+  });
+}
+window.addEventListener('load',()=>{const all=loadSales();Object.entries(all).forEach(([idx,sales])=>{const input=document.getElementById('sales-'+idx);if(input){input.value=sales;calcRate(input);}});updateLeaderboard();initBonusSelect();});
 </script>
 </body>
 </html>"""
@@ -555,6 +733,7 @@ def render_html(data: dict, dealer_kw: str) -> str:
         "{{new_rows}}":       new_rows,
         "{{store_blocks}}":   store_blocks,
         "{{stores_json}}":    json.dumps(stores_js, ensure_ascii=False),
+        "{{bonus_records_json}}": json.dumps(data.get("bonus_records", {}), ensure_ascii=False),
         "{{latest_week}}":    latest_week,
         "{{recycle_target}}": str(RECYCLE_TARGET),
         "{{plugin_target}}":  str(PLUGIN_TARGET),
