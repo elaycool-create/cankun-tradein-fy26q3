@@ -232,6 +232,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>{{title}}</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 :root{--bg:#f5f5f7;--card:#fff;--text:#1d1d1f;--sub:#6e6e73;--accent:#0071e3;--green:#34c759;--orange:#ff9500;--purple:#af52de;--border:#e5e5ea;--teal:#32ade6;--new:#ff9f0a}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -315,6 +316,20 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','PingFang TC'
 .lock-btn{padding:6px 14px;border:1px solid var(--border);border-radius:20px;background:#fff;font-size:12px;cursor:pointer;color:var(--sub);white-space:nowrap}
 .lock-btn:hover{background:#f5f5f7}
 .rate-rules-bar{display:flex;gap:18px;flex-wrap:wrap;font-size:12px;margin-bottom:14px;padding:10px 14px;background:#f9f9fb;border-radius:10px}
+/* ── 互動式圖表區 ── */
+.chart-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.chart-tab{padding:6px 14px;border:1px solid var(--border);border-radius:18px;background:#fff;font-size:13px;font-weight:600;cursor:pointer;color:var(--sub);transition:.15s}
+.chart-tab:hover{border-color:var(--accent);color:var(--accent)}
+.chart-tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.chart-wrap{position:relative;height:300px}
+@media (max-width: 768px) { .chart-wrap{height:260px} }
+.store-bars{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.store-bar-row{display:grid;grid-template-columns:140px 1fr 60px;align-items:center;gap:10px;font-size:13px}
+.store-bar-row .name{font-weight:600;color:var(--text);text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.store-bar-row .bar{position:relative;height:22px;background:#f5f5f7;border-radius:6px;overflow:hidden}
+.store-bar-row .bar-fill{position:absolute;top:0;left:0;height:100%;border-radius:6px;transition:width .4s}
+.store-bar-row .num{font-variant-numeric:tabular-nums;font-weight:700}
+@media (max-width: 768px){ .store-bar-row{grid-template-columns:90px 1fr 48px;font-size:12px;gap:7px} }
 .filter-bar{display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
 .filter-bar input{flex:1;min-width:200px;padding:9px 16px;border:1px solid var(--border);border-radius:24px;font-size:14px;outline:none;font-family:inherit}
 footer{text-align:center;color:var(--sub);font-size:12px;padding:28px}
@@ -407,7 +422,7 @@ footer{text-align:center;color:var(--sub);font-size:12px;padding:28px}
 <body>
 <div class="header">
   <h1>📱 {{dealer_kw}} Trade-in 舊換新分析報告</h1>
-  <p>Apple FY 週次追蹤 · 自動產生</p>
+  <p>{{dealer_kw}} · FY26Q3 各週次回收數據追蹤</p>
   <div class="header-meta">
     <span class="meta-badge">📅 {{first_week}}–{{last_week}}</span>
     <span class="meta-badge">🏪 {{n_stores}} 門市</span>
@@ -422,49 +437,30 @@ footer{text-align:center;color:var(--sub);font-size:12px;padding:28px}
     <div class="summary-card"><div class="label">成交數</div><div class="value green">{{total_deal}}</div><div class="sub">完成以舊換新</div></div>
     <div class="summary-card"><div class="label">操作人數</div><div class="value teal">{{n_ops}}</div><div class="sub">有成交記錄的人員</div></div>
   </div>
+  <!-- ① 週次總覽：互動式圖表 -->
   <div class="section-title">📊 全{{dealer_kw}}週次總覽</div>
-  <div class="card"><table class="data-table">
-    <thead><tr><th>週次</th><th>執行數</th><th>Plugin🔌</th><th>成交數</th></tr></thead>
-    <tbody>{{weekly_overview_rows}}<tr style="background:#f5f5f7;font-weight:700"><td>合計</td><td class="num blue">{{total_exec}}</td><td class="num purple">{{total_plugin}}</td><td class="num green">{{total_deal}}</td></tr></tbody>
-  </table></div>
-  <div class="section-title">👤 全{{dealer_kw}}操作人成交排行</div>
-  <div class="two-col">
-    <div class="card"><div class="card-title">🏆 操作人成交總排行</div><table class="data-table"><thead><tr><th>#</th><th>操作人</th><th>主要門市</th><th>成交筆數</th></tr></thead><tbody>{{global_op_rows}}</tbody></table></div>
-    <div style="display:flex;flex-direction:column;gap:20px">
-      <div class="card" style="margin:0"><div class="card-title">📤 最常被換出舊機 Top 10</div><table class="data-table"><thead><tr><th>舊機型號</th><th>次數</th></tr></thead><tbody>{{old_rows}}</tbody></table></div>
-      <div class="card" style="margin:0"><div class="card-title">📥 最常換購新品 Top 10</div><table class="data-table"><thead><tr><th>類別</th><th>新品型號</th><th>次數</th></tr></thead><tbody>{{new_rows}}</tbody></table></div>
+  <div class="card">
+    <div class="chart-tabs">
+      <button class="chart-tab active" data-metric="all"   onclick="switchTrend('all',this)">全部</button>
+      <button class="chart-tab"        data-metric="exec"  onclick="switchTrend('exec',this)">執行數</button>
+      <button class="chart-tab"        data-metric="plugin"onclick="switchTrend('plugin',this)">接機數🔌</button>
+      <button class="chart-tab"        data-metric="deal"  onclick="switchTrend('deal',this)">成交數</button>
     </div>
+    <div class="chart-wrap"><canvas id="trendChart"></canvas></div>
   </div>
-  <div class="section-title">💰 個人舊換新獎金計算機</div>
-  <div class="card" id="bonus-locked-card">
-    <div style="text-align:center;padding:24px 20px">
-      <div style="font-size:48px;margin-bottom:10px">🔒</div>
-      <div style="font-size:16px;font-weight:700;margin-bottom:6px">此區僅限授權人員查看</div>
-      <div style="font-size:13px;color:var(--sub);margin-bottom:18px">請輸入密碼以解鎖個人獎金資料</div>
-      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
-        <input type="password" id="bonusPwd" placeholder="密碼" onkeydown="if(event.key==='Enter')tryUnlock()" style="width:200px;padding:9px 16px;border:1.5px solid var(--border);border-radius:24px;font-size:14px;outline:none;font-family:inherit;text-align:center">
-        <button onclick="tryUnlock()" style="padding:9px 22px;border:none;border-radius:24px;background:var(--accent);color:#fff;font-size:14px;font-weight:600;cursor:pointer">🔓 解鎖</button>
-      </div>
-      <div id="pwd-error" style="color:#d63030;font-size:12px;margin-top:10px;display:none">❌ 密碼錯誤，請重試</div>
+
+  <!-- ② 各門市總和：橫條互動排行 -->
+  <div class="section-title">🏪 各門市總和（全期）</div>
+  <div class="card">
+    <div class="chart-tabs">
+      <button class="chart-tab active" data-st="exec"  onclick="switchStore('exec',this)">📦 依執行數</button>
+      <button class="chart-tab"        data-st="plugin"onclick="switchStore('plugin',this)">🔌 依接機數</button>
+      <button class="chart-tab"        data-st="deal"  onclick="switchStore('deal',this)">✅ 依成交數</button>
     </div>
+    <div id="store-bars" class="store-bars"></div>
   </div>
-  <div class="card" id="bonus-unlocked-card" style="display:none">
-    <div class="bonus-rules-bar">
-      <div class="bonus-rules-text">
-        <div><strong>🟢 基本獎勵</strong>（月總回收 &lt; 20 萬）<br>
-          高回收(≥$10,001) → 總額 × <strong>1%</strong> ・ 低回收(≤$10,000) → 每件 <strong>$100</strong></div>
-        <div><strong>🟡 進階獎勵</strong>（月總回收 ≥ 20 萬）<br>
-          高回收(≥$10,001) → 總額 × <strong>2%</strong> ・ 低回收(≤$10,000) → 每件 <strong>$200</strong></div>
-      </div>
-      <button onclick="lockBonus()" class="lock-btn">🔒 鎖定</button>
-    </div>
-    <div class="filter-bar" style="margin-bottom:18px">
-      <select id="bonusOpSelect" onchange="renderBonus(this.value)" style="flex:1;min-width:240px;padding:9px 16px;border:1px solid var(--border);border-radius:24px;font-size:14px;font-family:inherit;background:#fff">
-        <option value="">— 請選擇操作人（薪號／姓名）—</option>
-      </select>
-    </div>
-    <div id="bonus-result"><div class="empty-hint">👈 從上方選一位操作人來查詢個人獎金</div></div>
-  </div>
+
+  <!-- ③ 回收率/接線率排行榜 -->
   <div class="section-title">📈 iPhone 回收率 / 接線率排行榜</div>
   <div class="card">
     <p style="font-size:13px;color:var(--sub);margin-bottom:10px">在下方各門市卡片輸入 iPhone 銷量後，此排行榜會自動更新並依回收率排序。</p>
@@ -480,6 +476,35 @@ footer{text-align:center;color:var(--sub);font-size:12px;padding:28px}
       </table>
     </div>
   </div>
+
+  <!-- ④ 操作人成交排行 + 熱門機型 -->
+  <div class="section-title">👤 全{{dealer_kw}}操作人成交排行</div>
+  <div class="two-col">
+    <div class="card"><div class="card-title">🏆 操作人成交總排行</div><table class="data-table"><thead><tr><th>#</th><th>操作人</th><th>主要門市</th><th>成交筆數</th></tr></thead><tbody>{{global_op_rows}}</tbody></table></div>
+    <div style="display:flex;flex-direction:column;gap:20px">
+      <div class="card" style="margin:0"><div class="card-title">📤 最常被換出舊機 Top 10</div><table class="data-table"><thead><tr><th>舊機型號</th><th>次數</th></tr></thead><tbody>{{old_rows}}</tbody></table></div>
+      <div class="card" style="margin:0"><div class="card-title">📥 最常換購新品 Top 10</div><table class="data-table"><thead><tr><th>類別</th><th>新品型號</th><th>次數</th></tr></thead><tbody>{{new_rows}}</tbody></table></div>
+    </div>
+  </div>
+
+  <!-- ⑤ 個人獎金 -->
+  <div class="section-title">💰 個人舊換新獎金計算機</div>
+  <div class="card">
+    <div class="bonus-rules-bar">
+      <div class="bonus-rules-text">
+        <div><strong>🟢 基本獎勵</strong>（月總回收 &lt; 20 萬）<br>
+          高回收(≥$10,001) → 總額 × <strong>1%</strong> ・ 低回收(≤$10,000) → 每件 <strong>$100</strong></div>
+        <div><strong>🟡 進階獎勵</strong>（月總回收 ≥ 20 萬）<br>
+          高回收(≥$10,001) → 總額 × <strong>2%</strong> ・ 低回收(≤$10,000) → 每件 <strong>$200</strong></div>
+      </div>
+    </div>
+    <div class="filter-bar" style="margin-bottom:18px">
+      <select id="bonusOpSelect" onchange="renderBonus(this.value)" style="flex:1;min-width:240px;padding:9px 16px;border:1px solid var(--border);border-radius:24px;font-size:14px;font-family:inherit;background:#fff">
+        <option value="">— 請選擇操作人（薪號／姓名）—</option>
+      </select>
+    </div>
+    <div id="bonus-result"><div class="empty-hint">👈 從上方選一位操作人來查詢個人獎金</div></div>
+  </div>
   <div class="section-title">🏪 各門市週次明細</div>
   <div class="filter-bar">
     <input type="text" id="storeSearch" placeholder="🔍 搜尋門市名稱..." oninput="filterStores(this.value)">
@@ -491,6 +516,8 @@ footer{text-align:center;color:var(--sub);font-size:12px;padding:28px}
 <script>
 const STORES={{stores_json}};
 const BONUS_RECORDS={{bonus_records_json}};
+const WEEKLY_CHART={{weekly_chart_json}};
+const STORE_TOTALS={{store_totals_json}};
 const LS_KEY='ck_iphone_sales';
 const LATEST_WEEK='{{latest_week}}';
 const RECYCLE_TARGET={{recycle_target}};   // 回收率達標 (%)
@@ -683,49 +710,83 @@ function initBonusSelect(){
   });
 }
 
-// ── 密碼鎖（個人獎金區） ──────────────────────────────
-const BONUS_PWD_HASH='46a3bc0b6fdbcda91cb959d786e25cd2db5c38a95aaeac5fb4caad4ba4dab92d';  // SHA-256
-const UNLOCK_KEY='ck_bonus_unlocked_v1';
-async function sha256(text){
-  const buf=new TextEncoder().encode(text);
-  const hash=await crypto.subtle.digest('SHA-256',buf);
-  return Array.from(new Uint8Array(hash)).map(b=>b.toString(16).padStart(2,'0')).join('');
+// ── 互動圖表：週次趨勢 ────────────────────────────────
+const COLORS={exec:'#0071e3',plugin:'#af52de',deal:'#34c759'};
+const LABELS={exec:'執行數',plugin:'接機數🔌',deal:'成交數'};
+let trendChart=null;
+function renderTrend(metric){
+  const ctx=document.getElementById('trendChart');
+  if(!ctx) return;
+  const labels=WEEKLY_CHART.labels;
+  const datasets=[];
+  const keys=metric==='all'?['exec','plugin','deal']:[metric];
+  keys.forEach(k=>{
+    datasets.push({
+      label:LABELS[k],
+      data:WEEKLY_CHART[k],
+      borderColor:COLORS[k],
+      backgroundColor:COLORS[k]+'30',
+      fill:metric!=='all',
+      tension:0.35,
+      borderWidth:3,
+      pointRadius:5,
+      pointHoverRadius:8,
+      pointBackgroundColor:'#fff',
+      pointBorderWidth:2.5,
+    });
+  });
+  if(trendChart) trendChart.destroy();
+  trendChart=new Chart(ctx,{
+    type:'line',
+    data:{labels,datasets},
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      interaction:{mode:'index',intersect:false},
+      plugins:{
+        legend:{display:metric==='all',position:'top',labels:{boxWidth:14,font:{size:12,weight:'600'}}},
+        tooltip:{
+          backgroundColor:'rgba(29,29,31,.92)',padding:10,
+          titleFont:{size:13,weight:'700'},bodyFont:{size:13},
+          callbacks:{label:(c)=>` ${c.dataset.label}：${c.parsed.y.toLocaleString()}`}
+        }
+      },
+      scales:{
+        x:{grid:{display:false},ticks:{font:{size:11},color:'#6e6e73'}},
+        y:{beginAtZero:true,grid:{color:'rgba(0,0,0,.06)'},ticks:{font:{size:11},color:'#6e6e73'}}
+      }
+    }
+  });
 }
-async function tryUnlock(){
-  const input=document.getElementById('bonusPwd');
-  const err=document.getElementById('pwd-error');
-  const h=await sha256(input.value);
-  if(h===BONUS_PWD_HASH){
-    err.style.display='none';
-    sessionStorage.setItem(UNLOCK_KEY,'1');
-    showUnlocked();
-  }else{
-    err.style.display='block';
-    input.value='';
-    input.focus();
-  }
+function switchTrend(metric,btn){
+  document.querySelectorAll('[data-metric]').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  renderTrend(metric);
 }
-function showUnlocked(){
-  document.getElementById('bonus-locked-card').style.display='none';
-  document.getElementById('bonus-unlocked-card').style.display='';
-  initBonusSelect();
+
+// ── 各門市總和：橫條 ───────────────────────────────────
+function renderStoreBars(metric){
+  const wrap=document.getElementById('store-bars');
+  if(!wrap) return;
+  const sorted=[...STORE_TOTALS].sort((a,b)=>b[metric]-a[metric]);
+  const max=Math.max(...sorted.map(s=>s[metric]),1);
+  const c=COLORS[metric];
+  wrap.innerHTML=sorted.map((s,i)=>{
+    const w=(s[metric]/max*100).toFixed(1);
+    const short=s.name.replace('燦坤','').replace('TK3C@009','');
+    const medal=i===0?'🥇 ':i===1?'🥈 ':i===2?'🥉 ':'';
+    return `<div class="store-bar-row">
+      <span class="name" title="${s.name}">${medal}${short}</span>
+      <div class="bar"><div class="bar-fill" style="width:${w}%;background:${c}"></div></div>
+      <span class="num" style="color:${c}">${s[metric].toLocaleString()}</span>
+    </div>`;
+  }).join('');
 }
-function lockBonus(){
-  sessionStorage.removeItem(UNLOCK_KEY);
-  document.getElementById('bonus-locked-card').style.display='';
-  document.getElementById('bonus-unlocked-card').style.display='none';
-  const pwd=document.getElementById('bonusPwd');
-  if(pwd) pwd.value='';
-  // 清空已查詢結果，避免被截圖殘留
-  const sel=document.getElementById('bonusOpSelect');
-  if(sel) sel.value='';
-  const res=document.getElementById('bonus-result');
-  if(res) res.innerHTML='<div class="empty-hint">👈 從上方選一位操作人來查詢個人獎金</div>';
+function switchStore(metric,btn){
+  document.querySelectorAll('[data-st]').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  renderStoreBars(metric);
 }
-function checkUnlockOnLoad(){
-  if(sessionStorage.getItem(UNLOCK_KEY)==='1') showUnlocked();
-}
-window.addEventListener('load',()=>{const all=loadSales();Object.entries(all).forEach(([idx,sales])=>{const input=document.getElementById('sales-'+idx);if(input){input.value=sales;calcRate(input);}});updateLeaderboard();checkUnlockOnLoad();});
+window.addEventListener('load',()=>{const all=loadSales();Object.entries(all).forEach(([idx,sales])=>{const input=document.getElementById('sales-'+idx);if(input){input.value=sales;calcRate(input);}});updateLeaderboard();initBonusSelect();renderTrend('all');renderStoreBars('exec');});
 </script>
 </body>
 </html>"""
@@ -810,6 +871,27 @@ def render_html(data: dict, dealer_kw: str) -> str:
         for s in stores
     }
 
+    # ── 週次趨勢圖表資料 ────────────────────────────────────
+    weekly_chart = {
+        "labels": [f"{w}\n{week_dates[w]}" for w in weeks],
+        "exec":   [weekly_totals[w]["exec"]   for w in weeks],
+        "plugin": [weekly_totals[w]["plugin"] for w in weeks],
+        "deal":   [weekly_totals[w]["deal"]   for w in weeks],
+    }
+
+    # ── 各門市總和（用於互動橫條） ──────────────────────────
+    store_totals = []
+    for s in stores:
+        te = sum(results[s][w]["exec"]   for w in weeks)
+        if te == 0:  # 只列入有資料的門市
+            continue
+        store_totals.append({
+            "name":   s,
+            "exec":   te,
+            "plugin": sum(results[s][w]["plugin"] for w in weeks),
+            "deal":   sum(results[s][w]["deal"]   for w in weeks),
+        })
+
     # 各門市卡片
     store_blocks = ""
     for store in stores:
@@ -892,6 +974,8 @@ def render_html(data: dict, dealer_kw: str) -> str:
         "{{store_blocks}}":   store_blocks,
         "{{stores_json}}":    json.dumps(stores_js, ensure_ascii=False),
         "{{bonus_records_json}}": json.dumps(data.get("bonus_records", {}), ensure_ascii=False),
+        "{{weekly_chart_json}}": json.dumps(weekly_chart, ensure_ascii=False),
+        "{{store_totals_json}}": json.dumps(store_totals, ensure_ascii=False),
         "{{latest_week}}":    latest_week,
         "{{recycle_target}}": str(RECYCLE_TARGET),
         "{{plugin_target}}":  str(PLUGIN_TARGET),
