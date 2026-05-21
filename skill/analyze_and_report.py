@@ -300,8 +300,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','PingFang TC'
 .sales-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:11px 20px;background:linear-gradient(to right,rgba(255,204,0,.08),rgba(255,149,0,.04));border-bottom:1px solid var(--border)}
 .sales-label{font-size:12px;font-weight:600;color:var(--sub);white-space:nowrap}
 .sales-divider{color:#d1d1d6;font-size:14px}
-.sales-input{width:120px;padding:6px 12px;border:1.5px solid var(--border);border-radius:20px;font-size:13px;font-weight:600;font-family:inherit;outline:none;text-align:center}
+.sales-input{width:100px;padding:6px 12px;border:1.5px solid var(--border);border-radius:20px;font-size:13px;font-weight:600;font-family:inherit;outline:none;text-align:center}
 .sales-input:focus{border-color:var(--orange);box-shadow:0 0 0 3px rgba(255,149,0,.15)}
+.sales-value{display:inline-block;min-width:50px;padding:5px 12px;background:#fff;border:1.5px solid #e5e5ea;border-radius:18px;font-size:13px;font-weight:700;color:var(--text);text-align:center;font-variant-numeric:tabular-nums}
 .rate-badge{min-width:64px;text-align:center;font-size:15px;font-weight:800;padding:4px 12px;border-radius:20px;background:#f5f5f7;color:#bbb;transition:all .25s}
 .rate-badge.high{background:rgba(52,199,89,.15);color:#25a244}
 .rate-badge.mid{background:rgba(255,149,0,.15);color:#c97200}
@@ -341,13 +342,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','PingFang TC'
 .chart-tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
 .chart-wrap{position:relative;height:300px}
 @media (max-width: 768px) { .chart-wrap{height:260px} }
-.store-bars{display:flex;flex-direction:column;gap:8px;margin-top:10px}
-.store-bar-row{display:grid;grid-template-columns:140px 1fr 60px;align-items:center;gap:10px;font-size:13px}
-.store-bar-row .name{font-weight:600;color:var(--text);text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.store-bar-row .bar{position:relative;height:22px;background:#f5f5f7;border-radius:6px;overflow:hidden}
-.store-bar-row .bar-fill{position:absolute;top:0;left:0;height:100%;border-radius:6px;transition:width .4s}
-.store-bar-row .num{font-variant-numeric:tabular-nums;font-weight:700}
-@media (max-width: 768px){ .store-bar-row{grid-template-columns:90px 1fr 48px;font-size:12px;gap:7px} }
 .filter-bar{display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
 .filter-bar input{flex:1;min-width:200px;padding:9px 16px;border:1px solid var(--border);border-radius:24px;font-size:14px;outline:none;font-family:inherit}
 footer{text-align:center;color:var(--sub);font-size:12px;padding:28px}
@@ -467,7 +461,7 @@ footer{text-align:center;color:var(--sub);font-size:12px;padding:28px}
     <div class="chart-wrap"><canvas id="trendChart"></canvas></div>
   </div>
 
-  <!-- ② 各門市總和：橫條互動排行 -->
+  <!-- ② 各門市總和：垂直柱狀互動圖 -->
   <div class="section-title">🏪 各門市總和（全期）</div>
   <div class="card">
     <div class="chart-tabs">
@@ -475,21 +469,21 @@ footer{text-align:center;color:var(--sub);font-size:12px;padding:28px}
       <button class="chart-tab"        data-st="plugin"onclick="switchStore('plugin',this)">🔌 依接機數</button>
       <button class="chart-tab"        data-st="deal"  onclick="switchStore('deal',this)">✅ 依成交數</button>
     </div>
-    <div id="store-bars" class="store-bars"></div>
+    <div class="chart-wrap" style="height:340px"><canvas id="storeChart"></canvas></div>
   </div>
 
   <!-- ③ 回收率/接線率排行榜 -->
   <div class="section-title">📈 iPhone 回收率 / 接線率排行榜</div>
   <div class="card">
-    <p style="font-size:13px;color:var(--sub);margin-bottom:10px">在下方各門市卡片輸入 iPhone 銷量後，此排行榜會自動更新並依回收率排序。</p>
+    <p style="font-size:13px;color:var(--sub);margin-bottom:10px">在下方各門市卡片輸入<strong>大宗採購量</strong>後，此排行榜會自動更新並依回收率排序。</p>
     <div class="rate-rules-bar">
-      <span><strong style="color:var(--green)">回收率</strong> ＝ 成交數 ÷ iPhone 銷量 × 100% ・ 達標 <strong>≥ {{recycle_target}}%</strong></span>
-      <span><strong style="color:var(--purple)">接線率</strong> ＝ 接機數 ÷ iPhone 銷量 × 100% ・ 達標 <strong>≥ {{plugin_target}}%</strong></span>
+      <span><strong style="color:var(--green)">回收率</strong> ＝ 成交數 ÷ <strong>(iPhone 銷量 − 大宗採購)</strong> × 100% ・ 達標 <strong>≥ {{recycle_target}}%</strong></span>
+      <span><strong style="color:var(--purple)">接線率</strong> ＝ 接機數 ÷ <strong>(iPhone 銷量 − 大宗採購)</strong> × 100% ・ 達標 <strong>≥ {{plugin_target}}%</strong></span>
     </div>
     <div id="rate-leaderboard-wrap">
-      <div class="empty-hint" id="leaderboard-empty">尚無資料 — 請先在門市卡片輸入 iPhone 銷量 👇</div>
+      <div class="empty-hint" id="leaderboard-empty">尚無資料 — 請先在門市卡片輸入大宗採購量 👇</div>
       <table class="data-table" id="leaderboard-table" style="display:none">
-        <thead><tr><th>#</th><th>門市</th><th>iPhone 銷量</th><th>接機數</th><th>接線率</th><th>成交數</th><th>回收率</th></tr></thead>
+        <thead><tr><th>#</th><th>門市</th><th>iPhone 銷量</th><th>大宗採購</th><th>有效銷量</th><th>接機數</th><th>接線率</th><th>成交數</th><th>回收率</th></tr></thead>
         <tbody id="leaderboard-body"></tbody>
       </table>
     </div>
@@ -536,7 +530,7 @@ const STORES={{stores_json}};
 const BONUS_RECORDS={{bonus_records_json}};
 const WEEKLY_CHART={{weekly_chart_json}};
 const STORE_TOTALS={{store_totals_json}};
-const LS_KEY='ck_iphone_sales';
+const LS_KEY='ck_bulk_purchase_v2';        // 儲存大宗採購量
 const LATEST_WEEK='{{latest_week}}';
 const RECYCLE_TARGET={{recycle_target}};   // 回收率達標 (%)
 const PLUGIN_TARGET ={{plugin_target}};    // 接線率達標 (%)
@@ -544,38 +538,53 @@ const HIGH_THRESHOLD=10001;                // ≥ 10,001 算高回收
 const BASIC_HIGH_RATE=0.01, ADV_HIGH_RATE=0.02;
 const BASIC_LOW_PER=100, ADV_LOW_PER=200;
 const ADVANCE_THRESHOLD=200000;            // 月回收 ≥ 20 萬 → 進階
-function loadSales(){try{return JSON.parse(localStorage.getItem(LS_KEY))||{};}catch{return{};}}
-function saveSales(s){localStorage.setItem(LS_KEY,JSON.stringify(s));}
+function loadBulk(){try{return JSON.parse(localStorage.getItem(LS_KEY))||{};}catch{return{};}}
+function saveBulk(s){localStorage.setItem(LS_KEY,JSON.stringify(s));}
 function rateClass(pct,target){if(pct>=target)return 'high';if(pct>=target/2)return 'mid';return 'low';}
 function calcRate(input){
   const idx=parseInt(input.dataset.idx);
   const deal=parseInt(input.dataset.deal);
   const plugin=parseInt(input.dataset.plugin);
-  const sales=parseInt(input.value)||0;
+  const sales=parseInt(input.dataset.sales)||0;          // iPhone 銷量（固定）
+  const bulk=parseInt(input.value)||0;                    // 大宗採購量（手動輸入）
+  const effective=sales-bulk;                             // 有效銷量（分母）
   const rb=document.getElementById('rate-badge-'+idx);
   const pb=document.getElementById('plug-badge-'+idx);
-  const all=loadSales();
-  if(sales>0)all[idx]=sales;else delete all[idx];
-  saveSales(all);
-  if(sales>0){
-    const rPct=deal/sales*100;
+  // 儲存大宗採購量
+  const all=loadBulk();
+  if(bulk>0) all[idx]=bulk; else delete all[idx];
+  saveBulk(all);
+  // 計算
+  if(sales>0 && effective>0){
+    const rPct=deal/effective*100;
     rb.textContent=rPct.toFixed(1)+'%';
     rb.className='rate-badge '+rateClass(rPct,RECYCLE_TARGET);
-    const pPct=plugin/sales*100;
+    rb.title=`成交 ${deal} ÷ 有效銷量 ${effective} (= ${sales} − ${bulk}) × 100%`;
+    const pPct=plugin/effective*100;
     pb.textContent=pPct.toFixed(1)+'%';
     pb.className='rate-badge '+rateClass(pPct,PLUGIN_TARGET);
+    pb.title=`接機 ${plugin} ÷ 有效銷量 ${effective} (= ${sales} − ${bulk}) × 100%`;
   }else{
     rb.textContent='—';rb.className='rate-badge';
     pb.textContent='—';pb.className='rate-badge';
+    if(sales===0){rb.title='尚無 iPhone 銷量資料';pb.title='尚無 iPhone 銷量資料';}
+    else if(effective<=0){rb.title='大宗採購量超過 iPhone 銷量';pb.title='大宗採購量超過 iPhone 銷量';}
   }
   updateLeaderboard();
 }
 function updateLeaderboard(){
-  const all=loadSales(),rows=[];
-  Object.entries(all).forEach(([idx,sales])=>{
-    const s=STORES[idx];if(!s)return;
-    rows.push({idx,name:s.name,deal:s.deal,plugin:s.plugin,sales,
-               rPct:s.deal/sales*100, pPct:s.plugin/sales*100});
+  const bulkAll=loadBulk(),rows=[];
+  Object.entries(STORES).forEach(([idx,s])=>{
+    const sales=s.default_sales||0;
+    if(sales<=0) return;                                  // 沒銷量資料的不上榜
+    const bulk=parseInt(bulkAll[idx])||0;
+    const effective=sales-bulk;
+    if(effective<=0) return;                              // 大宗採購超過銷量，跳過
+    rows.push({
+      idx,name:s.name,deal:s.deal,plugin:s.plugin,
+      sales,bulk,effective,
+      rPct:s.deal/effective*100, pPct:s.plugin/effective*100
+    });
   });
   const empty=document.getElementById('leaderboard-empty'),table=document.getElementById('leaderboard-table'),tbody=document.getElementById('leaderboard-body');
   if(rows.length===0){empty.style.display='';table.style.display='none';return;}
@@ -589,8 +598,10 @@ function updateLeaderboard(){
     const pIcon = r.pPct>=PLUGIN_TARGET  ? ' ✅' : '';
     return `<tr>
       <td><span class="rate-rank-badge ${rc}">${i+1}</span></td>
-      <td><strong>${r.name}</strong></td>
+      <td><strong>${r.name.replace('燦坤','').replace('TK3C@009','')}</strong></td>
       <td class="num">${r.sales.toLocaleString()}</td>
+      <td class="num" style="color:#c97200">${r.bulk>0?'-'+r.bulk:'—'}</td>
+      <td class="num" style="font-weight:700">${r.effective.toLocaleString()}</td>
       <td class="num plugin-cell">${r.plugin}</td>
       <td class="num" style="color:${colors[pCl]};font-weight:800">${r.pPct.toFixed(1)}%${pIcon}</td>
       <td class="num deal-yes">${r.deal}</td>
@@ -781,23 +792,46 @@ function switchTrend(metric,btn){
   renderTrend(metric);
 }
 
-// ── 各門市總和：橫條 ───────────────────────────────────
+// ── 各門市總和：垂直柱狀圖 ─────────────────────────────
+let storeChart=null;
 function renderStoreBars(metric){
-  const wrap=document.getElementById('store-bars');
-  if(!wrap) return;
+  const ctx=document.getElementById('storeChart');
+  if(!ctx) return;
   const sorted=[...STORE_TOTALS].sort((a,b)=>b[metric]-a[metric]);
-  const max=Math.max(...sorted.map(s=>s[metric]),1);
+  const labels=sorted.map(s=>s.name.replace('燦坤','').replace('TK3C@009',''));
+  const fullNames=sorted.map(s=>s.name);
+  const data=sorted.map(s=>s[metric]);
   const c=COLORS[metric];
-  wrap.innerHTML=sorted.map((s,i)=>{
-    const w=(s[metric]/max*100).toFixed(1);
-    const short=s.name.replace('燦坤','').replace('TK3C@009','');
-    const medal=i===0?'🥇 ':i===1?'🥈 ':i===2?'🥉 ':'';
-    return `<div class="store-bar-row">
-      <span class="name" title="${s.name}">${medal}${short}</span>
-      <div class="bar"><div class="bar-fill" style="width:${w}%;background:${c}"></div></div>
-      <span class="num" style="color:${c}">${s[metric].toLocaleString()}</span>
-    </div>`;
-  }).join('');
+  // 前三名高亮
+  const bgColors=data.map((_,i)=>i===0?'#FFD700':i===1?'#C0C0C0':i===2?'#CD7F32':c);
+  const borderColors=data.map((_,i)=>i<3?'rgba(0,0,0,.08)':'transparent');
+  if(storeChart) storeChart.destroy();
+  storeChart=new Chart(ctx,{
+    type:'bar',
+    data:{labels,datasets:[{
+      label:LABELS[metric],data,
+      backgroundColor:bgColors,borderColor:borderColors,borderWidth:1.5,
+      borderRadius:6,maxBarThickness:38,
+    }]},
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{
+        legend:{display:false},
+        tooltip:{
+          backgroundColor:'rgba(29,29,31,.92)',padding:10,
+          titleFont:{size:13,weight:'700'},bodyFont:{size:13},
+          callbacks:{
+            title:(items)=>fullNames[items[0].dataIndex],
+            label:(c)=>` ${LABELS[metric]}：${c.parsed.y.toLocaleString()}`
+          }
+        }
+      },
+      scales:{
+        x:{grid:{display:false},ticks:{font:{size:11},color:'#1d1d1f',maxRotation:45,minRotation:30,autoSkip:false}},
+        y:{beginAtZero:true,grid:{color:'rgba(0,0,0,.06)'},ticks:{font:{size:11},color:'#6e6e73'}}
+      }
+    }
+  });
 }
 function switchStore(metric,btn){
   document.querySelectorAll('[data-st]').forEach(b=>b.classList.remove('active'));
@@ -805,17 +839,15 @@ function switchStore(metric,btn){
   renderStoreBars(metric);
 }
 window.addEventListener('load',()=>{
-  const all=loadSales();
-  // 套用預設銷量：localStorage 未設定的 idx，若有 default_sales 就帶入
-  let changed=false;
-  Object.entries(STORES).forEach(([idx,store])=>{
-    if(all[idx]===undefined && store.default_sales>0){ all[idx]=store.default_sales; changed=true; }
+  const bulkAll=loadBulk();
+  // 還原各門市的大宗採購量
+  Object.entries(bulkAll).forEach(([idx,bulk])=>{
+    const input=document.getElementById('bulk-'+idx);
+    if(input){input.value=bulk;}
   });
-  if(changed) saveSales(all);
-  // 填入各 input 並計算
-  Object.entries(all).forEach(([idx,sales])=>{
-    const input=document.getElementById('sales-'+idx);
-    if(input){input.value=sales;calcRate(input);}
+  // 對所有有銷量的門市計算一次（即使 bulk=0 也要顯示初始回收率/接線率）
+  document.querySelectorAll('input[id^="bulk-"]').forEach(input=>{
+    if(parseInt(input.dataset.sales)>0) calcRate(input);
   });
   updateLeaderboard();
   initBonusSelect();
@@ -935,6 +967,7 @@ def render_html(data: dict, dealer_kw: str) -> str:
         te = sum(results[store][w]["exec"]   for w in weeks)
         td = sum(results[store][w]["deal"]   for w in weeks)
         tp = sum(results[store][w]["plugin"] for w in weeks)
+        iphone_sales = DEFAULT_IPHONE_SALES.get(store, 0)
         if te == 0:
             continue
         op_agg = {}
@@ -977,7 +1010,10 @@ def render_html(data: dict, dealer_kw: str) -> str:
 </div>
 <div class="sales-row">
   <span class="sales-label">📱 iPhone 銷量</span>
-  <input type="number" class="sales-input" id="sales-{idx}" data-idx="{idx}" data-deal="{td}" data-plugin="{tp}" placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
+  <span class="sales-value" id="sales-val-{idx}">{iphone_sales if iphone_sales > 0 else '—'}</span>
+  <span class="sales-divider">−</span>
+  <span class="sales-label">🛒 大宗採購</span>
+  <input type="number" class="sales-input" id="bulk-{idx}" data-idx="{idx}" data-deal="{td}" data-plugin="{tp}" data-sales="{iphone_sales}" placeholder="0" min="0" value="0" oninput="calcRate(this)">
   <span class="sales-divider">|</span>
   <span class="sales-label">回收率</span>
   <span class="rate-badge" id="rate-badge-{idx}" title="目標 ≥ {RECYCLE_TARGET:.0f}%">—</span>

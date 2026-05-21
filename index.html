@@ -54,8 +54,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','PingFang TC'
 .sales-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:11px 20px;background:linear-gradient(to right,rgba(255,204,0,.08),rgba(255,149,0,.04));border-bottom:1px solid var(--border)}
 .sales-label{font-size:12px;font-weight:600;color:var(--sub);white-space:nowrap}
 .sales-divider{color:#d1d1d6;font-size:14px}
-.sales-input{width:120px;padding:6px 12px;border:1.5px solid var(--border);border-radius:20px;font-size:13px;font-weight:600;font-family:inherit;outline:none;text-align:center}
+.sales-input{width:100px;padding:6px 12px;border:1.5px solid var(--border);border-radius:20px;font-size:13px;font-weight:600;font-family:inherit;outline:none;text-align:center}
 .sales-input:focus{border-color:var(--orange);box-shadow:0 0 0 3px rgba(255,149,0,.15)}
+.sales-value{display:inline-block;min-width:50px;padding:5px 12px;background:#fff;border:1.5px solid #e5e5ea;border-radius:18px;font-size:13px;font-weight:700;color:var(--text);text-align:center;font-variant-numeric:tabular-nums}
 .rate-badge{min-width:64px;text-align:center;font-size:15px;font-weight:800;padding:4px 12px;border-radius:20px;background:#f5f5f7;color:#bbb;transition:all .25s}
 .rate-badge.high{background:rgba(52,199,89,.15);color:#25a244}
 .rate-badge.mid{background:rgba(255,149,0,.15);color:#c97200}
@@ -95,13 +96,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','PingFang TC'
 .chart-tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
 .chart-wrap{position:relative;height:300px}
 @media (max-width: 768px) { .chart-wrap{height:260px} }
-.store-bars{display:flex;flex-direction:column;gap:8px;margin-top:10px}
-.store-bar-row{display:grid;grid-template-columns:140px 1fr 60px;align-items:center;gap:10px;font-size:13px}
-.store-bar-row .name{font-weight:600;color:var(--text);text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.store-bar-row .bar{position:relative;height:22px;background:#f5f5f7;border-radius:6px;overflow:hidden}
-.store-bar-row .bar-fill{position:absolute;top:0;left:0;height:100%;border-radius:6px;transition:width .4s}
-.store-bar-row .num{font-variant-numeric:tabular-nums;font-weight:700}
-@media (max-width: 768px){ .store-bar-row{grid-template-columns:90px 1fr 48px;font-size:12px;gap:7px} }
 .filter-bar{display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
 .filter-bar input{flex:1;min-width:200px;padding:9px 16px;border:1px solid var(--border);border-radius:24px;font-size:14px;outline:none;font-family:inherit}
 footer{text-align:center;color:var(--sub);font-size:12px;padding:28px}
@@ -221,7 +215,7 @@ footer{text-align:center;color:var(--sub);font-size:12px;padding:28px}
     <div class="chart-wrap"><canvas id="trendChart"></canvas></div>
   </div>
 
-  <!-- ② 各門市總和：橫條互動排行 -->
+  <!-- ② 各門市總和：垂直柱狀互動圖 -->
   <div class="section-title">🏪 各門市總和（全期）</div>
   <div class="card">
     <div class="chart-tabs">
@@ -229,21 +223,21 @@ footer{text-align:center;color:var(--sub);font-size:12px;padding:28px}
       <button class="chart-tab"        data-st="plugin"onclick="switchStore('plugin',this)">🔌 依接機數</button>
       <button class="chart-tab"        data-st="deal"  onclick="switchStore('deal',this)">✅ 依成交數</button>
     </div>
-    <div id="store-bars" class="store-bars"></div>
+    <div class="chart-wrap" style="height:340px"><canvas id="storeChart"></canvas></div>
   </div>
 
   <!-- ③ 回收率/接線率排行榜 -->
   <div class="section-title">📈 iPhone 回收率 / 接線率排行榜</div>
   <div class="card">
-    <p style="font-size:13px;color:var(--sub);margin-bottom:10px">在下方各門市卡片輸入 iPhone 銷量後，此排行榜會自動更新並依回收率排序。</p>
+    <p style="font-size:13px;color:var(--sub);margin-bottom:10px">在下方各門市卡片輸入<strong>大宗採購量</strong>後，此排行榜會自動更新並依回收率排序。</p>
     <div class="rate-rules-bar">
-      <span><strong style="color:var(--green)">回收率</strong> ＝ 成交數 ÷ iPhone 銷量 × 100% ・ 達標 <strong>≥ 10.0%</strong></span>
-      <span><strong style="color:var(--purple)">接線率</strong> ＝ 接機數 ÷ iPhone 銷量 × 100% ・ 達標 <strong>≥ 15.0%</strong></span>
+      <span><strong style="color:var(--green)">回收率</strong> ＝ 成交數 ÷ <strong>(iPhone 銷量 − 大宗採購)</strong> × 100% ・ 達標 <strong>≥ 10.0%</strong></span>
+      <span><strong style="color:var(--purple)">接線率</strong> ＝ 接機數 ÷ <strong>(iPhone 銷量 − 大宗採購)</strong> × 100% ・ 達標 <strong>≥ 15.0%</strong></span>
     </div>
     <div id="rate-leaderboard-wrap">
-      <div class="empty-hint" id="leaderboard-empty">尚無資料 — 請先在門市卡片輸入 iPhone 銷量 👇</div>
+      <div class="empty-hint" id="leaderboard-empty">尚無資料 — 請先在門市卡片輸入大宗採購量 👇</div>
       <table class="data-table" id="leaderboard-table" style="display:none">
-        <thead><tr><th>#</th><th>門市</th><th>iPhone 銷量</th><th>接機數</th><th>接線率</th><th>成交數</th><th>回收率</th></tr></thead>
+        <thead><tr><th>#</th><th>門市</th><th>iPhone 銷量</th><th>大宗採購</th><th>有效銷量</th><th>接機數</th><th>接線率</th><th>成交數</th><th>回收率</th></tr></thead>
         <tbody id="leaderboard-body"></tbody>
       </table>
     </div>
@@ -293,7 +287,10 @@ footer{text-align:center;color:var(--sub);font-size:12px;padding:28px}
 </div>
 <div class="sales-row">
   <span class="sales-label">📱 iPhone 銷量</span>
-  <input type="number" class="sales-input" id="sales-0" data-idx="0" data-deal="8" data-plugin="16" placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
+  <span class="sales-value" id="sales-val-0">123</span>
+  <span class="sales-divider">−</span>
+  <span class="sales-label">🛒 大宗採購</span>
+  <input type="number" class="sales-input" id="bulk-0" data-idx="0" data-deal="8" data-plugin="16" data-sales="123" placeholder="0" min="0" value="0" oninput="calcRate(this)">
   <span class="sales-divider">|</span>
   <span class="sales-label">回收率</span>
   <span class="rate-badge" id="rate-badge-0" title="目標 ≥ 10%">—</span>
@@ -317,7 +314,10 @@ footer{text-align:center;color:var(--sub);font-size:12px;padding:28px}
 </div>
 <div class="sales-row">
   <span class="sales-label">📱 iPhone 銷量</span>
-  <input type="number" class="sales-input" id="sales-1" data-idx="1" data-deal="8" data-plugin="9" placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
+  <span class="sales-value" id="sales-val-1">40</span>
+  <span class="sales-divider">−</span>
+  <span class="sales-label">🛒 大宗採購</span>
+  <input type="number" class="sales-input" id="bulk-1" data-idx="1" data-deal="8" data-plugin="9" data-sales="40" placeholder="0" min="0" value="0" oninput="calcRate(this)">
   <span class="sales-divider">|</span>
   <span class="sales-label">回收率</span>
   <span class="rate-badge" id="rate-badge-1" title="目標 ≥ 10%">—</span>
@@ -341,7 +341,10 @@ footer{text-align:center;color:var(--sub);font-size:12px;padding:28px}
 </div>
 <div class="sales-row">
   <span class="sales-label">📱 iPhone 銷量</span>
-  <input type="number" class="sales-input" id="sales-2" data-idx="2" data-deal="6" data-plugin="7" placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
+  <span class="sales-value" id="sales-val-2">81</span>
+  <span class="sales-divider">−</span>
+  <span class="sales-label">🛒 大宗採購</span>
+  <input type="number" class="sales-input" id="bulk-2" data-idx="2" data-deal="6" data-plugin="7" data-sales="81" placeholder="0" min="0" value="0" oninput="calcRate(this)">
   <span class="sales-divider">|</span>
   <span class="sales-label">回收率</span>
   <span class="rate-badge" id="rate-badge-2" title="目標 ≥ 10%">—</span>
@@ -365,7 +368,10 @@ footer{text-align:center;color:var(--sub);font-size:12px;padding:28px}
 </div>
 <div class="sales-row">
   <span class="sales-label">📱 iPhone 銷量</span>
-  <input type="number" class="sales-input" id="sales-3" data-idx="3" data-deal="1" data-plugin="2" placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
+  <span class="sales-value" id="sales-val-3">235</span>
+  <span class="sales-divider">−</span>
+  <span class="sales-label">🛒 大宗採購</span>
+  <input type="number" class="sales-input" id="bulk-3" data-idx="3" data-deal="1" data-plugin="2" data-sales="235" placeholder="0" min="0" value="0" oninput="calcRate(this)">
   <span class="sales-divider">|</span>
   <span class="sales-label">回收率</span>
   <span class="rate-badge" id="rate-badge-3" title="目標 ≥ 10%">—</span>
@@ -389,7 +395,10 @@ footer{text-align:center;color:var(--sub);font-size:12px;padding:28px}
 </div>
 <div class="sales-row">
   <span class="sales-label">📱 iPhone 銷量</span>
-  <input type="number" class="sales-input" id="sales-4" data-idx="4" data-deal="11" data-plugin="11" placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
+  <span class="sales-value" id="sales-val-4">—</span>
+  <span class="sales-divider">−</span>
+  <span class="sales-label">🛒 大宗採購</span>
+  <input type="number" class="sales-input" id="bulk-4" data-idx="4" data-deal="11" data-plugin="11" data-sales="0" placeholder="0" min="0" value="0" oninput="calcRate(this)">
   <span class="sales-divider">|</span>
   <span class="sales-label">回收率</span>
   <span class="rate-badge" id="rate-badge-4" title="目標 ≥ 10%">—</span>
@@ -413,7 +422,10 @@ footer{text-align:center;color:var(--sub);font-size:12px;padding:28px}
 </div>
 <div class="sales-row">
   <span class="sales-label">📱 iPhone 銷量</span>
-  <input type="number" class="sales-input" id="sales-5" data-idx="5" data-deal="6" data-plugin="16" placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
+  <span class="sales-value" id="sales-val-5">176</span>
+  <span class="sales-divider">−</span>
+  <span class="sales-label">🛒 大宗採購</span>
+  <input type="number" class="sales-input" id="bulk-5" data-idx="5" data-deal="6" data-plugin="16" data-sales="176" placeholder="0" min="0" value="0" oninput="calcRate(this)">
   <span class="sales-divider">|</span>
   <span class="sales-label">回收率</span>
   <span class="rate-badge" id="rate-badge-5" title="目標 ≥ 10%">—</span>
@@ -437,7 +449,10 @@ footer{text-align:center;color:var(--sub);font-size:12px;padding:28px}
 </div>
 <div class="sales-row">
   <span class="sales-label">📱 iPhone 銷量</span>
-  <input type="number" class="sales-input" id="sales-6" data-idx="6" data-deal="8" data-plugin="15" placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
+  <span class="sales-value" id="sales-val-6">91</span>
+  <span class="sales-divider">−</span>
+  <span class="sales-label">🛒 大宗採購</span>
+  <input type="number" class="sales-input" id="bulk-6" data-idx="6" data-deal="8" data-plugin="15" data-sales="91" placeholder="0" min="0" value="0" oninput="calcRate(this)">
   <span class="sales-divider">|</span>
   <span class="sales-label">回收率</span>
   <span class="rate-badge" id="rate-badge-6" title="目標 ≥ 10%">—</span>
@@ -461,7 +476,10 @@ footer{text-align:center;color:var(--sub);font-size:12px;padding:28px}
 </div>
 <div class="sales-row">
   <span class="sales-label">📱 iPhone 銷量</span>
-  <input type="number" class="sales-input" id="sales-7" data-idx="7" data-deal="1" data-plugin="5" placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
+  <span class="sales-value" id="sales-val-7">—</span>
+  <span class="sales-divider">−</span>
+  <span class="sales-label">🛒 大宗採購</span>
+  <input type="number" class="sales-input" id="bulk-7" data-idx="7" data-deal="1" data-plugin="5" data-sales="0" placeholder="0" min="0" value="0" oninput="calcRate(this)">
   <span class="sales-divider">|</span>
   <span class="sales-label">回收率</span>
   <span class="rate-badge" id="rate-badge-7" title="目標 ≥ 10%">—</span>
@@ -485,7 +503,10 @@ footer{text-align:center;color:var(--sub);font-size:12px;padding:28px}
 </div>
 <div class="sales-row">
   <span class="sales-label">📱 iPhone 銷量</span>
-  <input type="number" class="sales-input" id="sales-8" data-idx="8" data-deal="11" data-plugin="16" placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
+  <span class="sales-value" id="sales-val-8">75</span>
+  <span class="sales-divider">−</span>
+  <span class="sales-label">🛒 大宗採購</span>
+  <input type="number" class="sales-input" id="bulk-8" data-idx="8" data-deal="11" data-plugin="16" data-sales="75" placeholder="0" min="0" value="0" oninput="calcRate(this)">
   <span class="sales-divider">|</span>
   <span class="sales-label">回收率</span>
   <span class="rate-badge" id="rate-badge-8" title="目標 ≥ 10%">—</span>
@@ -509,7 +530,10 @@ footer{text-align:center;color:var(--sub);font-size:12px;padding:28px}
 </div>
 <div class="sales-row">
   <span class="sales-label">📱 iPhone 銷量</span>
-  <input type="number" class="sales-input" id="sales-9" data-idx="9" data-deal="12" data-plugin="18" placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
+  <span class="sales-value" id="sales-val-9">80</span>
+  <span class="sales-divider">−</span>
+  <span class="sales-label">🛒 大宗採購</span>
+  <input type="number" class="sales-input" id="bulk-9" data-idx="9" data-deal="12" data-plugin="18" data-sales="80" placeholder="0" min="0" value="0" oninput="calcRate(this)">
   <span class="sales-divider">|</span>
   <span class="sales-label">回收率</span>
   <span class="rate-badge" id="rate-badge-9" title="目標 ≥ 10%">—</span>
@@ -533,7 +557,10 @@ footer{text-align:center;color:var(--sub);font-size:12px;padding:28px}
 </div>
 <div class="sales-row">
   <span class="sales-label">📱 iPhone 銷量</span>
-  <input type="number" class="sales-input" id="sales-10" data-idx="10" data-deal="4" data-plugin="7" placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
+  <span class="sales-value" id="sales-val-10">—</span>
+  <span class="sales-divider">−</span>
+  <span class="sales-label">🛒 大宗採購</span>
+  <input type="number" class="sales-input" id="bulk-10" data-idx="10" data-deal="4" data-plugin="7" data-sales="0" placeholder="0" min="0" value="0" oninput="calcRate(this)">
   <span class="sales-divider">|</span>
   <span class="sales-label">回收率</span>
   <span class="rate-badge" id="rate-badge-10" title="目標 ≥ 10%">—</span>
@@ -557,7 +584,10 @@ footer{text-align:center;color:var(--sub);font-size:12px;padding:28px}
 </div>
 <div class="sales-row">
   <span class="sales-label">📱 iPhone 銷量</span>
-  <input type="number" class="sales-input" id="sales-11" data-idx="11" data-deal="18" data-plugin="28" placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
+  <span class="sales-value" id="sales-val-11">603</span>
+  <span class="sales-divider">−</span>
+  <span class="sales-label">🛒 大宗採購</span>
+  <input type="number" class="sales-input" id="bulk-11" data-idx="11" data-deal="18" data-plugin="28" data-sales="603" placeholder="0" min="0" value="0" oninput="calcRate(this)">
   <span class="sales-divider">|</span>
   <span class="sales-label">回收率</span>
   <span class="rate-badge" id="rate-badge-11" title="目標 ≥ 10%">—</span>
@@ -581,7 +611,10 @@ footer{text-align:center;color:var(--sub);font-size:12px;padding:28px}
 </div>
 <div class="sales-row">
   <span class="sales-label">📱 iPhone 銷量</span>
-  <input type="number" class="sales-input" id="sales-12" data-idx="12" data-deal="15" data-plugin="18" placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
+  <span class="sales-value" id="sales-val-12">202</span>
+  <span class="sales-divider">−</span>
+  <span class="sales-label">🛒 大宗採購</span>
+  <input type="number" class="sales-input" id="bulk-12" data-idx="12" data-deal="15" data-plugin="18" data-sales="202" placeholder="0" min="0" value="0" oninput="calcRate(this)">
   <span class="sales-divider">|</span>
   <span class="sales-label">回收率</span>
   <span class="rate-badge" id="rate-badge-12" title="目標 ≥ 10%">—</span>
@@ -605,7 +638,10 @@ footer{text-align:center;color:var(--sub);font-size:12px;padding:28px}
 </div>
 <div class="sales-row">
   <span class="sales-label">📱 iPhone 銷量</span>
-  <input type="number" class="sales-input" id="sales-13" data-idx="13" data-deal="9" data-plugin="12" placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
+  <span class="sales-value" id="sales-val-13">187</span>
+  <span class="sales-divider">−</span>
+  <span class="sales-label">🛒 大宗採購</span>
+  <input type="number" class="sales-input" id="bulk-13" data-idx="13" data-deal="9" data-plugin="12" data-sales="187" placeholder="0" min="0" value="0" oninput="calcRate(this)">
   <span class="sales-divider">|</span>
   <span class="sales-label">回收率</span>
   <span class="rate-badge" id="rate-badge-13" title="目標 ≥ 10%">—</span>
@@ -629,7 +665,10 @@ footer{text-align:center;color:var(--sub);font-size:12px;padding:28px}
 </div>
 <div class="sales-row">
   <span class="sales-label">📱 iPhone 銷量</span>
-  <input type="number" class="sales-input" id="sales-14" data-idx="14" data-deal="11" data-plugin="16" placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
+  <span class="sales-value" id="sales-val-14">87</span>
+  <span class="sales-divider">−</span>
+  <span class="sales-label">🛒 大宗採購</span>
+  <input type="number" class="sales-input" id="bulk-14" data-idx="14" data-deal="11" data-plugin="16" data-sales="87" placeholder="0" min="0" value="0" oninput="calcRate(this)">
   <span class="sales-divider">|</span>
   <span class="sales-label">回收率</span>
   <span class="rate-badge" id="rate-badge-14" title="目標 ≥ 10%">—</span>
@@ -653,7 +692,10 @@ footer{text-align:center;color:var(--sub);font-size:12px;padding:28px}
 </div>
 <div class="sales-row">
   <span class="sales-label">📱 iPhone 銷量</span>
-  <input type="number" class="sales-input" id="sales-15" data-idx="15" data-deal="7" data-plugin="9" placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
+  <span class="sales-value" id="sales-val-15">—</span>
+  <span class="sales-divider">−</span>
+  <span class="sales-label">🛒 大宗採購</span>
+  <input type="number" class="sales-input" id="bulk-15" data-idx="15" data-deal="7" data-plugin="9" data-sales="0" placeholder="0" min="0" value="0" oninput="calcRate(this)">
   <span class="sales-divider">|</span>
   <span class="sales-label">回收率</span>
   <span class="rate-badge" id="rate-badge-15" title="目標 ≥ 10%">—</span>
@@ -677,7 +719,10 @@ footer{text-align:center;color:var(--sub);font-size:12px;padding:28px}
 </div>
 <div class="sales-row">
   <span class="sales-label">📱 iPhone 銷量</span>
-  <input type="number" class="sales-input" id="sales-16" data-idx="16" data-deal="7" data-plugin="9" placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
+  <span class="sales-value" id="sales-val-16">41</span>
+  <span class="sales-divider">−</span>
+  <span class="sales-label">🛒 大宗採購</span>
+  <input type="number" class="sales-input" id="bulk-16" data-idx="16" data-deal="7" data-plugin="9" data-sales="41" placeholder="0" min="0" value="0" oninput="calcRate(this)">
   <span class="sales-divider">|</span>
   <span class="sales-label">回收率</span>
   <span class="rate-badge" id="rate-badge-16" title="目標 ≥ 10%">—</span>
@@ -701,7 +746,10 @@ footer{text-align:center;color:var(--sub);font-size:12px;padding:28px}
 </div>
 <div class="sales-row">
   <span class="sales-label">📱 iPhone 銷量</span>
-  <input type="number" class="sales-input" id="sales-17" data-idx="17" data-deal="4" data-plugin="9" placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
+  <span class="sales-value" id="sales-val-17">—</span>
+  <span class="sales-divider">−</span>
+  <span class="sales-label">🛒 大宗採購</span>
+  <input type="number" class="sales-input" id="bulk-17" data-idx="17" data-deal="4" data-plugin="9" data-sales="0" placeholder="0" min="0" value="0" oninput="calcRate(this)">
   <span class="sales-divider">|</span>
   <span class="sales-label">回收率</span>
   <span class="rate-badge" id="rate-badge-17" title="目標 ≥ 10%">—</span>
@@ -725,7 +773,10 @@ footer{text-align:center;color:var(--sub);font-size:12px;padding:28px}
 </div>
 <div class="sales-row">
   <span class="sales-label">📱 iPhone 銷量</span>
-  <input type="number" class="sales-input" id="sales-18" data-idx="18" data-deal="4" data-plugin="4" placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
+  <span class="sales-value" id="sales-val-18">—</span>
+  <span class="sales-divider">−</span>
+  <span class="sales-label">🛒 大宗採購</span>
+  <input type="number" class="sales-input" id="bulk-18" data-idx="18" data-deal="4" data-plugin="4" data-sales="0" placeholder="0" min="0" value="0" oninput="calcRate(this)">
   <span class="sales-divider">|</span>
   <span class="sales-label">回收率</span>
   <span class="rate-badge" id="rate-badge-18" title="目標 ≥ 10%">—</span>
@@ -749,7 +800,10 @@ footer{text-align:center;color:var(--sub);font-size:12px;padding:28px}
 </div>
 <div class="sales-row">
   <span class="sales-label">📱 iPhone 銷量</span>
-  <input type="number" class="sales-input" id="sales-19" data-idx="19" data-deal="4" data-plugin="6" placeholder="輸入銷量…" min="0" oninput="calcRate(this)">
+  <span class="sales-value" id="sales-val-19">64</span>
+  <span class="sales-divider">−</span>
+  <span class="sales-label">🛒 大宗採購</span>
+  <input type="number" class="sales-input" id="bulk-19" data-idx="19" data-deal="4" data-plugin="6" data-sales="64" placeholder="0" min="0" value="0" oninput="calcRate(this)">
   <span class="sales-divider">|</span>
   <span class="sales-label">回收率</span>
   <span class="rate-badge" id="rate-badge-19" title="目標 ≥ 10%">—</span>
@@ -770,7 +824,7 @@ const STORES={"0": {"name": "TK3C@009華榮", "deal": 8, "plugin": 16, "default_
 const BONUS_RECORDS={"陶俊宏": [{"date": "2026-03-29", "month": "2026-03", "week": "FY26Q3W01", "store": "燦坤新光華店", "price": 792}, {"date": "2026-04-05", "month": "2026-04", "week": "FY26Q3W02", "store": "燦坤新光華店", "price": 2090}, {"date": "2026-04-06", "month": "2026-04", "week": "FY26Q3W02", "store": "燦坤新光華店", "price": 4455}, {"date": "2026-04-18", "month": "2026-04", "week": "FY26Q3W03", "store": "燦坤新光華店", "price": 9240}, {"date": "2026-04-18", "month": "2026-04", "week": "FY26Q3W03", "store": "燦坤新光華店", "price": 1760}, {"date": "2026-04-19", "month": "2026-04", "week": "FY26Q3W04", "store": "燦坤新光華店", "price": 1485}], "曾婷儀": [{"date": "2026-03-29", "month": "2026-03", "week": "FY26Q3W01", "store": "燦坤大甲店", "price": 10769}, {"date": "2026-04-12", "month": "2026-04", "week": "FY26Q3W03", "store": "燦坤大甲店", "price": 8580}, {"date": "2026-05-01", "month": "2026-05", "week": "FY26Q3W05", "store": "燦坤大甲店", "price": 5170}, {"date": "2026-05-02", "month": "2026-05", "week": "FY26Q3W05", "store": "燦坤大甲店", "price": 13310}], "王建仁": [{"date": "2026-03-29", "month": "2026-03", "week": "FY26Q3W01", "store": "燦坤新豐原旗艦店", "price": 7445}, {"date": "2026-04-06", "month": "2026-04", "week": "FY26Q3W02", "store": "燦坤新豐原旗艦店", "price": 4950}, {"date": "2026-05-08", "month": "2026-05", "week": "FY26Q3W06", "store": "燦坤新豐原旗艦店", "price": 5170}, {"date": "2026-05-12", "month": "2026-05", "week": "FY26Q3W07", "store": "燦坤新豐原旗艦店", "price": 16060}], "李璟和": [{"date": "2026-03-29", "month": "2026-03", "week": "FY26Q3W01", "store": "燦坤中華店", "price": 10989}, {"date": "2026-04-02", "month": "2026-04", "week": "FY26Q3W01", "store": "燦坤中華店", "price": 6732}, {"date": "2026-04-04", "month": "2026-04", "week": "FY26Q3W01", "store": "燦坤中華店", "price": 4400}, {"date": "2026-04-06", "month": "2026-04", "week": "FY26Q3W02", "store": "燦坤中華店", "price": 15400}, {"date": "2026-04-11", "month": "2026-04", "week": "FY26Q3W02", "store": "燦坤中華店", "price": 1430}, {"date": "2026-04-16", "month": "2026-04", "week": "FY26Q3W03", "store": "燦坤中華店", "price": 9900}, {"date": "2026-04-17", "month": "2026-04", "week": "FY26Q3W03", "store": "燦坤中華店", "price": 2695}, {"date": "2026-04-19", "month": "2026-04", "week": "FY26Q3W04", "store": "燦坤中華店", "price": 2475}], "楊爵福": [{"date": "2026-03-29", "month": "2026-03", "week": "FY26Q3W01", "store": "燦坤光復店", "price": 11831}, {"date": "2026-04-01", "month": "2026-04", "week": "FY26Q3W01", "store": "燦坤光復店", "price": 12650}, {"date": "2026-04-01", "month": "2026-04", "week": "FY26Q3W01", "store": "燦坤光復店", "price": 9504}, {"date": "2026-04-01", "month": "2026-04", "week": "FY26Q3W01", "store": "燦坤光復店", "price": 8140}, {"date": "2026-04-09", "month": "2026-04", "week": "FY26Q3W02", "store": "燦坤光復店", "price": 5148}, {"date": "2026-04-11", "month": "2026-04", "week": "FY26Q3W02", "store": "燦坤光復店", "price": 10296}, {"date": "2026-04-12", "month": "2026-04", "week": "FY26Q3W03", "store": "燦坤光復店", "price": 11440}, {"date": "2026-04-27", "month": "2026-04", "week": "FY26Q3W05", "store": "燦坤光復店", "price": 5390}, {"date": "2026-05-01", "month": "2026-05", "week": "FY26Q3W05", "store": "燦坤光復店", "price": 5170}, {"date": "2026-05-10", "month": "2026-05", "week": "FY26Q3W07", "store": "燦坤光復店", "price": 6039}, {"date": "2026-05-10", "month": "2026-05", "week": "FY26Q3W07", "store": "燦坤光復店", "price": 5610}], "梁祐維": [{"date": "2026-03-29", "month": "2026-03", "week": "FY26Q3W01", "store": "燦坤公益店", "price": 14168}, {"date": "2026-04-14", "month": "2026-04", "week": "FY26Q3W03", "store": "燦坤公益店", "price": 7227}, {"date": "2026-05-12", "month": "2026-05", "week": "FY26Q3W07", "store": "燦坤公益店", "price": 1980}], "徐誌良": [{"date": "2026-03-30", "month": "2026-03", "week": "FY26Q3W01", "store": "燦坤新莊店", "price": 16995}, {"date": "2026-04-03", "month": "2026-04", "week": "FY26Q3W01", "store": "燦坤新莊店", "price": 10230}, {"date": "2026-04-27", "month": "2026-04", "week": "FY26Q3W05", "store": "燦坤新莊店", "price": 18260}, {"date": "2026-04-30", "month": "2026-04", "week": "FY26Q3W05", "store": "燦坤新莊店", "price": 10890}, {"date": "2026-05-07", "month": "2026-05", "week": "FY26Q3W06", "store": "燦坤新莊店", "price": 1815}], "徐裴溫": [{"date": "2026-03-30", "month": "2026-03", "week": "FY26Q3W01", "store": "燦坤林口文化店", "price": 2437}, {"date": "2026-04-20", "month": "2026-04", "week": "FY26Q3W04", "store": "燦坤林口文化店", "price": 8910}, {"date": "2026-05-12", "month": "2026-05", "week": "FY26Q3W07", "store": "燦坤林口文化店", "price": 5940}, {"date": "2026-05-16", "month": "2026-05", "week": "FY26Q3W07", "store": "燦坤林口文化店", "price": 2585}], "張云瑞": [{"date": "2026-03-30", "month": "2026-03", "week": "FY26Q3W01", "store": "燦坤岡山家電館", "price": 1584}, {"date": "2026-04-05", "month": "2026-04", "week": "FY26Q3W02", "store": "燦坤岡山家電館", "price": 6237}, {"date": "2026-04-05", "month": "2026-04", "week": "FY26Q3W02", "store": "燦坤岡山家電館", "price": 2695}, {"date": "2026-04-11", "month": "2026-04", "week": "FY26Q3W02", "store": "燦坤岡山家電館", "price": 16137}, {"date": "2026-04-12", "month": "2026-04", "week": "FY26Q3W03", "store": "燦坤岡山家電館", "price": 13640}, {"date": "2026-04-16", "month": "2026-04", "week": "FY26Q3W03", "store": "燦坤岡山家電館", "price": 7370}, {"date": "2026-04-16", "month": "2026-04", "week": "FY26Q3W03", "store": "燦坤岡山家電館", "price": 4950}, {"date": "2026-05-10", "month": "2026-05", "week": "FY26Q3W07", "store": "燦坤岡山家電館", "price": 1595}, {"date": "2026-05-13", "month": "2026-05", "week": "FY26Q3W07", "store": "燦坤岡山家電館", "price": 5049}, {"date": "2026-05-15", "month": "2026-05", "week": "FY26Q3W07", "store": "燦坤岡山家電館", "price": 13970}, {"date": "2026-05-16", "month": "2026-05", "week": "FY26Q3W07", "store": "燦坤岡山家電館", "price": 4026}], "陳威志": [{"date": "2026-03-31", "month": "2026-03", "week": "FY26Q3W01", "store": "燦坤新文心店", "price": 4455}, {"date": "2026-04-12", "month": "2026-04", "week": "FY26Q3W03", "store": "燦坤新文心店", "price": 4455}, {"date": "2026-05-11", "month": "2026-05", "week": "FY26Q3W07", "store": "燦坤新文心店", "price": 6831}, {"date": "2026-05-11", "month": "2026-05", "week": "FY26Q3W07", "store": "燦坤新文心店", "price": 5170}], "林達妮": [{"date": "2026-04-01", "month": "2026-04", "week": "FY26Q3W01", "store": "燦坤新光華店", "price": 12408}, {"date": "2026-05-05", "month": "2026-05", "week": "FY26Q3W06", "store": "燦坤新光華店", "price": 4653}, {"date": "2026-05-16", "month": "2026-05", "week": "FY26Q3W07", "store": "燦坤新光華店", "price": 1540}], "謝昀燁": [{"date": "2026-04-02", "month": "2026-04", "week": "FY26Q3W01", "store": "燦坤桃園旗艦店", "price": 6732}, {"date": "2026-04-11", "month": "2026-04", "week": "FY26Q3W02", "store": "燦坤桃園旗艦店", "price": 5445}, {"date": "2026-04-11", "month": "2026-04", "week": "FY26Q3W02", "store": "燦坤桃園旗艦店", "price": 4488}, {"date": "2026-05-02", "month": "2026-05", "week": "FY26Q3W05", "store": "燦坤桃園旗艦店", "price": 4653}], "傅淑怡": [{"date": "2026-04-02", "month": "2026-04", "week": "FY26Q3W01", "store": "燦坤基隆旗艦店", "price": 4950}, {"date": "2026-04-07", "month": "2026-04", "week": "FY26Q3W02", "store": "燦坤基隆旗艦店", "price": 9790}, {"date": "2026-04-13", "month": "2026-04", "week": "FY26Q3W03", "store": "燦坤基隆旗艦店", "price": 2090}, {"date": "2026-04-18", "month": "2026-04", "week": "FY26Q3W03", "store": "燦坤基隆旗艦店", "price": 1760}, {"date": "2026-04-18", "month": "2026-04", "week": "FY26Q3W03", "store": "燦坤基隆旗艦店", "price": 2475}, {"date": "2026-04-18", "month": "2026-04", "week": "FY26Q3W03", "store": "燦坤基隆旗艦店", "price": 7370}, {"date": "2026-04-25", "month": "2026-04", "week": "FY26Q3W04", "store": "燦坤基隆旗艦店", "price": 20900}, {"date": "2026-04-30", "month": "2026-04", "week": "FY26Q3W05", "store": "燦坤基隆旗艦店", "price": 10560}, {"date": "2026-05-01", "month": "2026-05", "week": "FY26Q3W05", "store": "燦坤基隆旗艦店", "price": 5049}, {"date": "2026-05-01", "month": "2026-05", "week": "FY26Q3W05", "store": "燦坤基隆旗艦店", "price": 8140}, {"date": "2026-05-02", "month": "2026-05", "week": "FY26Q3W05", "store": "燦坤基隆旗艦店", "price": 3102}], "張易生": [{"date": "2026-04-03", "month": "2026-04", "week": "FY26Q3W01", "store": "燦坤斗六店", "price": 1705}, {"date": "2026-04-05", "month": "2026-04", "week": "FY26Q3W02", "store": "燦坤斗六店", "price": 7722}, {"date": "2026-04-10", "month": "2026-04", "week": "FY26Q3W02", "store": "燦坤斗六店", "price": 2475}, {"date": "2026-04-15", "month": "2026-04", "week": "FY26Q3W03", "store": "燦坤斗六店", "price": 14157}, {"date": "2026-04-23", "month": "2026-04", "week": "FY26Q3W04", "store": "燦坤斗六店", "price": 11418}, {"date": "2026-04-24", "month": "2026-04", "week": "FY26Q3W04", "store": "燦坤斗六店", "price": 9900}, {"date": "2026-04-27", "month": "2026-04", "week": "FY26Q3W05", "store": "燦坤斗六店", "price": 7040}, {"date": "2026-05-16", "month": "2026-05", "week": "FY26Q3W07", "store": "燦坤斗六店", "price": 6039}], "史昀靈": [{"date": "2026-04-03", "month": "2026-04", "week": "FY26Q3W01", "store": "燦坤右昌店", "price": 1705}, {"date": "2026-04-18", "month": "2026-04", "week": "FY26Q3W03", "store": "燦坤右昌店", "price": 1760}, {"date": "2026-04-19", "month": "2026-04", "week": "FY26Q3W04", "store": "燦坤右昌店", "price": 4455}, {"date": "2026-04-20", "month": "2026-04", "week": "FY26Q3W04", "store": "燦坤右昌店", "price": 2310}, {"date": "2026-05-01", "month": "2026-05", "week": "FY26Q3W05", "store": "燦坤右昌店", "price": 6732}, {"date": "2026-05-06", "month": "2026-05", "week": "FY26Q3W06", "store": "燦坤右昌店", "price": 5610}], "鄭宇廷": [{"date": "2026-04-03", "month": "2026-04", "week": "FY26Q3W01", "store": "TK3C@009華榮", "price": 6380}, {"date": "2026-04-04", "month": "2026-04", "week": "FY26Q3W01", "store": "TK3C@009華榮", "price": 4455}, {"date": "2026-04-20", "month": "2026-04", "week": "FY26Q3W04", "store": "TK3C@009華榮", "price": 12760}, {"date": "2026-05-14", "month": "2026-05", "week": "FY26Q3W07", "store": "TK3C@009華榮", "price": 10197}, {"date": "2026-05-14", "month": "2026-05", "week": "FY26Q3W07", "store": "TK3C@009華榮", "price": 1540}], "鄭伊婷": [{"date": "2026-04-05", "month": "2026-04", "week": "FY26Q3W02", "store": "燦坤永華二店", "price": 9130}], "黃子豪": [{"date": "2026-04-05", "month": "2026-04", "week": "FY26Q3W02", "store": "燦坤公益店", "price": 9405}, {"date": "2026-04-27", "month": "2026-04", "week": "FY26Q3W05", "store": "燦坤公益店", "price": 16170}, {"date": "2026-05-02", "month": "2026-05", "week": "FY26Q3W05", "store": "燦坤公益店", "price": 1815}, {"date": "2026-05-15", "month": "2026-05", "week": "FY26Q3W07", "store": "燦坤公益店", "price": 6930}, {"date": "2026-05-15", "month": "2026-05", "week": "FY26Q3W07", "store": "燦坤公益店", "price": 8360}], "陳帛汶": [{"date": "2026-04-05", "month": "2026-04", "week": "FY26Q3W02", "store": "燦坤內湖店", "price": 1705}, {"date": "2026-04-12", "month": "2026-04", "week": "FY26Q3W03", "store": "燦坤內湖店", "price": 4455}, {"date": "2026-04-17", "month": "2026-04", "week": "FY26Q3W03", "store": "燦坤內湖店", "price": 5940}, {"date": "2026-04-22", "month": "2026-04", "week": "FY26Q3W04", "store": "燦坤內湖店", "price": 990}, {"date": "2026-04-24", "month": "2026-04", "week": "FY26Q3W04", "store": "燦坤內湖店", "price": 1760}, {"date": "2026-05-07", "month": "2026-05", "week": "FY26Q3W06", "store": "燦坤內湖店", "price": 2585}], "朱俐穎": [{"date": "2026-04-06", "month": "2026-04", "week": "FY26Q3W02", "store": "燦坤斗六店", "price": 1705}, {"date": "2026-04-11", "month": "2026-04", "week": "FY26Q3W02", "store": "燦坤斗六店", "price": 1595}, {"date": "2026-04-12", "month": "2026-04", "week": "FY26Q3W03", "store": "燦坤斗六店", "price": 1045}, {"date": "2026-04-25", "month": "2026-04", "week": "FY26Q3W04", "store": "燦坤斗六店", "price": 6204}, {"date": "2026-04-29", "month": "2026-04", "week": "FY26Q3W05", "store": "燦坤斗六店", "price": 4730}, {"date": "2026-05-16", "month": "2026-05", "week": "FY26Q3W07", "store": "燦坤斗六店", "price": 9350}, {"date": "2026-05-16", "month": "2026-05", "week": "FY26Q3W07", "store": "燦坤斗六店", "price": 9350}], "呂丞凱": [{"date": "2026-04-06", "month": "2026-04", "week": "FY26Q3W02", "store": "燦坤新文心店", "price": 3069}, {"date": "2026-04-07", "month": "2026-04", "week": "FY26Q3W02", "store": "燦坤新文心店", "price": 9405}, {"date": "2026-04-11", "month": "2026-04", "week": "FY26Q3W02", "store": "燦坤新文心店", "price": 4851}, {"date": "2026-04-14", "month": "2026-04", "week": "FY26Q3W03", "store": "燦坤新文心店", "price": 12650}, {"date": "2026-04-22", "month": "2026-04", "week": "FY26Q3W04", "store": "燦坤新文心店", "price": 5390}, {"date": "2026-05-01", "month": "2026-05", "week": "FY26Q3W05", "store": "燦坤新文心店", "price": 6710}, {"date": "2026-05-15", "month": "2026-05", "week": "FY26Q3W07", "store": "燦坤新文心店", "price": 1815}], "吳啟禎": [{"date": "2026-04-08", "month": "2026-04", "week": "FY26Q3W02", "store": "燦坤右昌店", "price": 4488}, {"date": "2026-04-12", "month": "2026-04", "week": "FY26Q3W03", "store": "燦坤右昌店", "price": 1705}, {"date": "2026-04-22", "month": "2026-04", "week": "FY26Q3W04", "store": "燦坤右昌店", "price": 4455}, {"date": "2026-04-24", "month": "2026-04", "week": "FY26Q3W04", "store": "燦坤右昌店", "price": 4455}, {"date": "2026-05-01", "month": "2026-05", "week": "FY26Q3W05", "store": "燦坤右昌店", "price": 2365}], "羅文伶": [{"date": "2026-04-10", "month": "2026-04", "week": "FY26Q3W02", "store": "TK3C@009華榮", "price": 3135}, {"date": "2026-04-11", "month": "2026-04", "week": "FY26Q3W02", "store": "TK3C@009華榮", "price": 12650}, {"date": "2026-04-24", "month": "2026-04", "week": "FY26Q3W04", "store": "TK3C@009華榮", "price": 4312}], "孫靜雅": [{"date": "2026-04-10", "month": "2026-04", "week": "FY26Q3W02", "store": "燦坤岡山家電館", "price": 7480}, {"date": "2026-04-11", "month": "2026-04", "week": "FY26Q3W02", "store": "燦坤岡山家電館", "price": 770}, {"date": "2026-04-15", "month": "2026-04", "week": "FY26Q3W03", "store": "燦坤岡山家電館", "price": 4455}, {"date": "2026-04-18", "month": "2026-04", "week": "FY26Q3W03", "store": "燦坤岡山家電館", "price": 7128}, {"date": "2026-05-06", "month": "2026-05", "week": "FY26Q3W06", "store": "燦坤岡山家電館", "price": 13310}, {"date": "2026-05-10", "month": "2026-05", "week": "FY26Q3W07", "store": "燦坤岡山家電館", "price": 8415}, {"date": "2026-05-16", "month": "2026-05", "week": "FY26Q3W07", "store": "燦坤岡山家電館", "price": 4510}], "張育誌": [{"date": "2026-04-14", "month": "2026-04", "week": "FY26Q3W03", "store": "燦坤五甲店", "price": 11385}, {"date": "2026-04-17", "month": "2026-04", "week": "FY26Q3W03", "store": "燦坤五甲店", "price": 1815}, {"date": "2026-04-21", "month": "2026-04", "week": "FY26Q3W04", "store": "燦坤五甲店", "price": 6633}], "黃孟娟": [{"date": "2026-04-19", "month": "2026-04", "week": "FY26Q3W04", "store": "燦坤永華二店", "price": 4950}, {"date": "2026-05-01", "month": "2026-05", "week": "FY26Q3W05", "store": "燦坤永華二店", "price": 1815}, {"date": "2026-05-01", "month": "2026-05", "week": "FY26Q3W05", "store": "燦坤永華二店", "price": 10890}], "張蕙雯": [{"date": "2026-04-26", "month": "2026-04", "week": "FY26Q3W05", "store": "燦坤新豐原旗艦店", "price": 9240}, {"date": "2026-05-03", "month": "2026-05", "week": "FY26Q3W06", "store": "燦坤新豐原旗艦店", "price": 8470}, {"date": "2026-05-03", "month": "2026-05", "week": "FY26Q3W06", "store": "燦坤新豐原旗艦店", "price": 6710}], "黃至偉": [{"date": "2026-05-01", "month": "2026-05", "week": "FY26Q3W05", "store": "燦坤五甲店", "price": 1815}, {"date": "2026-05-03", "month": "2026-05", "week": "FY26Q3W06", "store": "燦坤五甲店", "price": 9801}, {"date": "2026-05-10", "month": "2026-05", "week": "FY26Q3W07", "store": "燦坤五甲店", "price": 1540}], "陳泓錦": [{"date": "2026-05-01", "month": "2026-05", "week": "FY26Q3W05", "store": "燦坤信義店", "price": 1705}], "謝函君": [{"date": "2026-05-08", "month": "2026-05", "week": "FY26Q3W06", "store": "燦坤基隆旗艦店", "price": 10890}], "曾常明": [{"date": "2026-05-09", "month": "2026-05", "week": "FY26Q3W06", "store": "燦坤北投新旗艦店", "price": 11682}]};
 const WEEKLY_CHART={"labels": ["FY26Q3W01\n3/29–4/4", "FY26Q3W02\n4/5–4/11", "FY26Q3W03\n4/12–4/18", "FY26Q3W04\n4/19–4/25", "FY26Q3W05\n4/26–5/2", "FY26Q3W06\n5/3–5/9", "FY26Q3W07\n5/10–5/16"], "exec": [266, 311, 335, 208, 268, 228, 309], "plugin": [38, 38, 39, 29, 28, 18, 43], "deal": [23, 28, 26, 18, 24, 12, 24]};
 const STORE_TOTALS=[{"name": "TK3C@009華榮", "exec": 127, "plugin": 16, "deal": 8}, {"name": "燦坤中華店", "exec": 73, "plugin": 9, "deal": 8}, {"name": "燦坤五甲店", "exec": 109, "plugin": 7, "deal": 6}, {"name": "燦坤信義店", "exec": 50, "plugin": 2, "deal": 1}, {"name": "燦坤光復店", "exec": 53, "plugin": 11, "deal": 11}, {"name": "燦坤內湖店", "exec": 124, "plugin": 16, "deal": 6}, {"name": "燦坤公益店", "exec": 124, "plugin": 15, "deal": 8}, {"name": "燦坤北投新旗艦店", "exec": 40, "plugin": 5, "deal": 1}, {"name": "燦坤右昌店", "exec": 122, "plugin": 16, "deal": 11}, {"name": "燦坤基隆旗艦店", "exec": 98, "plugin": 18, "deal": 12}, {"name": "燦坤大甲店", "exec": 52, "plugin": 7, "deal": 4}, {"name": "燦坤岡山家電館", "exec": 203, "plugin": 28, "deal": 18}, {"name": "燦坤斗六店", "exec": 143, "plugin": 18, "deal": 15}, {"name": "燦坤新光華店", "exec": 133, "plugin": 12, "deal": 9}, {"name": "燦坤新文心店", "exec": 95, "plugin": 16, "deal": 11}, {"name": "燦坤新莊店", "exec": 106, "plugin": 9, "deal": 7}, {"name": "燦坤新豐原旗艦店", "exec": 76, "plugin": 9, "deal": 7}, {"name": "燦坤林口文化店", "exec": 50, "plugin": 9, "deal": 4}, {"name": "燦坤桃園旗艦店", "exec": 56, "plugin": 4, "deal": 4}, {"name": "燦坤永華二店", "exec": 91, "plugin": 6, "deal": 4}];
-const LS_KEY='ck_iphone_sales';
+const LS_KEY='ck_bulk_purchase_v2';        // 儲存大宗採購量
 const LATEST_WEEK='FY26Q3W07';
 const RECYCLE_TARGET=10.0;   // 回收率達標 (%)
 const PLUGIN_TARGET =15.0;    // 接線率達標 (%)
@@ -778,38 +832,53 @@ const HIGH_THRESHOLD=10001;                // ≥ 10,001 算高回收
 const BASIC_HIGH_RATE=0.01, ADV_HIGH_RATE=0.02;
 const BASIC_LOW_PER=100, ADV_LOW_PER=200;
 const ADVANCE_THRESHOLD=200000;            // 月回收 ≥ 20 萬 → 進階
-function loadSales(){try{return JSON.parse(localStorage.getItem(LS_KEY))||{};}catch{return{};}}
-function saveSales(s){localStorage.setItem(LS_KEY,JSON.stringify(s));}
+function loadBulk(){try{return JSON.parse(localStorage.getItem(LS_KEY))||{};}catch{return{};}}
+function saveBulk(s){localStorage.setItem(LS_KEY,JSON.stringify(s));}
 function rateClass(pct,target){if(pct>=target)return 'high';if(pct>=target/2)return 'mid';return 'low';}
 function calcRate(input){
   const idx=parseInt(input.dataset.idx);
   const deal=parseInt(input.dataset.deal);
   const plugin=parseInt(input.dataset.plugin);
-  const sales=parseInt(input.value)||0;
+  const sales=parseInt(input.dataset.sales)||0;          // iPhone 銷量（固定）
+  const bulk=parseInt(input.value)||0;                    // 大宗採購量（手動輸入）
+  const effective=sales-bulk;                             // 有效銷量（分母）
   const rb=document.getElementById('rate-badge-'+idx);
   const pb=document.getElementById('plug-badge-'+idx);
-  const all=loadSales();
-  if(sales>0)all[idx]=sales;else delete all[idx];
-  saveSales(all);
-  if(sales>0){
-    const rPct=deal/sales*100;
+  // 儲存大宗採購量
+  const all=loadBulk();
+  if(bulk>0) all[idx]=bulk; else delete all[idx];
+  saveBulk(all);
+  // 計算
+  if(sales>0 && effective>0){
+    const rPct=deal/effective*100;
     rb.textContent=rPct.toFixed(1)+'%';
     rb.className='rate-badge '+rateClass(rPct,RECYCLE_TARGET);
-    const pPct=plugin/sales*100;
+    rb.title=`成交 ${deal} ÷ 有效銷量 ${effective} (= ${sales} − ${bulk}) × 100%`;
+    const pPct=plugin/effective*100;
     pb.textContent=pPct.toFixed(1)+'%';
     pb.className='rate-badge '+rateClass(pPct,PLUGIN_TARGET);
+    pb.title=`接機 ${plugin} ÷ 有效銷量 ${effective} (= ${sales} − ${bulk}) × 100%`;
   }else{
     rb.textContent='—';rb.className='rate-badge';
     pb.textContent='—';pb.className='rate-badge';
+    if(sales===0){rb.title='尚無 iPhone 銷量資料';pb.title='尚無 iPhone 銷量資料';}
+    else if(effective<=0){rb.title='大宗採購量超過 iPhone 銷量';pb.title='大宗採購量超過 iPhone 銷量';}
   }
   updateLeaderboard();
 }
 function updateLeaderboard(){
-  const all=loadSales(),rows=[];
-  Object.entries(all).forEach(([idx,sales])=>{
-    const s=STORES[idx];if(!s)return;
-    rows.push({idx,name:s.name,deal:s.deal,plugin:s.plugin,sales,
-               rPct:s.deal/sales*100, pPct:s.plugin/sales*100});
+  const bulkAll=loadBulk(),rows=[];
+  Object.entries(STORES).forEach(([idx,s])=>{
+    const sales=s.default_sales||0;
+    if(sales<=0) return;                                  // 沒銷量資料的不上榜
+    const bulk=parseInt(bulkAll[idx])||0;
+    const effective=sales-bulk;
+    if(effective<=0) return;                              // 大宗採購超過銷量，跳過
+    rows.push({
+      idx,name:s.name,deal:s.deal,plugin:s.plugin,
+      sales,bulk,effective,
+      rPct:s.deal/effective*100, pPct:s.plugin/effective*100
+    });
   });
   const empty=document.getElementById('leaderboard-empty'),table=document.getElementById('leaderboard-table'),tbody=document.getElementById('leaderboard-body');
   if(rows.length===0){empty.style.display='';table.style.display='none';return;}
@@ -823,8 +892,10 @@ function updateLeaderboard(){
     const pIcon = r.pPct>=PLUGIN_TARGET  ? ' ✅' : '';
     return `<tr>
       <td><span class="rate-rank-badge ${rc}">${i+1}</span></td>
-      <td><strong>${r.name}</strong></td>
+      <td><strong>${r.name.replace('燦坤','').replace('TK3C@009','')}</strong></td>
       <td class="num">${r.sales.toLocaleString()}</td>
+      <td class="num" style="color:#c97200">${r.bulk>0?'-'+r.bulk:'—'}</td>
+      <td class="num" style="font-weight:700">${r.effective.toLocaleString()}</td>
       <td class="num plugin-cell">${r.plugin}</td>
       <td class="num" style="color:${colors[pCl]};font-weight:800">${r.pPct.toFixed(1)}%${pIcon}</td>
       <td class="num deal-yes">${r.deal}</td>
@@ -1015,23 +1086,46 @@ function switchTrend(metric,btn){
   renderTrend(metric);
 }
 
-// ── 各門市總和：橫條 ───────────────────────────────────
+// ── 各門市總和：垂直柱狀圖 ─────────────────────────────
+let storeChart=null;
 function renderStoreBars(metric){
-  const wrap=document.getElementById('store-bars');
-  if(!wrap) return;
+  const ctx=document.getElementById('storeChart');
+  if(!ctx) return;
   const sorted=[...STORE_TOTALS].sort((a,b)=>b[metric]-a[metric]);
-  const max=Math.max(...sorted.map(s=>s[metric]),1);
+  const labels=sorted.map(s=>s.name.replace('燦坤','').replace('TK3C@009',''));
+  const fullNames=sorted.map(s=>s.name);
+  const data=sorted.map(s=>s[metric]);
   const c=COLORS[metric];
-  wrap.innerHTML=sorted.map((s,i)=>{
-    const w=(s[metric]/max*100).toFixed(1);
-    const short=s.name.replace('燦坤','').replace('TK3C@009','');
-    const medal=i===0?'🥇 ':i===1?'🥈 ':i===2?'🥉 ':'';
-    return `<div class="store-bar-row">
-      <span class="name" title="${s.name}">${medal}${short}</span>
-      <div class="bar"><div class="bar-fill" style="width:${w}%;background:${c}"></div></div>
-      <span class="num" style="color:${c}">${s[metric].toLocaleString()}</span>
-    </div>`;
-  }).join('');
+  // 前三名高亮
+  const bgColors=data.map((_,i)=>i===0?'#FFD700':i===1?'#C0C0C0':i===2?'#CD7F32':c);
+  const borderColors=data.map((_,i)=>i<3?'rgba(0,0,0,.08)':'transparent');
+  if(storeChart) storeChart.destroy();
+  storeChart=new Chart(ctx,{
+    type:'bar',
+    data:{labels,datasets:[{
+      label:LABELS[metric],data,
+      backgroundColor:bgColors,borderColor:borderColors,borderWidth:1.5,
+      borderRadius:6,maxBarThickness:38,
+    }]},
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{
+        legend:{display:false},
+        tooltip:{
+          backgroundColor:'rgba(29,29,31,.92)',padding:10,
+          titleFont:{size:13,weight:'700'},bodyFont:{size:13},
+          callbacks:{
+            title:(items)=>fullNames[items[0].dataIndex],
+            label:(c)=>` ${LABELS[metric]}：${c.parsed.y.toLocaleString()}`
+          }
+        }
+      },
+      scales:{
+        x:{grid:{display:false},ticks:{font:{size:11},color:'#1d1d1f',maxRotation:45,minRotation:30,autoSkip:false}},
+        y:{beginAtZero:true,grid:{color:'rgba(0,0,0,.06)'},ticks:{font:{size:11},color:'#6e6e73'}}
+      }
+    }
+  });
 }
 function switchStore(metric,btn){
   document.querySelectorAll('[data-st]').forEach(b=>b.classList.remove('active'));
@@ -1039,17 +1133,15 @@ function switchStore(metric,btn){
   renderStoreBars(metric);
 }
 window.addEventListener('load',()=>{
-  const all=loadSales();
-  // 套用預設銷量：localStorage 未設定的 idx，若有 default_sales 就帶入
-  let changed=false;
-  Object.entries(STORES).forEach(([idx,store])=>{
-    if(all[idx]===undefined && store.default_sales>0){ all[idx]=store.default_sales; changed=true; }
+  const bulkAll=loadBulk();
+  // 還原各門市的大宗採購量
+  Object.entries(bulkAll).forEach(([idx,bulk])=>{
+    const input=document.getElementById('bulk-'+idx);
+    if(input){input.value=bulk;}
   });
-  if(changed) saveSales(all);
-  // 填入各 input 並計算
-  Object.entries(all).forEach(([idx,sales])=>{
-    const input=document.getElementById('sales-'+idx);
-    if(input){input.value=sales;calcRate(input);}
+  // 對所有有銷量的門市計算一次（即使 bulk=0 也要顯示初始回收率/接線率）
+  document.querySelectorAll('input[id^="bulk-"]').forEach(input=>{
+    if(parseInt(input.dataset.sales)>0) calcRate(input);
   });
   updateLeaderboard();
   initBonusSelect();
