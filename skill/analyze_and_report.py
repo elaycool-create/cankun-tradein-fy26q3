@@ -97,7 +97,8 @@ def analyze(files, dealer_kw: str, start_date: str, num_weeks: int):
         null_vals = detect_null_placeholders(df)
         clean = make_clean(null_vals)
         df["订单创建时间"] = pd.to_datetime(df["订单创建时间"], errors="coerce")
-        df["is_plugin"] = df["检测信息"].astype(str).str.contains(IMEI_PATTERN, regex=True, na=False)
+        # 從 检测信息 抽取 IMEI 碼（15 位數）
+        df["imei"] = df["检测信息"].astype(str).str.extract(r'IMEI:(\d{15})', expand=False)
         df["is_deal"] = df["回收类型"] == "以旧换新"
         df["operator"]  = df["XPOS操作人"].apply(clean)
         df["old_model"] = df["旧手机型号"].apply(clean)
@@ -115,6 +116,15 @@ def analyze(files, dealer_kw: str, start_date: str, num_weeks: int):
            df_all["门店名称"].str.contains(dealer_kw, na=False)
     ck = df_all[mask].copy()
     print(f"🎯 過濾 '{dealer_kw}'：{len(ck):,} 筆")
+
+    # ── 接機數去重：同一 IMEI 只算一次（取最早出現） ────────────
+    # 依時間排序後，標記每個 IMEI 第一次出現為 True，重複出現為 False
+    ck = ck.sort_values("订单创建时间", kind="stable").reset_index(drop=True)
+    ck["is_plugin"] = ck["imei"].notna() & ~ck["imei"].duplicated(keep="first")
+    n_imei_records = ck["imei"].notna().sum()
+    n_unique_imei  = int(ck["is_plugin"].sum())
+    n_dup = n_imei_records - n_unique_imei
+    print(f"🔌 IMEI 接機統計：{n_imei_records} 筆原始 → 去重後 {n_unique_imei} 筆（剔除 {n_dup} 筆重複）")
 
     # 自動推算週數（如使用者沒指定）
     if num_weeks <= 0:
