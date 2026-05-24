@@ -270,7 +270,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','PingFang TC'
 .container{max-width:1500px;margin:0 auto;padding:32px 24px}
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px}
 @media(max-width:900px){.two-col{grid-template-columns:1fr}}
-.section-title{font-size:20px;font-weight:700;margin:32px 0 14px}
+.section-title{font-size:20px;font-weight:700;margin:32px 0 14px;display:flex;align-items:center;flex-wrap:wrap;gap:10px}
+.period-tag{display:inline-block;font-size:12px;font-weight:600;color:var(--sub);background:#f5f5f7;border:1px solid var(--border);padding:3px 12px;border-radius:14px;letter-spacing:.3px}
 .summary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:26px}
 .summary-card{background:var(--card);border-radius:16px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.06);text-align:center}
 .summary-card .label{color:var(--sub);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
@@ -510,7 +511,7 @@ footer{text-align:center;color:var(--sub);font-size:12px;padding:28px}
   </div>
 
   <!-- ③ 回收率/接線率排行榜 -->
-  <div class="section-title">📈 iPhone 回收率 / 接線率排行榜</div>
+  <div class="section-title">📈 iPhone 回收率 / 接線率排行榜<span class="period-tag">統計期間：{{period_range}}</span></div>
   <div class="card">
     <p style="font-size:13px;color:var(--sub);margin-bottom:10px">在下方各門市卡片輸入<strong>大宗採購量</strong>後，此排行榜會自動更新並依回收率排序。</p>
     <div class="rate-rules-bar">
@@ -936,6 +937,17 @@ def render_html(data: dict, dealer_kw: str) -> str:
     global_op     = data["global_op"]
     latest_week   = data["latest_week"] or ""
 
+    # 計算統計期間文字（W01–W08（3/29–5/23））
+    if weeks:
+        first_w, last_w = weeks[0], weeks[-1]
+        first_date = week_dates[first_w].split("–")[0] if first_w in week_dates else ""
+        last_date  = week_dates[last_w].split("–")[-1] if last_w in week_dates else ""
+        wn_first   = first_w.replace("FY26Q3", "")  # 例：W01
+        wn_last    = last_w.replace("FY26Q3", "")
+        period_range = f"{wn_first}–{wn_last}（{first_date} ~ {last_date}）"
+    else:
+        period_range = ""
+
     grand = {"exec": 0, "plugin": 0, "deal": 0}
     for s in stores:
         for w in weeks:
@@ -1108,6 +1120,7 @@ def render_html(data: dict, dealer_kw: str) -> str:
         "{{latest_week}}":    latest_week,
         "{{recycle_target}}": str(RECYCLE_TARGET),
         "{{plugin_target}}":  str(PLUGIN_TARGET),
+        "{{period_range}}":   period_range,
     }
     for k, v in replacements.items():
         html = html.replace(k, v)
