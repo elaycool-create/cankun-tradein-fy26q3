@@ -230,7 +230,7 @@ def analyze(files, dealer_kw: str, start_date: str, num_weeks: int):
                 global_op_dict[op] = global_op_dict.get(op, 0) + cnt
     global_op = sorted(global_op_dict.items(), key=lambda x: -x[1])
 
-    # ── 獎金計算用：每位操作人的成交記錄 ─────────────────────────
+    # ── 獎金計算用：每位專員的成交記錄 ─────────────────────────
     deal_df = ck[ck["is_deal"] & (ck["operator"] != "")].copy()
     bonus_records = {}
     for _, row in deal_df.iterrows():
@@ -423,7 +423,7 @@ footer{text-align:center;color:var(--sub);font-size:12px;padding:28px}
   .sales-input { padding: 6px 12px; font-size: 13px; }
   .rate-badge { font-size: 14px; padding: 4px 12px; }
 
-  /* 操作人列 */
+  /* 專員列 */
   .op-summary-bar { padding: 8px 12px; }
   .op-pill { font-size: 11px; padding: 2px 9px; }
 
@@ -485,7 +485,7 @@ footer{text-align:center;color:var(--sub);font-size:12px;padding:28px}
     <span class="meta-badge">📅 {{first_week}}–{{last_week}}</span>
     <span class="meta-badge">🏪 {{n_stores}} 門市</span>
     <span class="meta-badge">📊 {{total_exec}} 筆執行</span>
-    <span class="meta-badge">👤 {{n_ops}} 位操作人</span>
+    <span class="meta-badge">👤 {{n_ops}} 位專員</span>
   </div>
 </div>
 <div class="container">
@@ -493,7 +493,7 @@ footer{text-align:center;color:var(--sub);font-size:12px;padding:28px}
     <div class="summary-card"><div class="label">總執行數</div><div class="value blue">{{total_exec}}</div><div class="sub">全期合計</div></div>
     <div class="summary-card"><div class="label">Plugin 接機🔌</div><div class="value purple">{{total_plugin}}</div><div class="sub">有 IMEI 接線記錄</div></div>
     <div class="summary-card"><div class="label">成交數</div><div class="value green">{{total_deal}}</div><div class="sub">完成以舊換新</div></div>
-    <div class="summary-card"><div class="label">操作人數</div><div class="value teal">{{n_ops}}</div><div class="sub">有成交記錄的人員</div></div>
+    <div class="summary-card"><div class="label">專員數</div><div class="value teal">{{n_ops}}</div><div class="sub">有成交記錄的人員</div></div>
   </div>
   <!-- ① 週次總覽：互動式圖表 -->
   <div class="section-title">📊 全{{dealer_kw}}週次總覽</div>
@@ -535,10 +535,10 @@ footer{text-align:center;color:var(--sub);font-size:12px;padding:28px}
     </div>
   </div>
 
-  <!-- ④ 操作人成交排行 + 熱門機型 -->
-  <div class="section-title">👤 全{{dealer_kw}}操作人成交排行</div>
+  <!-- ④ 專員成交排行 + 熱門機型 -->
+  <div class="section-title">👤 全{{dealer_kw}}專員成交排行</div>
   <div class="two-col">
-    <div class="card"><div class="card-title">🏆 操作人成交總排行</div><table class="data-table"><thead><tr><th>#</th><th>操作人</th><th>主要門市</th><th>成交筆數</th></tr></thead><tbody>{{global_op_rows}}</tbody></table></div>
+    <div class="card"><div class="card-title">🏆 專員成交總排行</div><table class="data-table"><thead><tr><th>#</th><th>專員</th><th>主要門市</th><th>成交筆數</th></tr></thead><tbody>{{global_op_rows}}</tbody></table></div>
     <div style="display:flex;flex-direction:column;gap:20px">
       <div class="card" style="margin:0"><div class="card-title">📤 最常被換出舊機 Top 10</div><table class="data-table"><thead><tr><th>舊機型號</th><th>次數</th></tr></thead><tbody>{{old_rows}}</tbody></table></div>
       <div class="card" style="margin:0"><div class="card-title">📥 最常換購新品 Top 10</div><table class="data-table"><thead><tr><th>類別</th><th>新品型號</th><th>次數</th></tr></thead><tbody>{{new_rows}}</tbody></table></div>
@@ -558,10 +558,10 @@ footer{text-align:center;color:var(--sub);font-size:12px;padding:28px}
     </div>
     <div class="filter-bar" style="margin-bottom:18px">
       <select id="bonusOpSelect" onchange="renderBonus(this.value)" style="flex:1;min-width:240px;padding:9px 16px;border:1px solid var(--border);border-radius:24px;font-size:14px;font-family:inherit;background:#fff">
-        <option value="">— 請選擇操作人（薪號／姓名）—</option>
+        <option value="">— 請選擇專員（薪號／姓名）—</option>
       </select>
     </div>
-    <div id="bonus-result"><div class="empty-hint">👈 從上方選一位操作人來查詢個人獎金</div></div>
+    <div id="bonus-result"><div class="empty-hint">👈 從上方選一位專員來查詢個人獎金</div></div>
   </div>
   <div class="section-title">🏪 各門市週次明細</div>
   <div class="filter-bar">
@@ -692,9 +692,9 @@ function calcMonthBonus(records){
 function fmtMoney(n){return '$'+n.toLocaleString();}
 function renderBonus(op){
   const target=document.getElementById('bonus-result');
-  if(!op){target.innerHTML='<div class="empty-hint">👈 從上方選一位操作人來查詢個人獎金</div>';return;}
+  if(!op){target.innerHTML='<div class="empty-hint">👈 從上方選一位專員來查詢個人獎金</div>';return;}
   const recs=BONUS_RECORDS[op]||[];
-  if(recs.length===0){target.innerHTML='<div class="empty-hint">該操作人無成交記錄</div>';return;}
+  if(recs.length===0){target.innerHTML='<div class="empty-hint">該專員無成交記錄</div>';return;}
   // group by month
   const monthMap={};
   recs.forEach(r=>{(monthMap[r.month]=monthMap[r.month]||[]).push(r);});
@@ -705,7 +705,7 @@ function renderBonus(op){
   const stores=Array.from(new Set(recs.map(r=>r.store))).join('、');
 
   let html=`<div class="bonus-summary">
-    <div class="bsum-card"><div class="bsum-label">操作人</div><div class="bsum-val">${op}</div></div>
+    <div class="bsum-card"><div class="bsum-label">專員</div><div class="bsum-val">${op}</div></div>
     <div class="bsum-card"><div class="bsum-label">服務門市</div><div class="bsum-val" style="font-size:13px">${stores}</div></div>
     <div class="bsum-card"><div class="bsum-label">總成交件數</div><div class="bsum-val">${totalDeals} 件</div></div>
     <div class="bsum-card"><div class="bsum-label">總回收金額</div><div class="bsum-val">${fmtMoney(totalAmt)}</div></div>
@@ -964,7 +964,7 @@ def render_html(data: dict, dealer_kw: str) -> str:
             grand["plugin"] += d["plugin"]
             grand["deal"]   += d["deal"]
 
-    # 操作人主要門市
+    # 專員主要門市
     op_store = {}
     for store in stores:
         for w in weeks:
@@ -1098,9 +1098,9 @@ def render_html(data: dict, dealer_kw: str) -> str:
   <span class="sales-label">接線率</span>
   <span class="rate-badge" id="plug-badge-{idx}" title="目標 ≥ {PLUGIN_TARGET:.0f}%">—</span>
 </div>
-<div class="op-summary-bar"><span class="op-label">👤 操作人（全期成交）：</span>{all_period_ops}</div>
+<div class="op-summary-bar"><span class="op-label">👤 專員（全期成交）：</span>{all_period_ops}</div>
 <table class="data-table">
-  <thead><tr><th>週次</th><th>執行數</th><th>Plugin🔌</th><th>成交數</th><th>操作人（成交筆數）</th><th>主要舊機（前3）</th><th>換購新品（前3）</th></tr></thead>
+  <thead><tr><th>週次</th><th>執行數</th><th>Plugin🔌</th><th>成交數</th><th>專員（成交筆數）</th><th>主要舊機（前3）</th><th>換購新品（前3）</th></tr></thead>
   <tbody>{week_rows}</tbody>
 </table>
 </div>"""
@@ -1178,7 +1178,7 @@ def main():
     print(f"   總執行：{sum(data['weekly_totals'][w]['exec']   for w in data['weeks']):,}")
     print(f"   總接機：{sum(data['weekly_totals'][w]['plugin'] for w in data['weeks']):,}")
     print(f"   總成交：{sum(data['weekly_totals'][w]['deal']   for w in data['weeks']):,}")
-    print(f"   操作人：{len(data['global_op'])} 位\n")
+    print(f"   專員：{len(data['global_op'])} 位\n")
 
 
 if __name__ == "__main__":
