@@ -364,37 +364,58 @@ footer{text-align:center;color:var(--sub);font-size:12px;padding:28px}
 }
 /* iPhone Pro Max / iPad mini 以下 (≤ 768px) */
 @media (max-width: 768px) {
-  .container { padding: 18px 12px; }
-  .header { padding: 22px 16px 18px; }
-  .header h1 { font-size: 20px; line-height: 1.25; letter-spacing: 0; }
+  .container { padding: 14px 10px; }
+  .header { padding: 20px 14px 16px; }
+  .header h1 { font-size: 19px; line-height: 1.25; letter-spacing: 0; }
   .header p { font-size: 12px; }
-  .header-meta { gap: 6px; }
-  .meta-badge { font-size: 11px; padding: 4px 10px; }
+  .header-meta { gap: 5px; }
+  .meta-badge { font-size: 10px; padding: 3px 9px; }
 
-  .section-title { font-size: 17px; margin: 24px 0 12px; }
-  .card { padding: 14px 12px; border-radius: 12px; margin-bottom: 14px; }
+  .section-title { font-size: 16px; margin: 22px 0 10px; }
+  .card { padding: 12px 10px; border-radius: 12px; margin-bottom: 12px; }
   .card-title { font-size: 14px; }
 
   /* 摘要 KPI：iPhone 至少 2 欄不單欄 */
-  .summary-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 18px; }
-  .summary-card { padding: 14px 8px; border-radius: 12px; }
-  .summary-card .value { font-size: 24px; }
+  .summary-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 16px; }
+  .summary-card { padding: 12px 6px; border-radius: 12px; }
+  .summary-card .value { font-size: 22px; }
   .summary-card .label { font-size: 10px; }
+  .summary-card .sub { font-size: 11px; }
 
   /* 門市卡片 */
   .store-card { border-radius: 12px; margin-bottom: 12px; }
-  .store-header { padding: 11px 14px; gap: 6px; }
+  .store-header { padding: 10px 12px; gap: 6px; }
   .store-title { font-size: 14px; width: 100%; }
   .store-kpis { width: 100%; gap: 5px; }
-  .kpi-chip { font-size: 11px; padding: 3px 10px; }
+  .kpi-chip { font-size: 11px; padding: 3px 9px; }
 
-  /* 銷量輸入列：直立排列 */
-  .sales-row { padding: 12px 14px; gap: 8px; }
+  /* ★ 銷量輸入列 — auto/1fr grid，label 右對齊、value 填滿 */
+  .sales-row {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 8px 12px;
+    padding: 11px 14px;
+    align-items: center;
+  }
   .sales-divider { display: none; }
-  .sales-input { width: 100%; max-width: 200px; }
+  .sales-label {
+    font-size: 11px;
+    white-space: nowrap;
+    text-align: right;
+    color: var(--sub);
+  }
+  .sales-value, .sales-input, .rate-badge {
+    justify-self: stretch;
+    text-align: center;
+    width: auto;
+    min-width: 0;
+  }
+  .sales-value { padding: 5px 12px; font-size: 13px; }
+  .sales-input { padding: 6px 12px; font-size: 13px; }
+  .rate-badge { font-size: 14px; padding: 4px 12px; }
 
   /* 操作人列 */
-  .op-summary-bar { padding: 8px 14px; }
+  .op-summary-bar { padding: 8px 12px; }
   .op-pill { font-size: 11px; padding: 2px 9px; }
 
   /* 表格：橫向捲動，避免被遮蓋 */
@@ -407,34 +428,43 @@ footer{text-align:center;color:var(--sub);font-size:12px;padding:28px}
     -webkit-overflow-scrolling: touch;
     white-space: nowrap;
   }
-  .data-table th, .data-table td { padding: 8px 10px; }
+  .data-table th, .data-table td { padding: 7px 8px; font-size: 12px; }
   .data-table .small-text, .data-table .op-cell { white-space: normal; max-width: none; }
+
+  /* 排行榜：9 欄太寬，提示可左右滑 */
+  #leaderboard-table th, #leaderboard-table td { font-size: 11px; padding: 6px 7px; }
+
+  /* 規則說明條：iPhone 上文字較小 */
+  .rate-rules-bar, .bonus-rules-text { font-size: 11px; padding: 8px 10px; gap: 10px; }
 
   /* 獎金計算機 */
   .bonus-summary { grid-template-columns: repeat(2, 1fr); gap: 8px; }
   .bsum-card { padding: 10px 8px; }
-  .bsum-val { font-size: 15px; }
+  .bsum-val { font-size: 14px; }
   .bonus-month-card { padding: 12px; border-radius: 12px; }
   .bonus-month-head { gap: 8px; padding-bottom: 10px; margin-bottom: 12px; }
   .bonus-month-head > span:last-child { margin-left: 0 !important; width: 100%; }
   .bonus-calc-grid { grid-template-columns: 1fr; gap: 10px; }
   .bcalc { padding: 12px; }
 
-  /* 排行榜雙指標表：太寬時提示左右滑動 */
-  #leaderboard-table th, #leaderboard-table td { font-size: 11px; padding: 6px 8px; }
-
   /* Filter / 搜尋列 */
-  .filter-bar input[type=text] { width: 100%; min-width: 0; font-size: 13px; }
+  .filter-bar input[type=text],
+  .filter-bar select { width: 100%; min-width: 0; font-size: 13px; }
+
+  /* 圖表 tab 按鈕：手機字小一點 */
+  .chart-tab { padding: 5px 11px; font-size: 12px; }
 
   /* footer */
-  footer { padding: 20px 14px; font-size: 11px; }
+  footer { padding: 18px 12px; font-size: 11px; }
 }
 /* iPhone SE / 小螢幕 (≤ 380px) */
 @media (max-width: 380px) {
-  .header h1 { font-size: 18px; }
+  .header h1 { font-size: 17px; }
   .summary-grid { grid-template-columns: 1fr; }
   .store-title { font-size: 13px; }
-  .meta-badge { font-size: 10px; padding: 3px 8px; }
+  .meta-badge { font-size: 10px; padding: 3px 7px; }
+  .sales-row { grid-template-columns: 1fr; gap: 6px; }
+  .sales-row > * { justify-content: flex-start !important; }
 }
 </style>
 </head>
