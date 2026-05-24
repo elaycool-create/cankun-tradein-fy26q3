@@ -32,6 +32,7 @@ RECYCLE_TARGET = 10.0   # 回收率：成交數 ÷ iPhone 銷量 × 100% ≥ 10%
 PLUGIN_TARGET  = 15.0   # 接線率：接機數 ÷ iPhone 銷量 × 100% ≥ 15%
 
 # ── 預設 iPhone 銷量（首次載入時自動帶入；使用者可覆寫） ──
+# 共 20 間門市，依圖片資料
 DEFAULT_IPHONE_SALES = {
     "燦坤大甲店":       57,
     "燦坤中華店":       44,
@@ -52,7 +53,7 @@ DEFAULT_IPHONE_SALES = {
     "燦坤岡山家電館":  660,
     "燦坤新莊店":      103,
     "燦坤新豐原旗艦店": 54,
-    "燦坤彰化中正店":   47,  # 系統若還沒此門市資料，不會顯示
+    "燦坤彰化中正店":   47,  # 系統若尚無此門市成交資料，會自動忽略
 }
 
 IMEI_PATTERN = re.compile(r"IMEI:\d{15}")
@@ -525,7 +526,9 @@ footer{text-align:center;color:var(--sub);font-size:12px;padding:28px}
   </div>
   <div class="section-title">🏪 各門市週次明細</div>
   <div class="filter-bar">
-    <input type="text" id="storeSearch" placeholder="🔍 搜尋門市名稱..." oninput="filterStores(this.value)">
+    <select id="storeSelect" onchange="filterStores(this.value)" style="flex:1;min-width:240px;padding:9px 16px;border:1px solid var(--border);border-radius:24px;font-size:14px;font-family:inherit;background:#fff;outline:none;cursor:pointer">
+      <option value="">📋 顯示全部門市</option>
+    </select>
     <span style="font-size:13px;color:var(--sub)">共 {{n_stores}} 間門市</span>
   </div>
   <div id="stores-container">{{store_blocks}}</div>
@@ -615,7 +618,24 @@ function updateLeaderboard(){
     </tr>`;
   }).join('');
 }
-function filterStores(q){q=q.toLowerCase();document.querySelectorAll('.store-card').forEach(c=>{c.style.display=c.querySelector('.store-title').textContent.toLowerCase().includes(q)?'':'none';});}
+function filterStores(name){
+  document.querySelectorAll('.store-card').forEach(c=>{
+    const title=c.querySelector('.store-title').textContent.replace(/^[^\u4e00-\u9fffA-Za-z]+/,'').trim();
+    c.style.display=(!name||title===name)?'':'none';
+  });
+}
+function initStoreSelect(){
+  const sel=document.getElementById('storeSelect');
+  if(!sel) return;
+  // 從現有的 store-card 取得門市名稱（已過濾掉零執行的）
+  const titles=Array.from(document.querySelectorAll('.store-title')).map(t=>t.textContent.replace(/^[^\u4e00-\u9fffA-Za-z]+/,'').trim());
+  titles.sort();
+  titles.forEach(name=>{
+    const opt=document.createElement('option');
+    opt.value=name; opt.textContent='🏪 '+name;
+    sel.appendChild(opt);
+  });
+}
 
 // ── 獎金計算 ───────────────────────────────────────────
 function calcMonthBonus(records){
@@ -857,6 +877,7 @@ window.addEventListener('load',()=>{
   });
   updateLeaderboard();
   initBonusSelect();
+  initStoreSelect();
   renderTrend('all');
   renderStoreBars('exec');
 });
