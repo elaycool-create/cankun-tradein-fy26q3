@@ -428,17 +428,18 @@ footer{text-align:center;color:var(--sub);font-size:12px;padding:28px}
   .op-summary-bar { padding: 8px 12px; }
   .op-pill { font-size: 11px; padding: 2px 9px; }
 
-  /* 表格：橫向捲動，避免被遮蓋 */
-  .store-card > table.data-table,
-  .bonus-month-card > table.data-table,
-  .card > table.data-table,
-  details > table.data-table {
+  /* 表格：橫向捲動，避免被遮蓋（用後代選擇器覆蓋深層巢狀表格如排行榜） */
+  .store-card table.data-table,
+  .bonus-month-card table.data-table,
+  .card table.data-table,
+  details table.data-table {
     display: block;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     white-space: nowrap;
     overscroll-behavior-x: contain;
     touch-action: pan-x;
+    max-width: 100%;
   }
   .data-table th, .data-table td { padding: 7px 8px; font-size: 12px; }
   .data-table .small-text, .data-table .op-cell { white-space: normal; max-width: none; }
