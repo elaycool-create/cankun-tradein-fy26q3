@@ -350,7 +350,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','PingFang TC'
 .bonus-rules-text{display:flex;gap:18px;flex-wrap:wrap;font-size:12px;padding:10px 14px;background:#fff8e6;border-radius:10px;border-left:3px solid var(--orange);flex:1;min-width:260px}
 .lock-btn{padding:6px 14px;border:1px solid var(--border);border-radius:20px;background:#fff;font-size:12px;cursor:pointer;color:var(--sub);white-space:nowrap}
 .lock-btn:hover{background:#f5f5f7}
-.rate-rules-bar{display:flex;gap:18px;flex-wrap:wrap;font-size:12px;margin-bottom:14px;padding:10px 14px;background:#f9f9fb;border-radius:10px}
+.rate-rules-bar{display:flex;flex-direction:column;gap:6px;font-size:12px;margin-bottom:14px;padding:10px 14px;background:#f9f9fb;border-radius:10px}
 /* ── 互動式圖表區 ── */
 .chart-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
 .chart-tab{padding:6px 14px;border:1px solid var(--border);border-radius:18px;background:#fff;font-size:13px;font-weight:600;cursor:pointer;color:var(--sub);transition:.15s}
@@ -523,8 +523,8 @@ footer{text-align:center;color:var(--sub);font-size:12px;padding:28px}
   <div class="card">
     <p style="font-size:13px;color:var(--sub);margin-bottom:10px">在下方各門市卡片輸入<strong>大宗採購量</strong>後，此排行榜會自動更新並依回收率排序。</p>
     <div class="rate-rules-bar">
-      <span><strong style="color:var(--green)">回收率</strong> ＝ 成交數 ÷ <strong>(iPhone 銷量 − 大宗採購)</strong> × 100% ・ 達標 <strong>≥ {{recycle_target}}%</strong></span>
-      <span><strong style="color:var(--purple)">接線率</strong> ＝ 接機數 ÷ <strong>(iPhone 銷量 − 大宗採購)</strong> × 100% ・ 達標 <strong>≥ {{plugin_target}}%</strong></span>
+      <span><strong style="color:var(--green)">回收率</strong> ＝ 成交數 ÷ <strong>iPhone ST</strong> × 100%　。達標 <strong>≥ {{recycle_target}}%</strong></span>
+      <span><strong style="color:var(--purple)">接線率</strong> ＝ 接線數 ÷ <strong>iPhone ST</strong> × 100%　。達標 <strong>≥ {{plugin_target}}%</strong></span>
     </div>
     <div id="rate-leaderboard-wrap">
       <div class="empty-hint" id="leaderboard-empty">尚無資料 — 請先在門市卡片輸入大宗採購量 👇</div>
