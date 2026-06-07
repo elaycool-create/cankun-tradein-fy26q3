@@ -104,6 +104,11 @@ footer{text-align:center;color:var(--sub);font-size:12px;padding:28px}
 /* ── 登入遮罩 ── */
 #auth-gate{position:fixed;inset:0;z-index:9999;background:linear-gradient(135deg,#1d1d1f 0%,#0a0a0a 100%);display:flex;align-items:center;justify-content:center;padding:20px}
 #auth-gate.hidden{display:none}
+/* 鎖定時隱藏報告內容：避免部分 Safari 在 iframe 內 position:fixed 失效，導致遮罩沒鋪滿、底下圖表外露 */
+body.locked{overflow:hidden}
+body.locked .header,
+body.locked .container,
+body.locked footer{display:none}
 .auth-box{background:#fff;border-radius:20px;padding:36px 32px;max-width:360px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.4)}
 .auth-logo{font-size:44px;margin-bottom:10px}
 .auth-title{font-size:20px;font-weight:700;color:#1d1d1f}
@@ -243,7 +248,7 @@ footer{text-align:center;color:var(--sub);font-size:12px;padding:28px}
 }
 </style>
 </head>
-<body>
+<body class="locked">
 <!-- ── 登入遮罩 ── -->
 <div id="auth-gate">
   <div class="auth-box">
@@ -925,12 +930,14 @@ async function tryAuth(){
   }
 }
 function unlockPage(name){
+  document.body.classList.remove('locked');
   document.getElementById('auth-gate').classList.add('hidden');
   document.getElementById('lock-btn').classList.add('show');
   renderWatermark(name);
 }
 function lockPage(){
   sessionStorage.removeItem(AUTH_KEY);
+  document.body.classList.add('locked');
   // 還原登入框
   const gate=document.getElementById('auth-gate');
   gate.classList.remove('hidden');
