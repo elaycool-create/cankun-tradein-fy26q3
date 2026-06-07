@@ -101,6 +101,29 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','PingFang TC'
 .filter-bar{display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
 .filter-bar input{flex:1;min-width:200px;padding:9px 16px;border:1px solid var(--border);border-radius:24px;font-size:14px;outline:none;font-family:inherit}
 footer{text-align:center;color:var(--sub);font-size:12px;padding:28px}
+/* ── 登入遮罩 ── */
+#auth-gate{position:fixed;inset:0;z-index:9999;background:linear-gradient(135deg,#1d1d1f 0%,#0a0a0a 100%);display:flex;align-items:center;justify-content:center;padding:20px}
+#auth-gate.hidden{display:none}
+.auth-box{background:#fff;border-radius:20px;padding:36px 32px;max-width:360px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.auth-logo{font-size:44px;margin-bottom:10px}
+.auth-title{font-size:20px;font-weight:700;color:#1d1d1f}
+.auth-sub{font-size:13px;color:#6e6e73;margin:6px 0 22px}
+.auth-box input{width:100%;padding:11px 16px;margin-bottom:12px;border:1.5px solid #e5e5ea;border-radius:12px;font-size:15px;font-family:inherit;outline:none;text-align:center}
+.auth-box input:focus{border-color:#0071e3;box-shadow:0 0 0 3px rgba(0,113,227,.15)}
+.auth-btn{width:100%;padding:12px;border:none;border-radius:12px;background:#0071e3;color:#fff;font-size:15px;font-weight:700;cursor:pointer;margin-top:4px}
+.auth-btn:hover{background:#0060c0}
+.auth-error{color:#d63030;font-size:12px;margin-top:12px;display:none}
+.auth-error.show{display:block}
+.auth-note{color:#999;font-size:11px;margin-top:18px;padding-top:16px;border-top:1px solid #f0f0f0}
+/* ── 浮水印層 ── */
+#watermark{position:fixed;inset:0;z-index:9000;pointer-events:none;display:none;overflow:hidden}
+#watermark.show{display:block}
+#watermark .wm-text{position:absolute;color:rgba(0,0,0,.06);font-size:15px;font-weight:600;white-space:nowrap;transform:rotate(-30deg);user-select:none}
+@media(max-width:768px){#watermark .wm-text{font-size:12px}}
+/* ── 右上角鎖定按鈕 ── */
+#lock-btn{position:fixed;top:14px;right:14px;z-index:9100;display:none;padding:7px 14px;border:none;border-radius:20px;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);color:#1d1d1f;font-size:13px;font-weight:600;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.18)}
+#lock-btn.show{display:block}
+#lock-btn:hover{background:#fff}
 
 /* ════════════════════════════════════════════════════════
    RWD：iPad / iPhone 響應式優化
@@ -221,6 +244,24 @@ footer{text-align:center;color:var(--sub);font-size:12px;padding:28px}
 </style>
 </head>
 <body>
+<!-- ── 登入遮罩 ── -->
+<div id="auth-gate">
+  <div class="auth-box">
+    <div class="auth-logo">🔒</div>
+    <div class="auth-title">燦坤 Trade-in 週報</div>
+    <div class="auth-sub">此頁面僅供燦坤內部使用，請輸入存取資訊</div>
+    <input type="text" id="auth-name" placeholder="姓名 / 薪號" autocomplete="off" onkeydown="if(event.key==='Enter')document.getElementById('auth-pwd').focus()">
+    <input type="password" id="auth-pwd" placeholder="存取密碼" autocomplete="off" onkeydown="if(event.key==='Enter')tryAuth()">
+    <button class="auth-btn" onclick="tryAuth()">進入報告</button>
+    <div id="auth-error" class="auth-error">❌ 密碼錯誤或姓名未填，請重試</div>
+    <div class="auth-note">⚠️ 本報告內容為公司機密，禁止對外流傳</div>
+  </div>
+</div>
+<!-- ── 浮水印層 ── -->
+<div id="watermark" aria-hidden="true"></div>
+<!-- ── 右上角鎖定按鈕（登入後顯示） ── -->
+<button id="lock-btn" onclick="lockPage()">🔒 鎖定</button>
+
 <div class="header">
   <h1>📱 燦坤 Trade-in 舊換新分析報告</h1>
   <p>燦坤 · FY26Q3 各週次回收數據追蹤</p>
@@ -857,6 +898,84 @@ footer{text-align:center;color:var(--sub);font-size:12px;padding:28px}
 </div>
 <footer>燦坤 Trade-in 週報 · 由 analyze_and_report.py 自動產生<br>Plugin 判斷：检测信息含 IMEI 碼 · 成交判斷：回收類型＝以旧换新</footer>
 <script>
+// ════════════════════════════════════════════════════
+//  登入驗證 + 浮水印
+// ════════════════════════════════════════════════════
+const AUTH_HASH='bf050288b127f5916ad91cb76703ea295d185f0afa6cc26d7f703d7b9d8c05f3';  // SHA-256 of 存取密碼
+const AUTH_KEY='ck_auth_v1';   // sessionStorage key
+async function sha256(t){
+  const b=new TextEncoder().encode(t);
+  const h=await crypto.subtle.digest('SHA-256',b);
+  return Array.from(new Uint8Array(h)).map(x=>x.toString(16).padStart(2,'0')).join('');
+}
+async function tryAuth(){
+  const name=document.getElementById('auth-name').value.trim();
+  const pwd=document.getElementById('auth-pwd').value;
+  const err=document.getElementById('auth-error');
+  if(!name){ err.textContent='❌ 請先填寫您的姓名 / 工號'; err.classList.add('show'); return; }
+  const h=await sha256(pwd);
+  if(h===AUTH_HASH){
+    sessionStorage.setItem(AUTH_KEY, JSON.stringify({name, t:Date.now()}));
+    unlockPage(name);
+  }else{
+    err.textContent='❌ 密碼錯誤，請重試';
+    err.classList.add('show');
+    document.getElementById('auth-pwd').value='';
+    document.getElementById('auth-pwd').focus();
+  }
+}
+function unlockPage(name){
+  document.getElementById('auth-gate').classList.add('hidden');
+  document.getElementById('lock-btn').classList.add('show');
+  renderWatermark(name);
+}
+function lockPage(){
+  sessionStorage.removeItem(AUTH_KEY);
+  // 還原登入框
+  const gate=document.getElementById('auth-gate');
+  gate.classList.remove('hidden');
+  document.getElementById('lock-btn').classList.remove('show');
+  document.getElementById('watermark').classList.remove('show');
+  // 清空輸入
+  document.getElementById('auth-name').value='';
+  document.getElementById('auth-pwd').value='';
+  document.getElementById('auth-error').classList.remove('show');
+  window.scrollTo(0,0);
+}
+function renderWatermark(name){
+  const wm=document.getElementById('watermark');
+  if(!wm) return;
+  const today=new Date();
+  const dateStr=`${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
+  const label=`燦坤內部專用 · ${dateStr} · ${name}`;
+  // 鋪滿整個畫面的斜向重複文字
+  const cols=Math.ceil(window.innerWidth/240)+2;
+  const rows=Math.ceil(window.innerHeight/160)+2;
+  let html='';
+  for(let r=0;r<rows;r++){
+    for(let c=0;c<cols;c++){
+      html+=`<div class="wm-text" style="left:${c*240-60}px;top:${r*160}px">${label}</div>`;
+    }
+  }
+  wm.innerHTML=html;
+  wm.classList.add('show');
+}
+// 載入時檢查 session（同分頁重整免再輸入）
+function checkAuthOnLoad(){
+  try{
+    const saved=JSON.parse(sessionStorage.getItem(AUTH_KEY));
+    if(saved && saved.name){ unlockPage(saved.name); return true; }
+  }catch(e){}
+  return false;
+}
+// 視窗大小改變時重繪浮水印
+window.addEventListener('resize',()=>{
+  try{
+    const saved=JSON.parse(sessionStorage.getItem(AUTH_KEY));
+    if(saved && saved.name) renderWatermark(saved.name);
+  }catch(e){}
+});
+
 const STORES={"0": {"name": "燦坤華榮店", "deal": 9, "plugin": 17, "default_sales": 168}, "1": {"name": "燦坤中華店", "deal": 9, "plugin": 11, "default_sales": 46}, "2": {"name": "燦坤五甲店", "deal": 8, "plugin": 8, "default_sales": 102}, "3": {"name": "燦坤信義店", "deal": 2, "plugin": 3, "default_sales": 253}, "4": {"name": "燦坤光復店", "deal": 13, "plugin": 13, "default_sales": 119}, "5": {"name": "燦坤內湖店", "deal": 7, "plugin": 17, "default_sales": 188}, "6": {"name": "燦坤公益店", "deal": 10, "plugin": 18, "default_sales": 133}, "7": {"name": "燦坤北投新旗艦店", "deal": 1, "plugin": 5, "default_sales": 23}, "8": {"name": "燦坤右昌店", "deal": 14, "plugin": 19, "default_sales": 95}, "9": {"name": "燦坤基隆旗艦店", "deal": 13, "plugin": 20, "default_sales": 98}, "10": {"name": "燦坤大甲店", "deal": 4, "plugin": 9, "default_sales": 59}, "11": {"name": "燦坤岡山家電館", "deal": 21, "plugin": 36, "default_sales": 683}, "12": {"name": "燦坤斗六店", "deal": 18, "plugin": 22, "default_sales": 431}, "13": {"name": "燦坤新光華店", "deal": 13, "plugin": 18, "default_sales": 234}, "14": {"name": "燦坤新文心店", "deal": 16, "plugin": 23, "default_sales": 111}, "15": {"name": "燦坤新莊店", "deal": 7, "plugin": 10, "default_sales": 105}, "16": {"name": "燦坤新豐原旗艦店", "deal": 7, "plugin": 9, "default_sales": 60}, "17": {"name": "燦坤林口文化店", "deal": 6, "plugin": 15, "default_sales": 41}, "18": {"name": "燦坤桃園旗艦店", "deal": 6, "plugin": 6, "default_sales": 82}, "19": {"name": "燦坤永華二店", "deal": 7, "plugin": 10, "default_sales": 79}};
 const BONUS_RECORDS={"陶俊宏": [{"date": "2026-03-29", "month": "2026-03", "week": "FY26Q3W01", "store": "燦坤新光華店", "price": 792}, {"date": "2026-04-05", "month": "2026-04", "week": "FY26Q3W02", "store": "燦坤新光華店", "price": 2090}, {"date": "2026-04-06", "month": "2026-04", "week": "FY26Q3W02", "store": "燦坤新光華店", "price": 4455}, {"date": "2026-04-18", "month": "2026-04", "week": "FY26Q3W03", "store": "燦坤新光華店", "price": 9240}, {"date": "2026-04-18", "month": "2026-04", "week": "FY26Q3W03", "store": "燦坤新光華店", "price": 1760}, {"date": "2026-04-19", "month": "2026-04", "week": "FY26Q3W04", "store": "燦坤新光華店", "price": 1485}, {"date": "2026-05-18", "month": "2026-05", "week": "FY26Q3W08", "store": "燦坤新光華店", "price": 12573}], "曾婷儀": [{"date": "2026-03-29", "month": "2026-03", "week": "FY26Q3W01", "store": "燦坤大甲店", "price": 10769}, {"date": "2026-04-12", "month": "2026-04", "week": "FY26Q3W03", "store": "燦坤大甲店", "price": 8580}, {"date": "2026-05-01", "month": "2026-05", "week": "FY26Q3W05", "store": "燦坤大甲店", "price": 5170}, {"date": "2026-05-02", "month": "2026-05", "week": "FY26Q3W05", "store": "燦坤大甲店", "price": 13310}], "王建仁": [{"date": "2026-03-29", "month": "2026-03", "week": "FY26Q3W01", "store": "燦坤新豐原旗艦店", "price": 7445}, {"date": "2026-04-06", "month": "2026-04", "week": "FY26Q3W02", "store": "燦坤新豐原旗艦店", "price": 4950}, {"date": "2026-05-08", "month": "2026-05", "week": "FY26Q3W06", "store": "燦坤新豐原旗艦店", "price": 5170}, {"date": "2026-05-12", "month": "2026-05", "week": "FY26Q3W07", "store": "燦坤新豐原旗艦店", "price": 16060}], "李璟和": [{"date": "2026-03-29", "month": "2026-03", "week": "FY26Q3W01", "store": "燦坤中華店", "price": 10989}, {"date": "2026-04-02", "month": "2026-04", "week": "FY26Q3W01", "store": "燦坤中華店", "price": 6732}, {"date": "2026-04-04", "month": "2026-04", "week": "FY26Q3W01", "store": "燦坤中華店", "price": 4400}, {"date": "2026-04-06", "month": "2026-04", "week": "FY26Q3W02", "store": "燦坤中華店", "price": 15400}, {"date": "2026-04-11", "month": "2026-04", "week": "FY26Q3W02", "store": "燦坤中華店", "price": 1430}, {"date": "2026-04-16", "month": "2026-04", "week": "FY26Q3W03", "store": "燦坤中華店", "price": 9900}, {"date": "2026-04-17", "month": "2026-04", "week": "FY26Q3W03", "store": "燦坤中華店", "price": 2695}, {"date": "2026-04-19", "month": "2026-04", "week": "FY26Q3W04", "store": "燦坤中華店", "price": 2475}, {"date": "2026-05-21", "month": "2026-05", "week": "FY26Q3W08", "store": "燦坤中華店", "price": 10197}], "楊爵福": [{"date": "2026-03-29", "month": "2026-03", "week": "FY26Q3W01", "store": "燦坤光復店", "price": 11831}, {"date": "2026-04-01", "month": "2026-04", "week": "FY26Q3W01", "store": "燦坤光復店", "price": 12650}, {"date": "2026-04-01", "month": "2026-04", "week": "FY26Q3W01", "store": "燦坤光復店", "price": 9504}, {"date": "2026-04-01", "month": "2026-04", "week": "FY26Q3W01", "store": "燦坤光復店", "price": 8140}, {"date": "2026-04-09", "month": "2026-04", "week": "FY26Q3W02", "store": "燦坤光復店", "price": 5148}, {"date": "2026-04-11", "month": "2026-04", "week": "FY26Q3W02", "store": "燦坤光復店", "price": 10296}, {"date": "2026-04-12", "month": "2026-04", "week": "FY26Q3W03", "store": "燦坤光復店", "price": 11440}, {"date": "2026-04-27", "month": "2026-04", "week": "FY26Q3W05", "store": "燦坤光復店", "price": 5390}, {"date": "2026-05-01", "month": "2026-05", "week": "FY26Q3W05", "store": "燦坤光復店", "price": 5170}, {"date": "2026-05-10", "month": "2026-05", "week": "FY26Q3W07", "store": "燦坤光復店", "price": 6039}, {"date": "2026-05-10", "month": "2026-05", "week": "FY26Q3W07", "store": "燦坤光復店", "price": 5610}, {"date": "2026-05-17", "month": "2026-05", "week": "FY26Q3W08", "store": "燦坤光復店", "price": 1100}, {"date": "2026-05-23", "month": "2026-05", "week": "FY26Q3W08", "store": "燦坤光復店", "price": 11330}], "梁祐維": [{"date": "2026-03-29", "month": "2026-03", "week": "FY26Q3W01", "store": "燦坤公益店", "price": 14168}, {"date": "2026-04-14", "month": "2026-04", "week": "FY26Q3W03", "store": "燦坤公益店", "price": 7227}, {"date": "2026-05-12", "month": "2026-05", "week": "FY26Q3W07", "store": "燦坤公益店", "price": 1980}, {"date": "2026-05-18", "month": "2026-05", "week": "FY26Q3W08", "store": "燦坤公益店", "price": 19580}, {"date": "2026-05-18", "month": "2026-05", "week": "FY26Q3W08", "store": "燦坤公益店", "price": 19580}], "徐誌良": [{"date": "2026-03-30", "month": "2026-03", "week": "FY26Q3W01", "store": "燦坤新莊店", "price": 16995}, {"date": "2026-04-03", "month": "2026-04", "week": "FY26Q3W01", "store": "燦坤新莊店", "price": 10230}, {"date": "2026-04-27", "month": "2026-04", "week": "FY26Q3W05", "store": "燦坤新莊店", "price": 18260}, {"date": "2026-04-30", "month": "2026-04", "week": "FY26Q3W05", "store": "燦坤新莊店", "price": 10890}, {"date": "2026-05-07", "month": "2026-05", "week": "FY26Q3W06", "store": "燦坤新莊店", "price": 1815}], "徐裴溫": [{"date": "2026-03-30", "month": "2026-03", "week": "FY26Q3W01", "store": "燦坤林口文化店", "price": 2437}, {"date": "2026-04-20", "month": "2026-04", "week": "FY26Q3W04", "store": "燦坤林口文化店", "price": 8910}, {"date": "2026-05-12", "month": "2026-05", "week": "FY26Q3W07", "store": "燦坤林口文化店", "price": 5940}, {"date": "2026-05-16", "month": "2026-05", "week": "FY26Q3W07", "store": "燦坤林口文化店", "price": 2585}, {"date": "2026-05-17", "month": "2026-05", "week": "FY26Q3W08", "store": "燦坤林口文化店", "price": 4653}, {"date": "2026-05-28", "month": "2026-05", "week": "FY26Q3W09", "store": "燦坤林口文化店", "price": 11330}], "張云瑞": [{"date": "2026-03-30", "month": "2026-03", "week": "FY26Q3W01", "store": "燦坤岡山家電館", "price": 1584}, {"date": "2026-04-05", "month": "2026-04", "week": "FY26Q3W02", "store": "燦坤岡山家電館", "price": 6237}, {"date": "2026-04-05", "month": "2026-04", "week": "FY26Q3W02", "store": "燦坤岡山家電館", "price": 2695}, {"date": "2026-04-11", "month": "2026-04", "week": "FY26Q3W02", "store": "燦坤岡山家電館", "price": 16137}, {"date": "2026-04-12", "month": "2026-04", "week": "FY26Q3W03", "store": "燦坤岡山家電館", "price": 13640}, {"date": "2026-04-16", "month": "2026-04", "week": "FY26Q3W03", "store": "燦坤岡山家電館", "price": 7370}, {"date": "2026-04-16", "month": "2026-04", "week": "FY26Q3W03", "store": "燦坤岡山家電館", "price": 4950}, {"date": "2026-05-10", "month": "2026-05", "week": "FY26Q3W07", "store": "燦坤岡山家電館", "price": 1595}, {"date": "2026-05-13", "month": "2026-05", "week": "FY26Q3W07", "store": "燦坤岡山家電館", "price": 5049}, {"date": "2026-05-15", "month": "2026-05", "week": "FY26Q3W07", "store": "燦坤岡山家電館", "price": 13970}, {"date": "2026-05-16", "month": "2026-05", "week": "FY26Q3W07", "store": "燦坤岡山家電館", "price": 4026}, {"date": "2026-05-23", "month": "2026-05", "week": "FY26Q3W08", "store": "燦坤岡山家電館", "price": 1815}, {"date": "2026-05-29", "month": "2026-05", "week": "FY26Q3W09", "store": "燦坤岡山家電館", "price": 770}], "陳威志": [{"date": "2026-03-31", "month": "2026-03", "week": "FY26Q3W01", "store": "燦坤新文心店", "price": 4455}, {"date": "2026-04-12", "month": "2026-04", "week": "FY26Q3W03", "store": "燦坤新文心店", "price": 4455}, {"date": "2026-05-11", "month": "2026-05", "week": "FY26Q3W07", "store": "燦坤新文心店", "price": 6831}, {"date": "2026-05-11", "month": "2026-05", "week": "FY26Q3W07", "store": "燦坤新文心店", "price": 5170}, {"date": "2026-05-25", "month": "2026-05", "week": "FY26Q3W09", "store": "燦坤新文心店", "price": 13970}, {"date": "2026-05-29", "month": "2026-05", "week": "FY26Q3W09", "store": "燦坤新文心店", "price": 10197}], "林達妮": [{"date": "2026-04-01", "month": "2026-04", "week": "FY26Q3W01", "store": "燦坤新光華店", "price": 12408}, {"date": "2026-05-05", "month": "2026-05", "week": "FY26Q3W06", "store": "燦坤新光華店", "price": 4653}, {"date": "2026-05-16", "month": "2026-05", "week": "FY26Q3W07", "store": "燦坤新光華店", "price": 1540}, {"date": "2026-05-17", "month": "2026-05", "week": "FY26Q3W08", "store": "燦坤新光華店", "price": 10120}, {"date": "2026-05-17", "month": "2026-05", "week": "FY26Q3W08", "store": "燦坤新光華店", "price": 4015}, {"date": "2026-05-23", "month": "2026-05", "week": "FY26Q3W08", "store": "燦坤新光華店", "price": 4653}], "謝昀燁": [{"date": "2026-04-02", "month": "2026-04", "week": "FY26Q3W01", "store": "燦坤桃園旗艦店", "price": 6732}, {"date": "2026-04-11", "month": "2026-04", "week": "FY26Q3W02", "store": "燦坤桃園旗艦店", "price": 5445}, {"date": "2026-04-11", "month": "2026-04", "week": "FY26Q3W02", "store": "燦坤桃園旗艦店", "price": 4488}, {"date": "2026-05-02", "month": "2026-05", "week": "FY26Q3W05", "store": "燦坤桃園旗艦店", "price": 4653}, {"date": "2026-05-17", "month": "2026-05", "week": "FY26Q3W08", "store": "燦坤桃園旗艦店", "price": 9009}, {"date": "2026-05-17", "month": "2026-05", "week": "FY26Q3W08", "store": "燦坤桃園旗艦店", "price": 3102}], "傅淑怡": [{"date": "2026-04-02", "month": "2026-04", "week": "FY26Q3W01", "store": "燦坤基隆旗艦店", "price": 4950}, {"date": "2026-04-07", "month": "2026-04", "week": "FY26Q3W02", "store": "燦坤基隆旗艦店", "price": 9790}, {"date": "2026-04-13", "month": "2026-04", "week": "FY26Q3W03", "store": "燦坤基隆旗艦店", "price": 2090}, {"date": "2026-04-18", "month": "2026-04", "week": "FY26Q3W03", "store": "燦坤基隆旗艦店", "price": 1760}, {"date": "2026-04-18", "month": "2026-04", "week": "FY26Q3W03", "store": "燦坤基隆旗艦店", "price": 2475}, {"date": "2026-04-18", "month": "2026-04", "week": "FY26Q3W03", "store": "燦坤基隆旗艦店", "price": 7370}, {"date": "2026-04-25", "month": "2026-04", "week": "FY26Q3W04", "store": "燦坤基隆旗艦店", "price": 20900}, {"date": "2026-04-30", "month": "2026-04", "week": "FY26Q3W05", "store": "燦坤基隆旗艦店", "price": 10560}, {"date": "2026-05-01", "month": "2026-05", "week": "FY26Q3W05", "store": "燦坤基隆旗艦店", "price": 5049}, {"date": "2026-05-01", "month": "2026-05", "week": "FY26Q3W05", "store": "燦坤基隆旗艦店", "price": 8140}, {"date": "2026-05-02", "month": "2026-05", "week": "FY26Q3W05", "store": "燦坤基隆旗艦店", "price": 3102}, {"date": "2026-05-17", "month": "2026-05", "week": "FY26Q3W08", "store": "燦坤基隆旗艦店", "price": 1925}], "張易生": [{"date": "2026-04-03", "month": "2026-04", "week": "FY26Q3W01", "store": "燦坤斗六店", "price": 1705}, {"date": "2026-04-05", "month": "2026-04", "week": "FY26Q3W02", "store": "燦坤斗六店", "price": 7722}, {"date": "2026-04-10", "month": "2026-04", "week": "FY26Q3W02", "store": "燦坤斗六店", "price": 2475}, {"date": "2026-04-15", "month": "2026-04", "week": "FY26Q3W03", "store": "燦坤斗六店", "price": 14157}, {"date": "2026-04-23", "month": "2026-04", "week": "FY26Q3W04", "store": "燦坤斗六店", "price": 11418}, {"date": "2026-04-24", "month": "2026-04", "week": "FY26Q3W04", "store": "燦坤斗六店", "price": 9900}, {"date": "2026-04-27", "month": "2026-04", "week": "FY26Q3W05", "store": "燦坤斗六店", "price": 7040}, {"date": "2026-05-16", "month": "2026-05", "week": "FY26Q3W07", "store": "燦坤斗六店", "price": 6039}], "史昀靈": [{"date": "2026-04-03", "month": "2026-04", "week": "FY26Q3W01", "store": "燦坤右昌店", "price": 1705}, {"date": "2026-04-18", "month": "2026-04", "week": "FY26Q3W03", "store": "燦坤右昌店", "price": 1760}, {"date": "2026-04-19", "month": "2026-04", "week": "FY26Q3W04", "store": "燦坤右昌店", "price": 4455}, {"date": "2026-04-20", "month": "2026-04", "week": "FY26Q3W04", "store": "燦坤右昌店", "price": 2310}, {"date": "2026-05-01", "month": "2026-05", "week": "FY26Q3W05", "store": "燦坤右昌店", "price": 6732}, {"date": "2026-05-06", "month": "2026-05", "week": "FY26Q3W06", "store": "燦坤右昌店", "price": 5610}, {"date": "2026-05-20", "month": "2026-05", "week": "FY26Q3W08", "store": "燦坤右昌店", "price": 4653}], "鄭宇廷": [{"date": "2026-04-03", "month": "2026-04", "week": "FY26Q3W01", "store": "燦坤華榮店", "price": 6380}, {"date": "2026-04-04", "month": "2026-04", "week": "FY26Q3W01", "store": "燦坤華榮店", "price": 4455}, {"date": "2026-04-20", "month": "2026-04", "week": "FY26Q3W04", "store": "燦坤華榮店", "price": 12760}, {"date": "2026-05-14", "month": "2026-05", "week": "FY26Q3W07", "store": "燦坤華榮店", "price": 10197}, {"date": "2026-05-14", "month": "2026-05", "week": "FY26Q3W07", "store": "燦坤華榮店", "price": 1540}], "鄭伊婷": [{"date": "2026-04-05", "month": "2026-04", "week": "FY26Q3W02", "store": "燦坤永華二店", "price": 9130}, {"date": "2026-05-23", "month": "2026-05", "week": "FY26Q3W08", "store": "燦坤永華二店", "price": 1760}, {"date": "2026-05-24", "month": "2026-05", "week": "FY26Q3W09", "store": "燦坤永華二店", "price": 5170}, {"date": "2026-05-24", "month": "2026-05", "week": "FY26Q3W09", "store": "燦坤永華二店", "price": 4653}], "黃子豪": [{"date": "2026-04-05", "month": "2026-04", "week": "FY26Q3W02", "store": "燦坤公益店", "price": 9405}, {"date": "2026-04-27", "month": "2026-04", "week": "FY26Q3W05", "store": "燦坤公益店", "price": 16170}, {"date": "2026-05-02", "month": "2026-05", "week": "FY26Q3W05", "store": "燦坤公益店", "price": 1815}, {"date": "2026-05-15", "month": "2026-05", "week": "FY26Q3W07", "store": "燦坤公益店", "price": 6930}, {"date": "2026-05-15", "month": "2026-05", "week": "FY26Q3W07", "store": "燦坤公益店", "price": 8360}], "陳帛汶": [{"date": "2026-04-05", "month": "2026-04", "week": "FY26Q3W02", "store": "燦坤內湖店", "price": 1705}, {"date": "2026-04-12", "month": "2026-04", "week": "FY26Q3W03", "store": "燦坤內湖店", "price": 4455}, {"date": "2026-04-17", "month": "2026-04", "week": "FY26Q3W03", "store": "燦坤內湖店", "price": 5940}, {"date": "2026-04-22", "month": "2026-04", "week": "FY26Q3W04", "store": "燦坤內湖店", "price": 990}, {"date": "2026-04-24", "month": "2026-04", "week": "FY26Q3W04", "store": "燦坤內湖店", "price": 1760}, {"date": "2026-05-07", "month": "2026-05", "week": "FY26Q3W06", "store": "燦坤內湖店", "price": 2585}, {"date": "2026-05-25", "month": "2026-05", "week": "FY26Q3W09", "store": "燦坤內湖店", "price": 13640}], "朱俐穎": [{"date": "2026-04-06", "month": "2026-04", "week": "FY26Q3W02", "store": "燦坤斗六店", "price": 1705}, {"date": "2026-04-11", "month": "2026-04", "week": "FY26Q3W02", "store": "燦坤斗六店", "price": 1595}, {"date": "2026-04-12", "month": "2026-04", "week": "FY26Q3W03", "store": "燦坤斗六店", "price": 1045}, {"date": "2026-04-25", "month": "2026-04", "week": "FY26Q3W04", "store": "燦坤斗六店", "price": 6204}, {"date": "2026-04-29", "month": "2026-04", "week": "FY26Q3W05", "store": "燦坤斗六店", "price": 4730}, {"date": "2026-05-16", "month": "2026-05", "week": "FY26Q3W07", "store": "燦坤斗六店", "price": 9350}, {"date": "2026-05-16", "month": "2026-05", "week": "FY26Q3W07", "store": "燦坤斗六店", "price": 9350}, {"date": "2026-05-23", "month": "2026-05", "week": "FY26Q3W08", "store": "燦坤斗六店", "price": 1815}, {"date": "2026-05-30", "month": "2026-05", "week": "FY26Q3W09", "store": "燦坤斗六店", "price": 1870}, {"date": "2026-05-30", "month": "2026-05", "week": "FY26Q3W09", "store": "燦坤斗六店", "price": 9009}], "呂丞凱": [{"date": "2026-04-06", "month": "2026-04", "week": "FY26Q3W02", "store": "燦坤新文心店", "price": 3069}, {"date": "2026-04-07", "month": "2026-04", "week": "FY26Q3W02", "store": "燦坤新文心店", "price": 9405}, {"date": "2026-04-11", "month": "2026-04", "week": "FY26Q3W02", "store": "燦坤新文心店", "price": 4851}, {"date": "2026-04-14", "month": "2026-04", "week": "FY26Q3W03", "store": "燦坤新文心店", "price": 12650}, {"date": "2026-04-22", "month": "2026-04", "week": "FY26Q3W04", "store": "燦坤新文心店", "price": 5390}, {"date": "2026-05-01", "month": "2026-05", "week": "FY26Q3W05", "store": "燦坤新文心店", "price": 6710}, {"date": "2026-05-15", "month": "2026-05", "week": "FY26Q3W07", "store": "燦坤新文心店", "price": 1815}, {"date": "2026-05-22", "month": "2026-05", "week": "FY26Q3W08", "store": "燦坤新文心店", "price": 8360}, {"date": "2026-05-24", "month": "2026-05", "week": "FY26Q3W09", "store": "燦坤新文心店", "price": 1705}, {"date": "2026-05-24", "month": "2026-05", "week": "FY26Q3W09", "store": "燦坤新文心店", "price": 5170}], "吳啟禎": [{"date": "2026-04-08", "month": "2026-04", "week": "FY26Q3W02", "store": "燦坤右昌店", "price": 4488}, {"date": "2026-04-12", "month": "2026-04", "week": "FY26Q3W03", "store": "燦坤右昌店", "price": 1705}, {"date": "2026-04-22", "month": "2026-04", "week": "FY26Q3W04", "store": "燦坤右昌店", "price": 4455}, {"date": "2026-04-24", "month": "2026-04", "week": "FY26Q3W04", "store": "燦坤右昌店", "price": 4455}, {"date": "2026-05-01", "month": "2026-05", "week": "FY26Q3W05", "store": "燦坤右昌店", "price": 2365}, {"date": "2026-05-17", "month": "2026-05", "week": "FY26Q3W08", "store": "燦坤右昌店", "price": 770}, {"date": "2026-05-29", "month": "2026-05", "week": "FY26Q3W09", "store": "燦坤右昌店", "price": 1870}], "羅文伶": [{"date": "2026-04-10", "month": "2026-04", "week": "FY26Q3W02", "store": "燦坤華榮店", "price": 3135}, {"date": "2026-04-11", "month": "2026-04", "week": "FY26Q3W02", "store": "燦坤華榮店", "price": 12650}, {"date": "2026-04-24", "month": "2026-04", "week": "FY26Q3W04", "store": "燦坤華榮店", "price": 4312}, {"date": "2026-05-21", "month": "2026-05", "week": "FY26Q3W08", "store": "燦坤華榮店", "price": 1980}], "孫靜雅": [{"date": "2026-04-10", "month": "2026-04", "week": "FY26Q3W02", "store": "燦坤岡山家電館", "price": 7480}, {"date": "2026-04-11", "month": "2026-04", "week": "FY26Q3W02", "store": "燦坤岡山家電館", "price": 770}, {"date": "2026-04-15", "month": "2026-04", "week": "FY26Q3W03", "store": "燦坤岡山家電館", "price": 4455}, {"date": "2026-04-18", "month": "2026-04", "week": "FY26Q3W03", "store": "燦坤岡山家電館", "price": 7128}, {"date": "2026-05-06", "month": "2026-05", "week": "FY26Q3W06", "store": "燦坤岡山家電館", "price": 13310}, {"date": "2026-05-10", "month": "2026-05", "week": "FY26Q3W07", "store": "燦坤岡山家電館", "price": 8415}, {"date": "2026-05-16", "month": "2026-05", "week": "FY26Q3W07", "store": "燦坤岡山家電館", "price": 4510}, {"date": "2026-05-21", "month": "2026-05", "week": "FY26Q3W08", "store": "燦坤岡山家電館", "price": 1815}], "張育誌": [{"date": "2026-04-14", "month": "2026-04", "week": "FY26Q3W03", "store": "燦坤五甲店", "price": 11385}, {"date": "2026-04-17", "month": "2026-04", "week": "FY26Q3W03", "store": "燦坤五甲店", "price": 1815}, {"date": "2026-04-21", "month": "2026-04", "week": "FY26Q3W04", "store": "燦坤五甲店", "price": 6633}, {"date": "2026-05-23", "month": "2026-05", "week": "FY26Q3W08", "store": "燦坤五甲店", "price": 6633}, {"date": "2026-05-28", "month": "2026-05", "week": "FY26Q3W09", "store": "燦坤五甲店", "price": 1925}], "黃孟娟": [{"date": "2026-04-19", "month": "2026-04", "week": "FY26Q3W04", "store": "燦坤永華二店", "price": 4950}, {"date": "2026-05-01", "month": "2026-05", "week": "FY26Q3W05", "store": "燦坤永華二店", "price": 1815}, {"date": "2026-05-01", "month": "2026-05", "week": "FY26Q3W05", "store": "燦坤永華二店", "price": 10890}], "張蕙雯": [{"date": "2026-04-26", "month": "2026-04", "week": "FY26Q3W05", "store": "燦坤新豐原旗艦店", "price": 9240}, {"date": "2026-05-03", "month": "2026-05", "week": "FY26Q3W06", "store": "燦坤新豐原旗艦店", "price": 8470}, {"date": "2026-05-03", "month": "2026-05", "week": "FY26Q3W06", "store": "燦坤新豐原旗艦店", "price": 6710}], "黃至偉": [{"date": "2026-05-01", "month": "2026-05", "week": "FY26Q3W05", "store": "燦坤五甲店", "price": 1815}, {"date": "2026-05-03", "month": "2026-05", "week": "FY26Q3W06", "store": "燦坤五甲店", "price": 9801}, {"date": "2026-05-10", "month": "2026-05", "week": "FY26Q3W07", "store": "燦坤五甲店", "price": 1540}], "陳泓錦": [{"date": "2026-05-01", "month": "2026-05", "week": "FY26Q3W05", "store": "燦坤信義店", "price": 1705}, {"date": "2026-05-25", "month": "2026-05", "week": "FY26Q3W09", "store": "燦坤信義店", "price": 3762}], "謝函君": [{"date": "2026-05-08", "month": "2026-05", "week": "FY26Q3W06", "store": "燦坤基隆旗艦店", "price": 10890}], "曾常明": [{"date": "2026-05-09", "month": "2026-05", "week": "FY26Q3W06", "store": "燦坤北投新旗艦店", "price": 11682}]};
 const WEEKLY_CHART={"labels": ["FY26Q3W01\n3/29–4/4", "FY26Q3W02\n4/5–4/11", "FY26Q3W03\n4/12–4/18", "FY26Q3W04\n4/19–4/25", "FY26Q3W05\n4/26–5/2", "FY26Q3W06\n5/3–5/9", "FY26Q3W07\n5/10–5/16", "FY26Q3W08\n5/17–5/23", "FY26Q3W09\n5/24–5/30"], "exec": [266, 311, 335, 208, 268, 228, 309, 279, 231], "plugin": [38, 38, 39, 29, 28, 18, 43, 33, 23], "deal": [23, 28, 26, 18, 24, 12, 24, 22, 14]};
@@ -1202,6 +1321,7 @@ window.addEventListener('load',()=>{
   initStoreSelect();
   renderTrend('all');
   renderStoreBars('exec');
+  checkAuthOnLoad();
 });
 </script>
 </body>

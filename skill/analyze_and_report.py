@@ -362,6 +362,29 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','PingFang TC'
 .filter-bar{display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
 .filter-bar input{flex:1;min-width:200px;padding:9px 16px;border:1px solid var(--border);border-radius:24px;font-size:14px;outline:none;font-family:inherit}
 footer{text-align:center;color:var(--sub);font-size:12px;padding:28px}
+/* ── 登入遮罩 ── */
+#auth-gate{position:fixed;inset:0;z-index:9999;background:linear-gradient(135deg,#1d1d1f 0%,#0a0a0a 100%);display:flex;align-items:center;justify-content:center;padding:20px}
+#auth-gate.hidden{display:none}
+.auth-box{background:#fff;border-radius:20px;padding:36px 32px;max-width:360px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.auth-logo{font-size:44px;margin-bottom:10px}
+.auth-title{font-size:20px;font-weight:700;color:#1d1d1f}
+.auth-sub{font-size:13px;color:#6e6e73;margin:6px 0 22px}
+.auth-box input{width:100%;padding:11px 16px;margin-bottom:12px;border:1.5px solid #e5e5ea;border-radius:12px;font-size:15px;font-family:inherit;outline:none;text-align:center}
+.auth-box input:focus{border-color:#0071e3;box-shadow:0 0 0 3px rgba(0,113,227,.15)}
+.auth-btn{width:100%;padding:12px;border:none;border-radius:12px;background:#0071e3;color:#fff;font-size:15px;font-weight:700;cursor:pointer;margin-top:4px}
+.auth-btn:hover{background:#0060c0}
+.auth-error{color:#d63030;font-size:12px;margin-top:12px;display:none}
+.auth-error.show{display:block}
+.auth-note{color:#999;font-size:11px;margin-top:18px;padding-top:16px;border-top:1px solid #f0f0f0}
+/* ── 浮水印層 ── */
+#watermark{position:fixed;inset:0;z-index:9000;pointer-events:none;display:none;overflow:hidden}
+#watermark.show{display:block}
+#watermark .wm-text{position:absolute;color:rgba(0,0,0,.06);font-size:15px;font-weight:600;white-space:nowrap;transform:rotate(-30deg);user-select:none}
+@media(max-width:768px){#watermark .wm-text{font-size:12px}}
+/* ── 右上角鎖定按鈕 ── */
+#lock-btn{position:fixed;top:14px;right:14px;z-index:9100;display:none;padding:7px 14px;border:none;border-radius:20px;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);color:#1d1d1f;font-size:13px;font-weight:600;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.18)}
+#lock-btn.show{display:block}
+#lock-btn:hover{background:#fff}
 
 /* ════════════════════════════════════════════════════════
    RWD：iPad / iPhone 響應式優化
@@ -482,6 +505,24 @@ footer{text-align:center;color:var(--sub);font-size:12px;padding:28px}
 </style>
 </head>
 <body>
+<!-- ── 登入遮罩 ── -->
+<div id="auth-gate">
+  <div class="auth-box">
+    <div class="auth-logo">🔒</div>
+    <div class="auth-title">燦坤 Trade-in 週報</div>
+    <div class="auth-sub">此頁面僅供燦坤內部使用，請輸入存取資訊</div>
+    <input type="text" id="auth-name" placeholder="姓名 / 薪號" autocomplete="off" onkeydown="if(event.key==='Enter')document.getElementById('auth-pwd').focus()">
+    <input type="password" id="auth-pwd" placeholder="存取密碼" autocomplete="off" onkeydown="if(event.key==='Enter')tryAuth()">
+    <button class="auth-btn" onclick="tryAuth()">進入報告</button>
+    <div id="auth-error" class="auth-error">❌ 密碼錯誤或姓名未填，請重試</div>
+    <div class="auth-note">⚠️ 本報告內容為公司機密，禁止對外流傳</div>
+  </div>
+</div>
+<!-- ── 浮水印層 ── -->
+<div id="watermark" aria-hidden="true"></div>
+<!-- ── 右上角鎖定按鈕（登入後顯示） ── -->
+<button id="lock-btn" onclick="lockPage()">🔒 鎖定</button>
+
 <div class="header">
   <h1>📱 {{dealer_kw}} Trade-in 舊換新分析報告</h1>
   <p>{{dealer_kw}} · FY26Q3 各週次回收數據追蹤</p>
@@ -578,6 +619,84 @@ footer{text-align:center;color:var(--sub);font-size:12px;padding:28px}
 </div>
 <footer>{{dealer_kw}} Trade-in 週報 · 由 analyze_and_report.py 自動產生<br>Plugin 判斷：检测信息含 IMEI 碼 · 成交判斷：回收類型＝以旧换新</footer>
 <script>
+// ════════════════════════════════════════════════════
+//  登入驗證 + 浮水印
+// ════════════════════════════════════════════════════
+const AUTH_HASH='bf050288b127f5916ad91cb76703ea295d185f0afa6cc26d7f703d7b9d8c05f3';  // SHA-256 of 存取密碼
+const AUTH_KEY='ck_auth_v1';   // sessionStorage key
+async function sha256(t){
+  const b=new TextEncoder().encode(t);
+  const h=await crypto.subtle.digest('SHA-256',b);
+  return Array.from(new Uint8Array(h)).map(x=>x.toString(16).padStart(2,'0')).join('');
+}
+async function tryAuth(){
+  const name=document.getElementById('auth-name').value.trim();
+  const pwd=document.getElementById('auth-pwd').value;
+  const err=document.getElementById('auth-error');
+  if(!name){ err.textContent='❌ 請先填寫您的姓名 / 工號'; err.classList.add('show'); return; }
+  const h=await sha256(pwd);
+  if(h===AUTH_HASH){
+    sessionStorage.setItem(AUTH_KEY, JSON.stringify({name, t:Date.now()}));
+    unlockPage(name);
+  }else{
+    err.textContent='❌ 密碼錯誤，請重試';
+    err.classList.add('show');
+    document.getElementById('auth-pwd').value='';
+    document.getElementById('auth-pwd').focus();
+  }
+}
+function unlockPage(name){
+  document.getElementById('auth-gate').classList.add('hidden');
+  document.getElementById('lock-btn').classList.add('show');
+  renderWatermark(name);
+}
+function lockPage(){
+  sessionStorage.removeItem(AUTH_KEY);
+  // 還原登入框
+  const gate=document.getElementById('auth-gate');
+  gate.classList.remove('hidden');
+  document.getElementById('lock-btn').classList.remove('show');
+  document.getElementById('watermark').classList.remove('show');
+  // 清空輸入
+  document.getElementById('auth-name').value='';
+  document.getElementById('auth-pwd').value='';
+  document.getElementById('auth-error').classList.remove('show');
+  window.scrollTo(0,0);
+}
+function renderWatermark(name){
+  const wm=document.getElementById('watermark');
+  if(!wm) return;
+  const today=new Date();
+  const dateStr=`${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
+  const label=`燦坤內部專用 · ${dateStr} · ${name}`;
+  // 鋪滿整個畫面的斜向重複文字
+  const cols=Math.ceil(window.innerWidth/240)+2;
+  const rows=Math.ceil(window.innerHeight/160)+2;
+  let html='';
+  for(let r=0;r<rows;r++){
+    for(let c=0;c<cols;c++){
+      html+=`<div class="wm-text" style="left:${c*240-60}px;top:${r*160}px">${label}</div>`;
+    }
+  }
+  wm.innerHTML=html;
+  wm.classList.add('show');
+}
+// 載入時檢查 session（同分頁重整免再輸入）
+function checkAuthOnLoad(){
+  try{
+    const saved=JSON.parse(sessionStorage.getItem(AUTH_KEY));
+    if(saved && saved.name){ unlockPage(saved.name); return true; }
+  }catch(e){}
+  return false;
+}
+// 視窗大小改變時重繪浮水印
+window.addEventListener('resize',()=>{
+  try{
+    const saved=JSON.parse(sessionStorage.getItem(AUTH_KEY));
+    if(saved && saved.name) renderWatermark(saved.name);
+  }catch(e){}
+});
+
 const STORES={{stores_json}};
 const BONUS_RECORDS={{bonus_records_json}};
 const WEEKLY_CHART={{weekly_chart_json}};
@@ -923,6 +1042,7 @@ window.addEventListener('load',()=>{
   initStoreSelect();
   renderTrend('all');
   renderStoreBars('exec');
+  checkAuthOnLoad();
 });
 </script>
 </body>
